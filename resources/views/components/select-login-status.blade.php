@@ -1,5 +1,5 @@
 <select name="{{ $name }}" id="{{ $id }}" class="form-select form-select-sm" aria-label="select status">
-    <option value="" @if (''===$value) selected @endif>-- tous status --</option>
+    <option value="" @if (''===$value) selected @endif>-- status --</option>
     {{--
     <option value="CREATED" @if ('CREATED'===$value) selected @endif>CREATED</option>
     <option value="VALIDATED" @if ('VALIDATED'===$value) selected @endif>VALIDATED</option>

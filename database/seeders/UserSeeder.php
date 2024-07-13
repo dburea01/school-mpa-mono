@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Role;
 
 class UserSeeder extends Seeder
 {
@@ -18,20 +18,18 @@ class UserSeeder extends Seeder
 
         // create 1 administrateur
         $admin = User::factory()->create([
-            'login_status_id' => 'VALIDATED'
+            'login_status_id' => 'VALIDATED',
+            'role_id' => 'ADMIN'
         ]);
-        $admin->assignRole('administrateur');
 
         // create some teachers
-        $teachers = User::factory()->count(10)->create();
-        foreach ($teachers as $teacher) {
-            $teacher->assignRole('enseignant');
-        }
+        $teachers = User::factory()->count(10)->create([
+            'role_id' => 'TEACHER'
+        ]);
 
         // create some parents
-        $parents = User::factory()->count(10)->create();
-        foreach ($parents as $parent) {
-            $parent->assignRole('parent');
-        }
+        $parents = User::factory()->count(10)->create([
+            'role_id' => 'PARENT'
+        ]);
     }
 }

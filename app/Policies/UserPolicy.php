@@ -3,24 +3,18 @@
 namespace App\Policies;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 
 class UserPolicy
 {
-    public function before(User $user): ?bool
-    {
-        if ($user->hasRole('administrateur')) {
-            return true;
-        }
-
-        return null;
-    }
+    use TraitCheckAuthorization;
 
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return $user->hasPermissionTo('Afficher liste des utilisateurs');
+        return $this->isAuthorized($user, 'viewAnyUser');
     }
 
     /**
@@ -44,7 +38,8 @@ class UserPolicy
      */
     public function update(User $user, User $model): bool
     {
-        return $user->id == $model->id && $model->provider == 'local';
+        return $user->hasPermissionTo('Modifier un utilisateur');
+        // return $user->id == $model->id && $model->provider == 'local';
     }
 
     /**

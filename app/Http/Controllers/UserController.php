@@ -15,13 +15,13 @@ class UserController extends Controller
     use AuthorizesRequests;
     public UserRepository $userRepository;
     // public PhotoService $photoService;
-    
+
     public function __construct(UserRepository $userRepository)
     {
         $this->userRepository = $userRepository;
         // $this->photoService = $photoService;
     }
-    
+
     /**
      * Display a listing of the resource.
      */
@@ -34,8 +34,8 @@ class UserController extends Controller
             'users' => $users,
             'name' => $request->query('name', ''),
             'email' => $request->query('email', ''),
-            'provider' => $request->query('provider', ''),
             'login_status_id' => $request->query('login_status_id', ''),
+            'role_id' => $request->query('role_id', ''),
             'mode' => $request->query('mode', 'table'),
         ]);
     }
@@ -69,7 +69,10 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        //
+        $this->authorize('update', [User::class, $user]);
+        return view('user.user-form', [
+            'user' => $user
+        ]);
     }
 
     /**

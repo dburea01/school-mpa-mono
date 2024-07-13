@@ -37,7 +37,7 @@
                                 @else
                                 <i class="bi bi-person"></i>
                                 @endif
-                                {{ Auth::user()->full_name }} ( {{ Auth::user()->getRoleNames()->first() }} )
+                                {{ Auth::user()->full_name }} ( {{ Auth::user()->role->name }} )
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown1">
                                 <li><a class="dropdown-item" href="{{ route('logout') }}">Se déconnecter</a></li>
@@ -57,7 +57,7 @@
                                 Menu
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown2">
-                                @can('Afficher liste des utilisateurs')<li><a class="dropdown-item" href="{{ route('users.index') }}">Liste utilisateurs</a></li>@endcan
+                                @can('viewAny', App\models\User::class)<li><a class="dropdown-item" href="{{ route('users.index') }}">Liste utilisateurs</a></li>@endcan
                                 @can('Autre action')<li><a class="dropdown-item" href="#">Autre action</a></li>@endcan
                                 <li>
                                     <hr class="dropdown-divider">

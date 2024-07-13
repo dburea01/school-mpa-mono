@@ -23,11 +23,7 @@
                     </div>
 
                     <div class="mt-1">
-                        <select name="provider" id="provider" class="form-select form-select-sm" aria-label="select provider">
-                            <option value="" @if (''===$provider) selected @endif>-- tous provider --</option>
-                            <option value="local" @if ('local'===$provider) selected @endif>local</option>
-                            <option value="google" @if ('google'===$provider) selected @endif>google</option>
-                        </select>
+                        <x-select-role :value="$role_id" name="role_id" id="role_id" />
                     </div>
 
                     <div class="mt-1">
@@ -49,71 +45,44 @@
         <div class="card mt-3 mt-md-0 shadow">
             <div class="card-header text-center">
                 Liste des utilisateurs ({{ $users->count() }}/{{ $users->total() }})
-                {{--
-                <div class="btn-group btn-group-sm" role="group" aria-label="display mode">
-                    <button type="button" class="btn btn-outline-primary mode @if($mode == 'photo') active @endif" data-mode="photo" aria-label="mode photo"><i class="bi bi-person-vcard"></i></button>
-                    <button type="button" class="btn btn-outline-primary mode @if($mode == 'table') active @endif" data-mode="table" aria-label="mode table"><i class="bi bi-card-list"></i></button>
-                </div>
-                --}}
             </div>
             <div class="card-body">
 
-                @if($mode == 'table')
                 <div class="table-responsive">
                     <table class="table table-striped table-sm table-bordered table-hover">
-                        {{--
-                    <thead>
+
+                        <thead>
                             <tr>
                                 <th>Nom</th>
-                                <th>Email</th>
-                                <th>Login Status</th>
+                                <th>Rôle</th>
+                                <th>Status</th>
                                 <th>&nbsp;</th>
                             </tr>
                         </thead>
-                        --}}
+
                         <tbody>
                             @foreach ($users as $user)
                             <tr>
-                                <td><a href="{{ route('users.edit', ['user' => $user]) }}">{{ $user->name }}</a></td>
-                                <td>{{ $user->email }} @if ($user->provider == 'google') <i class="bi bi-google"></i> @endif</td>
+                                <td>
+                                    @can('modifier utilisateur')
+                                    <a href="{{ route('users.edit', ['user' => $user]) }}">{{ $user->full_name }}</a>
+                                    @else
+                                    {{ $user->full_name }}
+                                    @endcan
+                                </td>
+                                <td><x-span-roles :role-names="$user->getRoleNames()" /></td>
                                 <td>{{ $user->login_status_id }}</td>
-                                {{--<td><button type="button" class="btn btn-danger btn-sm btn-delete-user" data-bs-toggle="modal" data-bs-target="#exampleModal" data-userid="{{$user->id}}" data-username="{{$user->name}}" aria-label="delete user">
-                                <i class="bi bi-trash"></i>
-                                </button>
-                                </td>--}}
-                                <td style="cursor: pointer;">
-                                    <i class="bi bi-trash btn-delete-user text-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" data-userid="{{$user->id}}" data-username="{{$user->name}}">
-                                    </i>
-
+                                <td>
+                                    @if(! $user->hasRole('administrateur') && auth()->user()->can('supprimer utilisateur'))
+                                    <i class="bi bi-trash btn-delete-user text-danger" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#exampleModal" data-userid="{{$user->id}}" data-username="{{$user->name}}"></i>
+                                    @endif
                                 </td>
                             </tr>
                             @endforeach
                         </tbody>
                     </table>
                 </div>
-                @endif
 
-                @if ($mode == 'photo')
-                <div class="table-responsive">
-                    <table class="table table-striped table-sm">
-                        @foreach ($users as $user)
-                        <tr>
-                            <td class="align-middle">
-                                <img style="width: 100px;" src="@if ($user->photo_url) {{ $user->photo_url }} @else {{ asset('img/user.png') }} @endif" alt="image not found" class="border">
-                            </td>
-                            <td class="align-middle">
-                                <h3><a href="{{ route('users.edit', ['user' => $user]) }}">{{ $user->name }}</a></h3>
-                                <h4>{{ $user->email }} @if ($user->provider == 'google') <i class="bi bi-google"></i> @endif</h4>
-                                <h6>{{ $user->login_status_id }}</h6>
-
-                            </td>
-
-
-                        </tr>
-                        @endforeach
-                    </table>
-                </div>
-                @endif
 
                 <div class="row">
                     {{ $users->withQueryString()->links() }}

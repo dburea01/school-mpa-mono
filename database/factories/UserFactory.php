@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\LoginStatus;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -41,7 +42,7 @@ class UserFactory extends Factory
         }
       
         
-        $loginStatuses = ['CREATED', 'VALIDATED', 'BLOCKED'];
+        $loginStatuses = LoginStatus::all()->pluck('id');
 
         return [
             'last_name' => strtoupper($lastName),

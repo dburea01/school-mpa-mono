@@ -16,6 +16,7 @@ return new class extends Migration
             // $table->integer('role_id');
             $table->string('last_name');
             $table->string('first_name');
+            $table->string('role_id');
             $table->char('gender_id', 1)->nullable()->comment('1 : boy / 2 : girl');
             $table->char('civility_id', 10)->nullable()->comment('Mde / Melle / Mr');
             $table->date('birth_date')->nullable();
@@ -30,6 +31,9 @@ return new class extends Migration
             $table->string('updated_by')->nullable();
             $table->rememberToken();
             $table->timestamps();
+
+            $table->foreign('role_id')->references('id')->on('roles');
+            $table->foreign('login_status_id')->references('id')->on('login_statuses');
         });
     }
 

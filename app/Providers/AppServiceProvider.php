@@ -2,7 +2,10 @@
 
 namespace App\Providers;
 
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -21,9 +24,19 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // Implicitly grant "Admin" role all permissions
-        // This works in the app by using gate-related functions like auth()->user->can() and @can()
         Gate::before(function ($user, $ability) {
-            return $user->hasRole('administrateur') ? true : null;
+            return $user->isAdmin() ? true : null;
         });
+
+        Paginator::useBootstrapFive();
+        // Paginator::defaultView('vendor/pagination/bootstrap-5');
+
+        // if ($this->app->environment() !== 'production') {
+        Mail::alwaysTo('dburea01@gmail.com');
+        // }
+
+        if (config('app.env') === 'production') {
+            URL::forceScheme('https');
+        }
     }
 }

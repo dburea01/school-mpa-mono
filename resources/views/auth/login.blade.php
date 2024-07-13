@@ -74,9 +74,9 @@
 
             <div class="card-body">
                 @php
-                $admin = App\Models\User::role('administrateur')->where('login_status_id', 'VALIDATED')->first();
-                $teacher = App\Models\User::role('enseignant')->where('login_status_id', 'VALIDATED')->first();
-                $parent = App\Models\User::role('parent')->where('login_status_id', 'VALIDATED')->first();
+                $admin = App\Models\User::where('role_id', 'ADMIN')->where('login_status_id', 'VALIDATED')->first();
+                $teacher = App\Models\User::where('role_id', 'TEACHER')->where('login_status_id', 'VALIDATED')->first();
+                $parent = App\Models\User::where('role_id', 'PARENT')->where('login_status_id', 'VALIDATED')->first();
                 @endphp
 
 
