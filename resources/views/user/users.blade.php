@@ -45,6 +45,9 @@
         <div class="card mt-3 mt-md-0 shadow">
             <div class="card-header text-center">
                 Liste des utilisateurs ({{ $users->count() }}/{{ $users->total() }})
+                @can('create', App\Models\User::class)
+                <a href="{{ route('users.create') }}">Créer utilisateur</a>
+                @endcan
             </div>
             <div class="card-body">
 
@@ -70,11 +73,11 @@
                                     {{ $user->full_name }}
                                     @endcan
                                 </td>
-                                <td><x-span-roles :role-names="$user->getRoleNames()" /></td>
+                                <td>{{ $user->role->name }}</td>
                                 <td>{{ $user->login_status_id }}</td>
                                 <td>
-                                    @if(! $user->hasRole('administrateur') && auth()->user()->can('supprimer utilisateur'))
-                                    <i class="bi bi-trash btn-delete-user text-danger" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#exampleModal" data-userid="{{$user->id}}" data-username="{{$user->name}}"></i>
+                                    @if($user->role_id != 'ADMIN' && auth()->user()->can('updateUser'))
+                                    <i class="bi bi-trash btn-delete-user text-danger" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#exampleModal" data-userid="{{$user->id}}" data-username="{{$user->full_name}}"></i>
                                     @endif
                                 </td>
                             </tr>

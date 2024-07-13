@@ -58,7 +58,7 @@
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown2">
                                 @can('viewAny', App\models\User::class)<li><a class="dropdown-item" href="{{ route('users.index') }}">Liste utilisateurs</a></li>@endcan
-                                @can('Autre action')<li><a class="dropdown-item" href="#">Autre action</a></li>@endcan
+                                @can('autre action')<li><a class="dropdown-item" href="#">Autre action</a></li>@endcan
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>

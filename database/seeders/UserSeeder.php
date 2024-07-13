@@ -28,7 +28,7 @@ class UserSeeder extends Seeder
         ]);
 
         // create some parents
-        $parents = User::factory()->count(10)->create([
+        $parents = User::factory()->count(100)->create([
             'role_id' => 'PARENT'
         ]);
     }

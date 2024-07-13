@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Repositories;
 
 use App\Models\User;
@@ -18,10 +16,10 @@ class UserRepository
      */
     public function index(array $request)
     {
-        $query = User::with('roles')->orderBy('last_name');
+        $query = User::with('role')->orderBy('last_name');
 
         $query->when(isset($request['role_id']), function ($q) use ($request) {
-           return $q->role($request['role_id']);
+            return $q->where('role_id', $request['role_id']);
         });
 
         $query->when(isset($request['name']), function ($q) use ($request) {
@@ -47,7 +45,7 @@ class UserRepository
     {
         $user = new User();
         $user->fill($data);
-        $user->password = Hash::make($data['password']);
+        // $user->password = Hash::make($data['password']);
         $user->email_verification_code = Str::random(32);
         $user->login_status_id = $login_status_id;
         $user->save();

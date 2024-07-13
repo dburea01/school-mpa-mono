@@ -45,7 +45,13 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        $this->authorize('create', User::class);
+        $user = new User();
+        $user->role_id = 'STUDENT';
+
+        return view('user.user-form', [
+            'user' => $user,
+        ]);
     }
 
     /**
@@ -53,7 +59,19 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
-        //
+        // see the form request for the authorizations
+
+        // check if the user to create is a potential duplicated user.
+        // todo
+
+        try {
+            $user = $this->userRepository->insert($request->all(), 'CREATED');
+
+            return redirect("/users?name=$user->last_name")
+                ->with('success', "Utilisateur $user->full_name créé");
+        } catch (\Throwable $th) {
+            return back()->with('error', 'Utilisateur non créé')->withInput();
+        }
     }
 
     /**
@@ -78,9 +96,17 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateUserRequest $request, User $user)
-    {
-        //
+    public function update(StoreUserRequest $request, User $user)
+        {
+        // see the form request for the authorizations
+        try {
+            $userUpdated = $this->userRepository->update($user, $request->all());
+
+            return redirect("/users?name=$user->last_name")
+                ->with('success', "Utilisateur $userUpdated->full_name modifié");
+        } catch (\Throwable $th) {
+            return back()->with('error', $th->getMessage());
+        }
     }
 
     /**
@@ -88,6 +114,14 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        $this->authorize('delete', $user);
+
+        try {
+            $this->userRepository->delete($user);
+
+            return redirect()->route('users.index')->with('success', "Utilisateur $user->full_name supprimé");
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', "Utilisateur $user->full_name non supprimé");
+        }
     }
 }

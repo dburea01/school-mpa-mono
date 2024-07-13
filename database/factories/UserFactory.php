@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Civility;
 use App\Models\LoginStatus;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
@@ -28,20 +29,9 @@ class UserFactory extends Factory
         $genderId = fake()->randomElement(['1', '2']);
         $firstName = str_replace(' ', '', $this->stripAccents(fake()->firstName($genderId == '1' ? 'male' : 'female')));
         $lastName = str_replace(' ', '', $this->stripAccents(fake()->lastName()));
-   
-        switch ($genderId) {
-            case '1':
-                $civilityId = 'Mr';
-                break;
-            case '2':
-                $civilityId = fake()->randomElement(['Melle', 'Mde']);
-                break;
-            default:
-                $civilityId = null;
-                break;
-        }
-      
-        
+
+        $civilities = Civility::all()->pluck('id');
+
         $loginStatuses = LoginStatus::all()->pluck('id');
 
         return [
@@ -49,8 +39,16 @@ class UserFactory extends Factory
             'first_name' => $firstName,
             // 'role_id' => $roleRandom->id,
             'gender_id' => $genderId,
-            'civility_id' => $civilityId,
+            'civility_id' => $civilities->random(),
             'birth_date' => fake()->date(),
+
+            'other_comment' => fake()->sentence(),
+            'health_comment' => fake()->sentence(),
+            'address' => fake()->streetAddress(),
+            'postal_code' => fake()->postcode(),
+            'city' => fake()->city(),
+            'country_id' => 'FR',
+            'phone_number' => fake()->phoneNumber(),
             'email' => strtolower($firstName) . '.' . strtolower($lastName) . '@' . fake()->domainName(),
             'email_verified_at' => now(),
             'password' => Hash::make('password'),

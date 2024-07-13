@@ -2,11 +2,11 @@
 
 namespace App\View\Components;
 
+use App\Models\Role;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\View\Component;
-use Spatie\Permission\Models\Role;
 
 class SelectRole extends Component
 {
@@ -19,7 +19,7 @@ class SelectRole extends Component
         public string $name,
         public string $id
     ) {
-        $this->roles = Role::all();
+        $this->roles = Role::all()->sortBy('name');
     }
 
     /**

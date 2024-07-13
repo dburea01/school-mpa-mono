@@ -17,22 +17,34 @@ return new class extends Migration
             $table->string('last_name');
             $table->string('first_name');
             $table->string('role_id');
+            $table->string('login_status_id');
+            $table->string('civility_id', 10)->nullable();
             $table->char('gender_id', 1)->nullable()->comment('1 : boy / 2 : girl');
-            $table->char('civility_id', 10)->nullable()->comment('Mde / Melle / Mr');
             $table->date('birth_date')->nullable();
+
+            $table->text('other_comment')->nullable();
+            $table->text('health_comment')->nullable();
+            $table->text('address')->nullable();
+            $table->string('postal_code')->nullable();
+            $table->string('city')->nullable();
+            $table->string('country_id')->nullable();
+
+            $table->string('phone_number')->nullable();
             $table->string('email')->unique();
             $table->string('email_verification_code')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
             $table->string('photo_path')->nullable();
             $table->string('photo_url')->nullable();
-            $table->string('login_status_id');
+            
             $table->string('created_by');
             $table->string('updated_by')->nullable();
             $table->rememberToken();
             $table->timestamps();
 
             $table->foreign('role_id')->references('id')->on('roles');
+            $table->foreign('country_id')->references('id')->on('countries')->nullOnDelete();
+            $table->foreign('civility_id')->references('id')->on('civilities')->nullOnDelete();
             $table->foreign('login_status_id')->references('id')->on('login_statuses');
         });
     }
