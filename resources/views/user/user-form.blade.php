@@ -334,8 +334,14 @@
                 </div>
                 <div class="modal-body">
                     <p>Attention, la personne semble déjà exister. Vérifiez avant de valider.</p>
-                    <table class="table table-sm" id="table-duplicated-user">
-                        
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Prénom</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-duplicated-user"></tbody>
                     </table>
                 </div>
                 <div class="modal-footer">
@@ -389,10 +395,16 @@
                             $("#form-user").submit();
                         } else {
                             console.log('des doublons')
-                            let append = ''
-                            data.foreach(user => append = append('<tr><td>New Name</td><td>New Age</td></tr>'))
-                            console.log(append)
-                            $('#modalDuplicatedUser').modal('show');
+                            let rows = ''
+                            for (let key in data) {
+                                console.log(key)
+                                console.log(data[key])
+                                rows = rows + '<tr><td>' + data[key].last_name + '</td><td>' + data[key].first_name + '</td></tr>'
+                            }
+                            //data.foreach(user => append = append('<tr><td>New Name</td><td>New Age</td></tr>'))
+                            console.log(rows)
+                            $('#table-duplicated-user').html(rows)
+                            $('#modalDuplicatedUser').modal('show')
                         }
                     }
                 });
