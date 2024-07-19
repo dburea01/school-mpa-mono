@@ -89,4 +89,14 @@ class UserRepository
                 'email_verified_at' => now(),
             ]);
     }
+
+    public function getDuplicatedUser(string $lastName, string $firstName) {
+        
+        // @todo : add more and more possibilities ....
+        $users = User::where('last_name', strtoupper($lastName))->where('first_name', ucfirst($firstName))
+        ->select('first_name', 'last_name', 'id')
+        ->get();
+
+        return $users;
+    }
 }

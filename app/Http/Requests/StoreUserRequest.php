@@ -56,6 +56,41 @@ class StoreUserRequest extends FormRequest
                 'before:today',
             ],
             'country_id' => 'nullable|exists:countries,id',
+            'other_comment' => 'max:500',
+            'health_comment' => 'max:500'
+        ];
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'role_id.required' => 'Le rôle est obligatoire',
+            'role_id.exists' => 'Le rôle est incorrect',
+
+            'last_name.required' => 'Le nom de famille est obligatoire',
+            'first_name.required' => 'Le prénom est obligatoire',
+
+            'email.email' => 'Email incorrect',
+            'email.unique' => 'Email déjà utilisé par un autre utilisateur',
+
+            'gender_id.required' => 'Le genre est obligatoire pour ce rôle',
+            'gender_id.in' => 'Le genre est incorrect (1 / 2)',
+
+            'civility_id' => 'Civilité incorrecte',
+
+            'birth_date.required' => 'La date de naissance est obligatoire pour ce rôle',
+            'birth_date.date_format' => 'Date incorrecte (jj/mm/aaaa)',
+            'birth_date.before' => 'Date dans le futur non autorisée',
+
+            'country_id.exists' => 'Pays incorrect',
+
+            'health_comment.max' => 'Informations santé trop long (500 caractères max)',
+            'other_comment.max' => 'Commentaire trop long (500 caractères max)'
         ];
     }
 }

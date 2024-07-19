@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateUserRequest;
 use App\Repositories\UserRepository;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -48,6 +49,7 @@ class UserController extends Controller
         $this->authorize('create', User::class);
         $user = new User();
         $user->role_id = 'STUDENT';
+        $user->login_status_id = 'CREATED';
 
         return view('user.user-form', [
             'user' => $user,
@@ -70,7 +72,7 @@ class UserController extends Controller
             return redirect("/users?name=$user->last_name")
                 ->with('success', "Utilisateur $user->full_name créé");
         } catch (\Throwable $th) {
-            return back()->with('error', 'Utilisateur non créé')->withInput();
+            return back()->with('error', 'Utilisateur non créé'.$th->getMessage())->withInput();
         }
     }
 
@@ -123,5 +125,14 @@ class UserController extends Controller
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', "Utilisateur $user->full_name non supprimé");
         }
+    }
+
+    public function findDuplicatedUser(Request $request)
+    {
+        $this->authorize('viewAny', User::class);
+
+        $users = $this->userRepository->getDuplicatedUser($request->last_name, $request->first_name);
+Log::info($users);
+        return response()->json($users);
     }
 }

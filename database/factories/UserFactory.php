@@ -40,7 +40,7 @@ class UserFactory extends Factory
             // 'role_id' => $roleRandom->id,
             'gender_id' => $genderId,
             'civility_id' => $civilities->random(),
-            'birth_date' => fake()->date(),
+            // 'birth_date' => fake()->date(),
 
             'other_comment' => fake()->sentence(),
             'health_comment' => fake()->sentence(),
