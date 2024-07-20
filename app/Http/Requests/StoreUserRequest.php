@@ -57,7 +57,7 @@ class StoreUserRequest extends FormRequest
             ],
             'country_id' => 'nullable|exists:countries,id',
             'other_comment' => 'max:500',
-            'health_comment' => 'max:500'
+            'health_comment' => 'max:500',
         ];
     }
 
@@ -90,7 +90,7 @@ class StoreUserRequest extends FormRequest
             'country_id.exists' => 'Pays incorrect',
 
             'health_comment.max' => 'Informations santé trop long (500 caractères max)',
-            'other_comment.max' => 'Commentaire trop long (500 caractères max)'
+            'other_comment.max' => 'Commentaire trop long (500 caractères max)',
         ];
     }
 }

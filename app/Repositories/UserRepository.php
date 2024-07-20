@@ -4,10 +4,9 @@ namespace App\Repositories;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class UserRepository
@@ -26,13 +25,13 @@ class UserRepository
 
         $query->when(isset($request['name']), function ($q) use ($request) {
             return $q->where(function (Builder $query2) use ($request) {
-                $query2->where('last_name', 'like', '%' . $request['name'] . '%')
-                    ->orWhere('first_name', 'like', '%' . $request['name'] . '%');
+                $query2->where('last_name', 'like', '%'.$request['name'].'%')
+                    ->orWhere('first_name', 'like', '%'.$request['name'].'%');
             });
         });
 
         $query->when(isset($request['email']), function ($q) use ($request) {
-            return $q->where('email', 'like', '%' . $request['email'] . '%');
+            return $q->where('email', 'like', '%'.$request['email'].'%');
         });
 
         $query->when(isset($request['login_status_id']), function ($q) use ($request) {
@@ -92,25 +91,24 @@ class UserRepository
             ]);
     }
 
-    public function getDuplicatedUser(string $lastName, string $firstName, ?string $userIdToIgnore) {
-        
+    public function getDuplicatedUser(string $lastName, string $firstName, ?string $userIdToIgnore): Collection
+    {
+
         // @todo : add more and more possibilities ....
 
         $query = User::with('role')
-        ->where(function(Builder $query) use ($lastName, $firstName){
-            $query->where(function(builder $query2) use ($lastName, $firstName){
-                $query2->where('last_name', strtoupper($lastName))
-                ->where('first_name', ucfirst($firstName));
-            })
-            ->orWhere(function(Builder $query2) use ($lastName, $firstName){
-                $query2->where('last_name', ucfirst($firstName))
-                ->where('first_name', strtoupper($lastName));
+            ->where(function (Builder $query) use ($lastName, $firstName) {
+                $query->where(function (builder $query2) use ($lastName, $firstName) {
+                    $query2->where('last_name', strtoupper($lastName))
+                        ->where('first_name', ucfirst($firstName));
+                })
+                    ->orWhere(function (Builder $query2) use ($lastName, $firstName) {
+                        $query2->where('last_name', ucfirst($firstName))
+                            ->where('first_name', strtoupper($lastName));
+                    });
             });
-        });
-        
 
         $query->when(isset($userIdToIgnore), function ($q) use ($userIdToIgnore) {
-            Log::info($userIdToIgnore);
             return $q->where('id', '<>', $userIdToIgnore);
         });
 

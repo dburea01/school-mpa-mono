@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Role extends Model
 {
-    use HasFactory;
     use HasCreatedUpdatedBy;
+    use HasFactory;
 
     public $incrementing = false;
 

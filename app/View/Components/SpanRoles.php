@@ -3,8 +3,8 @@
 namespace App\View\Components;
 
 use Closure;
-use Illuminate\Support\Collection;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Collection;
 use Illuminate\View\Component;
 
 class SpanRoles extends Component
@@ -14,10 +14,7 @@ class SpanRoles extends Component
      */
     public function __construct(
         public Collection $roleNames
-    )
-    {
-    
-    }
+    ) {}
 
     /**
      * Get the view / contents that represent the component.

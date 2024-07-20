@@ -14,12 +14,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property string $role_id
  * @property string $email
  */
-
 class User extends Authenticatable
 {
+    use HasCreatedUpdatedBy;
     use HasFactory;
     use HasUuids;
-    use HasCreatedUpdatedBy;
 
     protected $fillable = [
         'id',
@@ -55,13 +54,13 @@ class User extends Authenticatable
         $this->attributes['first_name'] = ucfirst($value);
     }
 
-    public function getBirthDateAttribute(string $value = null): string|null
+    public function getBirthDateAttribute(?string $value = null): ?string
     {
         /** @phpstan-ignore-next-line */
         return $value ? Carbon::createFromFormat('Y-m-d', $value)->format('d/m/Y') : null;
     }
 
-    public function setBirthDateAttribute(string $value = null): void
+    public function setBirthDateAttribute(?string $value = null): void
     {
         /** @phpstan-ignore-next-line */
         $this->attributes['birth_date'] = $value ? Carbon::createFromFormat('d/m/Y', $value)->format('Y-m-d') : null;
@@ -78,7 +77,7 @@ class User extends Authenticatable
 
     public function getFullNameAttribute(): string
     {
-        return $this->first_name . ' ' . $this->last_name;
+        return $this->first_name.' '.$this->last_name;
     }
 
     public function isAdmin(): bool

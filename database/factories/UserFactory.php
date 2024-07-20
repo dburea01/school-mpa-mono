@@ -49,11 +49,11 @@ class UserFactory extends Factory
             'city' => fake()->city(),
             'country_id' => 'FR',
             'phone_number' => fake()->phoneNumber(),
-            'email' => strtolower($firstName) . '.' . strtolower($lastName) . '@' . fake()->domainName(),
+            'email' => strtolower($firstName).'.'.strtolower($lastName).'@'.fake()->domainName(),
             'email_verified_at' => now(),
             'password' => Hash::make('password'),
             'remember_token' => Str::random(10),
-            'login_status_id' => fake()->randomElement($loginStatuses)
+            'login_status_id' => fake()->randomElement($loginStatuses),
         ];
     }
 

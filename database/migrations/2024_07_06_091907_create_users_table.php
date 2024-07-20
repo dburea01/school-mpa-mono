@@ -36,7 +36,7 @@ return new class extends Migration
             $table->string('password')->nullable();
             $table->string('photo_path')->nullable();
             $table->string('photo_url')->nullable();
-            
+
             $table->string('created_by');
             $table->string('updated_by')->nullable();
             $table->rememberToken();

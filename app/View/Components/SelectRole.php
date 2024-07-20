@@ -11,6 +11,7 @@ use Illuminate\View\Component;
 class SelectRole extends Component
 {
     public Collection $roles;
+
     /**
      * Create a new component instance.
      */

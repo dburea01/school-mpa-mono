@@ -18,14 +18,14 @@ class SelectCivility extends Component
 
     public bool $required = false;
 
-    public string|null  $value;
+    public ?string $value;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct(string $type, string $name, string $id, bool $required, string $value = null)
+    public function __construct(string $type, string $name, string $id, bool $required, ?string $value = null)
     {
         $this->civilities = Civility::orderBy('position')->get();
         $this->type = $type;

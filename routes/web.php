@@ -15,7 +15,6 @@ Route::get('/login', function () {
 
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 
-
 /*
 |--------------------------------------------------------------------------
 | routes with authentication
@@ -25,7 +24,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::resource('/users', UserController::class);
-    
+
     Route::get('/find-duplicated-users', [UserController::class, 'findDuplicatedUser'])->name('getDuplicatedUsers');
     Route::get('/potential-duplicated-user', [UserController::class, 'potentialDuplicatedUser'])->name('potentialDuplicatedUser');
 });

@@ -11,6 +11,6 @@ class RoleTask extends Model
 
     protected $fillable = [
         'role_id',
-        'task_id'
+        'task_id',
     ];
 }

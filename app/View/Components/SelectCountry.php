@@ -16,14 +16,14 @@ class SelectCountry extends Component
 
     public bool $required = false;
 
-    public string|null  $value;
+    public ?string $value;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct(string $name, string $id, bool $required, string $value = null)
+    public function __construct(string $name, string $id, bool $required, ?string $value = null)
     {
         $this->countries = Country::orderBy('position')->get();
         $this->name = $name;

@@ -3,7 +3,6 @@
 namespace App\Policies;
 
 use App\Models\User;
-use Illuminate\Support\Facades\Log;
 
 class UserPolicy
 {
@@ -38,8 +37,7 @@ class UserPolicy
      */
     public function update(User $user, User $model): bool
     {
-        return $user->hasPermissionTo('Modifier un utilisateur');
-        // return $user->id == $model->id && $model->provider == 'local';
+        return $this->isAuthorized($user, 'updateUser');
     }
 
     /**
