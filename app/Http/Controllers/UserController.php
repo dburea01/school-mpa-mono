@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Http\Resources\UserResourceBasic;
+use App\Models\Role;
 use App\Repositories\UserRepository;
+use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -64,7 +67,29 @@ class UserController extends Controller
         // see the form request for the authorizations
 
         // check if the user to create is a potential duplicated user.
-        // todo
+        if (! $request->has('check_duplicated_user_done')) {
+
+            /** @var string $lastName */
+            $lastName = $request->last_name;
+            /** @var string $firstName */
+            $firstName = $request->first_name;
+
+            $existingUsers = $this->userRepository->getDuplicatedUser($lastName, $firstName, null);
+
+            if ($existingUsers->count() !== 0) {
+                $userToCreate = new User();
+                $userToCreate->fill($request->all());
+                $roleUserToCreate = Role::find($request->role_id);
+
+                session([
+                    'existingUsers' => $existingUsers,
+                    'userToCreate' => $userToCreate,
+                    'roleUserToCreate' => $roleUserToCreate
+                ]);
+
+                return redirect("/potential-duplicated-user");
+            }
+        }
 
         try {
             $user = $this->userRepository->insert($request->all(), 'CREATED');
@@ -131,8 +156,16 @@ class UserController extends Controller
     {
         $this->authorize('viewAny', User::class);
 
-        $users = $this->userRepository->getDuplicatedUser($request->last_name, $request->first_name);
-Log::info($users);
-        return response()->json($users);
+        $users = $this->userRepository->getDuplicatedUser($request->last_name, $request->first_name, $request->id);
+
+        return UserResourceBasic::collection($users);
+    }
+
+    public function potentialDuplicatedUser(): View
+    {
+        return view('user.potential-duplicated-user', [
+            'userToCreate' => session('userToCreate'),
+            'existingUsers' => session('existingUsers'),
+        ]);
     }
 }

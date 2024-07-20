@@ -5,7 +5,9 @@ namespace App\Repositories;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class UserRepository
@@ -90,13 +92,28 @@ class UserRepository
             ]);
     }
 
-    public function getDuplicatedUser(string $lastName, string $firstName) {
+    public function getDuplicatedUser(string $lastName, string $firstName, ?string $userIdToIgnore) {
         
         // @todo : add more and more possibilities ....
-        $users = User::where('last_name', strtoupper($lastName))->where('first_name', ucfirst($firstName))
-        ->select('first_name', 'last_name', 'id')
-        ->get();
 
-        return $users;
+        $query = User::with('role')
+        ->where(function(Builder $query) use ($lastName, $firstName){
+            $query->where(function(builder $query2) use ($lastName, $firstName){
+                $query2->where('last_name', strtoupper($lastName))
+                ->where('first_name', ucfirst($firstName));
+            })
+            ->orWhere(function(Builder $query2) use ($lastName, $firstName){
+                $query2->where('last_name', ucfirst($firstName))
+                ->where('first_name', strtoupper($lastName));
+            });
+        });
+        
+
+        $query->when(isset($userIdToIgnore), function ($q) use ($userIdToIgnore) {
+            Log::info($userIdToIgnore);
+            return $q->where('id', '<>', $userIdToIgnore);
+        });
+
+        return $query->get();
     }
 }

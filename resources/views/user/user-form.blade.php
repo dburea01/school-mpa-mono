@@ -142,7 +142,7 @@
                 </div>
 
                 <div class="card shadow mt-3">
-                    <div class="card-header text-center">Statu</div>
+                    <div class="card-header text-center">Statu (@todo)</div>
 
                     <div class="card-body">
                         {{-- login status --}}
@@ -272,7 +272,7 @@
         {{-- buttons --}}
         <div class="row mt-3">
             <div class="col">
-                <button type="button" id="submit-form" class="btn btn-sm btn-success"><i class="bi bi-check2" aria-hidden="true"></i>
+                <button type="submit" id="submit-form" class="btn btn-sm btn-success"><i class="bi bi-check2" aria-hidden="true"></i>
                     @if ($user->id)
                     Modifier utilisateur
                     @else
@@ -329,30 +329,33 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="DuplicatedUser">Attention - potentiel doublons ?</strong></h5>
+                    <h5 class="modal-title" id="DuplicatedUser"><strong>Attention - potentiel doublons ?</strong></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Attention, la personne semble déjà exister. Vérifiez avant de valider.</p>
+                    <p>Attention, il existe des utilisateurs similaires. Vérifiez avant de valider.</p>
                     <table class="table table-sm">
                         <thead>
                             <tr>
                                 <th>Nom</th>
                                 <th>Prénom</th>
+                                <th>Rôle</th>
+                                <th>Commune</th>
                             </tr>
                         </thead>
                         <tbody id="table-duplicated-user"></tbody>
                     </table>
                 </div>
                 <div class="modal-footer">
-                    <form class="form-inline" method="POST" action="/users/{{ $user->id }}">
-                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                        @method('DELETE')
-                        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal"><i class="bi bi-chevron-left" aria-hidden="true"></i>
-                            Abandonner</button>
-                        <button type="submit" class="btn btn-sm btn-danger ml-3"><i class="bi bi-trash" aria-hidden="true"></i>
-                            Supprimer <strong>{{ $user->full_name }}</strong></button>
-                    </form>
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal"><i class="bi bi-chevron-left" aria-hidden="true"></i>
+                        Abandonner</button>
+                    <button type="submit" form="form-user" class="btn btn-sm btn-success ml-3"><i class="bi bi-check2" aria-hidden="true"></i>
+                        @if ($user->id)
+                        Modifier utilisateur
+                        @else
+                        Créer utilisateur
+                        @endif
+                    </button>
                 </div>
             </div>
         </div>
@@ -378,39 +381,40 @@
             $("#role_id").change(function() {
                 displayHiddeElement();
             })
-
-            $("#submit-form").click(function(e) {
-                // $("#form-user").reportValidity();
-
-                $.ajax({
-                    url: "{{ route('getDuplicatedUsers') }}",
-                    data: {
-                        first_name: $("#first_name").val(),
-                        last_name: $("#last_name").val()
-                    },
-                    dataType: "json",
-                    success: function(data) {
-                        console.log(data)
-                        if (data.length == 0) {
-                            $("#form-user").submit();
-                        } else {
-                            console.log('des doublons')
-                            let rows = ''
-                            for (let key in data) {
-                                console.log(key)
-                                console.log(data[key])
-                                rows = rows + '<tr><td>' + data[key].last_name + '</td><td>' + data[key].first_name + '</td></tr>'
+            /*
+                        $("#submit-form").click(function(e) {
+                           
+                            const first_name = $("#first_name").val()
+                            const last_name = $("#last_name").val()
+                            if (first_name != '' && last_name != '') {
+                                $.ajax({
+                                    url: "{{ route('getDuplicatedUsers') }}",
+                                    data: {
+                                        first_name: $("#first_name").val(),
+                                        last_name: $("#last_name").val(),
+                                        id: "{{ $user->id }}"
+                                    },
+                                    dataType: "json",
+                                    success: function(users) {
+                                        console.log(users)
+                                        if (users.data.length == 0) {
+                                            $("#form-user").submit();
+                                        } else {
+                                            let rows = ''
+                                            for (let key in users.data) {
+                                                const user = users.data[key]
+                                                rows = rows + '<tr><td>' + user.last_name + '</td><td>' + user.first_name + '</td><td>' + user.role + '</td><td>' + user.city + '</td></tr>'
+                                            }
+                                            $('#table-duplicated-user').html(rows)
+                                            $('#modalDuplicatedUser').modal('show')
+                                        }
+                                    }
+                                });
                             }
-                            //data.foreach(user => append = append('<tr><td>New Name</td><td>New Age</td></tr>'))
-                            console.log(rows)
-                            $('#table-duplicated-user').html(rows)
-                            $('#modalDuplicatedUser').modal('show')
-                        }
-                    }
-                });
 
 
-            });
+                        });
+            */
 
             function displayHiddeElement() {
                 if ($("#role_id").val() == 'STUDENT') {
