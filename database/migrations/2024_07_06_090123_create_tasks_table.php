@@ -27,6 +27,12 @@ return new class extends Migration
             ['id' => 'updateUser',  'name' => 'Modifier un utilisateur'],
             ['id' => 'deleteUser',  'name' => 'Supprimer un utilisateur'],
 
+            ['id' => 'viewAnyPeriod', 'name' => 'Voir toutes les périodes'],
+            ['id' => 'viewPeriod',    'name' => 'Voir une période'],
+            ['id' => 'createPeriod',  'name' => 'Créer une période'],
+            ['id' => 'updatePeriod',  'name' => 'Modifier une période'],
+            ['id' => 'deletePeriod',  'name' => 'Supprimer une période'],
+
         ];
 
         foreach ($tasks as $task) {

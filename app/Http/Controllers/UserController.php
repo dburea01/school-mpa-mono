@@ -164,9 +164,7 @@ class UserController extends Controller
 
     public function potentialDuplicatedUser(): View
     {
-        return view('user.potential-duplicated-user', [
-            'userToCreate' => session('userToCreate'),
-            'existingUsers' => session('existingUsers'),
-        ]);
+        $this->authorize('create', User::class);
+        return view('user.potential-duplicated-user');
     }
 }

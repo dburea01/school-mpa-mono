@@ -23,6 +23,7 @@ return new class extends Migration
             $table->unique(['task_id', 'role_id']);
         });
 
+        // As the admin is authorized to all tasks, not necessary to create a role_task for him
         $roleTasks = [
             ['role_id' => 'TEACHER', 'task_id' => 'viewAnyUser'],
             ['role_id' => 'TEACHER', 'task_id' => 'viewUser'],

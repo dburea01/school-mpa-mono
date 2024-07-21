@@ -28,8 +28,9 @@
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body">
+                    @auth
                     <ul class="navbar-nav justify-content-start flex-grow-1 pe-3">
-                        @auth
+
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 @if (Auth::user()->photo_url)
@@ -51,32 +52,31 @@
                             </ul>
                         </li>
 
-                       
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Menu
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown2">
                                 @can('viewAny', App\models\User::class)<li><a class="dropdown-item" href="{{ route('users.index') }}">Liste utilisateurs</a></li>@endcan
-                                @can('autre action')<li><a class="dropdown-item" href="#">Autre action</a></li>@endcan
+                                @can('viewAny', App\models\Period::class)<li><a class="dropdown-item" href="{{ route('periods.index') }}">Liste périodes</a></li>@endcan
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
                                 <li><a class="dropdown-item" href="#">Something else here</a></li>
                             </ul>
                         </li>
-                       
-
-                       
-
-
-                        @else
-                        <li class="nav-item">
-                            <a href="{{ route('login') }}" class="nav-link">Se connecter</a>
-                        </li>
-                        @endauth
 
                     </ul>
+                    <span class="navbar-text">
+                        <x-display-current-period />
+                    </span>
+                    @endauth
+                    
+                    @guest
+                    <li class="nav-item">
+                        <a href="{{ route('login') }}" class="nav-link">Se connecter</a>
+                    </li>
+                    @endguest
 
                 </div>
             </div>

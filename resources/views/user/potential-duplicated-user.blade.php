@@ -75,7 +75,7 @@
                             </div>
                         </div>
 
-                        {{-- status --}}}
+                        {{-- status --}}
 
 
                         @if (session('userToCreate'))

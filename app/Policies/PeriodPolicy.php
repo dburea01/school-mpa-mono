@@ -2,9 +2,11 @@
 
 namespace App\Policies;
 
+use App\Models\Period;
 use App\Models\User;
+use Illuminate\Auth\Access\Response;
 
-class UserPolicy
+class PeriodPolicy
 {
     use TraitCheckAuthorization;
 
@@ -13,7 +15,7 @@ class UserPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $this->isAuthorized($user, 'viewAnyUser');
+        return $this->isAuthorized($user, 'viewAnyPeriod');
     }
 
     /**
@@ -21,22 +23,22 @@ class UserPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return $this->isAuthorized($user, 'createPeriod');
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, User $model): bool
+    public function update(User $user, Period $period): bool
     {
-        return $this->isAuthorized($user, 'updateUser');
+        return $this->isAuthorized($user, 'updatePeriod');
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, User $model): bool
+    public function delete(User $user, Period $period): bool
     {
-        return $this->isAuthorized($user, 'deleteUser');
+        return $this->isAuthorized($user, 'deletePeriod');
     }
 }

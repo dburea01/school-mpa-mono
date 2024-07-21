@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PeriodController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -25,8 +26,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::resource('/users', UserController::class);
 
-    Route::get('/find-duplicated-users', [UserController::class, 'findDuplicatedUser'])->name('getDuplicatedUsers');
+    // Route::get('/find-duplicated-users', [UserController::class, 'findDuplicatedUser'])->name('getDuplicatedUsers');
     Route::get('/potential-duplicated-user', [UserController::class, 'potentialDuplicatedUser'])->name('potentialDuplicatedUser');
+
+    Route::resource('/periods', PeriodController::class);
+
 });
 
 Route::fallback(function () {
