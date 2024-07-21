@@ -381,40 +381,6 @@
             $("#role_id").change(function() {
                 displayHiddeElement();
             })
-            /*
-                        $("#submit-form").click(function(e) {
-                           
-                            const first_name = $("#first_name").val()
-                            const last_name = $("#last_name").val()
-                            if (first_name != '' && last_name != '') {
-                                $.ajax({
-                                    url: "{{ route('getDuplicatedUsers') }}",
-                                    data: {
-                                        first_name: $("#first_name").val(),
-                                        last_name: $("#last_name").val(),
-                                        id: "{{ $user->id }}"
-                                    },
-                                    dataType: "json",
-                                    success: function(users) {
-                                        console.log(users)
-                                        if (users.data.length == 0) {
-                                            $("#form-user").submit();
-                                        } else {
-                                            let rows = ''
-                                            for (let key in users.data) {
-                                                const user = users.data[key]
-                                                rows = rows + '<tr><td>' + user.last_name + '</td><td>' + user.first_name + '</td><td>' + user.role + '</td><td>' + user.city + '</td></tr>'
-                                            }
-                                            $('#table-duplicated-user').html(rows)
-                                            $('#modalDuplicatedUser').modal('show')
-                                        }
-                                    }
-                                });
-                            }
-
-
-                        });
-            */
 
             function displayHiddeElement() {
                 if ($("#role_id").val() == 'STUDENT') {
