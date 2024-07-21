@@ -6,13 +6,12 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Period extends Model
 {
-    use HasFactory, HasUuids, HasCreatedUpdatedBy;
+    use HasCreatedUpdatedBy, HasFactory, HasUuids;
 
     public $incrementing = false;
 
@@ -53,7 +52,6 @@ class Period extends Model
             $this->attributes['end_date'] = Carbon::createFromFormat('d/m/Y', $value) ? Carbon::createFromFormat('d/m/Y', $value)->format('Y-m-d') : null;
         }
     }
-
 
     /*
     public function classrooms(): HasMany

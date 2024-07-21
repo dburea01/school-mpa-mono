@@ -178,14 +178,14 @@
                     classes, affectations, notes, résultats relatifs à cette année scolaire.
                 </p>
 
-                <p>Si votre but est de ne plus rendre accessible cette année scolaire, préférez la rendre 'inactive'.
+                <p>Si votre but est de ne plus rendre accessible cette année scolaire, déclarez l'année 'non courante'.
                 </p>
                 <h2 class="text-danger text-center"><strong>Action irréversible.</strong></h2>
                 <p>Veuillez confirmer la suppression de l'année scolaire <strong>{{ $period->name }}</strong></p>
             </div>
             <div class="modal-footer">
                 <form class="form-inline" method="POST" action="{{ Route('periods.destroy', $period) }}">
-                    @csrf
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     @method('DELETE')
                     <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal"><i class="bi bi-chevron-left" aria-hidden="true"></i>
                         Annuler</button>

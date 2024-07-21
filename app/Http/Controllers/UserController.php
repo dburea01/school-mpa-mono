@@ -104,7 +104,7 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(User $user):void
+    public function show(User $user): void
     {
         //
     }
@@ -165,6 +165,7 @@ class UserController extends Controller
     public function potentialDuplicatedUser(): View
     {
         $this->authorize('create', User::class);
+
         return view('user.potential-duplicated-user');
     }
 }

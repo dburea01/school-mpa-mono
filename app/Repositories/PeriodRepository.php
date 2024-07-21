@@ -12,29 +12,30 @@ class PeriodRepository
         return Period::orderBy('start_date', 'desc')->get();
     }
 
-    public function insert(School $school, array $data): Period
+    /** @param array<string,string> $data */
+    public function insert(array $data): Period
     {
         $period = new Period();
         $period->fill($data);
         $period->is_current = array_key_exists('is_current', $data) ? true : false;
-        $period->school_id = $school->id;
         $period->save();
 
         if (array_key_exists('is_current', $data)) {
-            $this->resetOtherPeriods($school, $period);
+            $this->resetOtherPeriods($period);
         }
 
         return $period;
     }
 
-    public function update(School $school, Period $period, array $data): Period
+    /** @param array<string,string> $data */
+    public function update(Period $period, array $data): Period
     {
         $period->fill($data);
         $period->is_current = array_key_exists('is_current', $data) ? true : false;
         $period->save();
 
         if (array_key_exists('is_current', $data)) {
-            $this->resetOtherPeriods($school, $period);
+            $this->resetOtherPeriods($period);
         }
 
         return $period;
@@ -45,17 +46,16 @@ class PeriodRepository
         $period->delete();
     }
 
-    public function resetOtherPeriods(School $school, Period $period): void
+    public function resetOtherPeriods(Period $period): void
     {
-        Period::where('school_id', $school->id)
-            ->where('id', '<>', $period->id)
+        Period::where('id', '<>', $period->id)
             ->update([
                 'is_current' => false,
             ]);
     }
 
-    public function getCurrentPeriod(School $school): ?Period
+    public function getCurrentPeriod(): ?Period
     {
-        return Period::where('school_id', $school->id)->where('is_current', true)->first();
+        return Period::where('is_current', true)->first();
     }
 }

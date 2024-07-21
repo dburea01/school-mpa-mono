@@ -20,7 +20,7 @@ class PeriodFactory extends Factory
         $endDate = fake()->dateTimeBetween($startDate, 'now');
 
         return [
-            'name' => 'Année scolaire ' . fake()->sentence(1),
+            'name' => 'Année scolaire '.fake()->sentence(1),
             'start_date' => $startDate->format('d/m/Y'),
             'end_date' => $endDate->format('d/m/Y'),
             'comment' => fake()->sentence(6),

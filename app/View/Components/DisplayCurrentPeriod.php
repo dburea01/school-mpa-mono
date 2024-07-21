@@ -10,6 +10,7 @@ use Illuminate\View\Component;
 class DisplayCurrentPeriod extends Component
 {
     public ?Period $currentPeriod;
+
     /**
      * Create a new component instance.
      */
