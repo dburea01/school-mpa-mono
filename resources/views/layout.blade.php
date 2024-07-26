@@ -58,7 +58,9 @@
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown2">
                                 @can('viewAny', App\models\User::class)<li><a class="dropdown-item" href="{{ route('users.index') }}">Liste utilisateurs</a></li>@endcan
+                                @can('viewAny', App\models\Group::class)<li><a class="dropdown-item" href="{{ route('groups.index') }}">Liste groupes</a></li>@endcan
                                 @can('viewAny', App\models\Period::class)<li><a class="dropdown-item" href="{{ route('periods.index') }}">Liste périodes</a></li>@endcan
+
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
@@ -71,7 +73,7 @@
                         <x-display-current-period />
                     </span>
                     @endauth
-                    
+
                     @guest
                     <li class="nav-item">
                         <a href="{{ route('login') }}" class="nav-link">Se connecter</a>

@@ -33,6 +33,12 @@ return new class extends Migration
             ['id' => 'updatePeriod',  'name' => 'Modifier une période'],
             ['id' => 'deletePeriod',  'name' => 'Supprimer une période'],
 
+            ['id' => 'viewAnyGroup',  'name' => 'Voir tous les groupes'],
+            ['id' => 'viewGroup',     'name' => 'Voir un groupe'],
+            ['id' => 'createGroup',   'name' => 'Créer un groupe'],
+            ['id' => 'updateGroup',   'name' => 'Modifier un groupe'],
+            ['id' => 'deleteGroup',   'name' => 'Supprimer un groupe'],
+
         ];
 
         foreach ($tasks as $task) {

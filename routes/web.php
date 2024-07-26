@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\GroupController;
 use App\Http\Controllers\PeriodController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -30,6 +31,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/potential-duplicated-user', [UserController::class, 'potentialDuplicatedUser'])->name('potentialDuplicatedUser');
 
     Route::resource('/periods', PeriodController::class);
+    Route::resource('/groups', GroupController::class);
 
 });
 

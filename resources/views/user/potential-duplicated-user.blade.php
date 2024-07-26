@@ -8,7 +8,7 @@
 
 <h1 class="text-center text-danger">Potentiel utilisateur déjà existant ?</h1>
 
-<p class="text-center text-danger">Attention, il existe des utilisteurs similaires. veuillez vérifier et confirmez ou annulez la création.</p>
+<p class="text-center text-danger">Attention, il existe des utilisateurs similaires. Veuillez vérifier avant de continuer.</p>
 
 <div class="row mt-3">
     <div class="col-md-6 col-sm-12">
