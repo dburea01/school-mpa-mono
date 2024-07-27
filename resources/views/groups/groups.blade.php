@@ -43,7 +43,8 @@
 
                         <thead>
                             <tr>
-                                <th>Nom</th>
+                                <th>Groupe</th>
+                                <th>Utilisateurs</th>
                                 <th>&nbsp;</th>
                             </tr>
                         </thead>
@@ -58,7 +59,12 @@
                                     {{ $group->name }}
                                     @endcan
                                 </td>
-
+                                <td>
+                                    @can('create', [App\Models\UserGroup::class])
+                                    <a href="{{ route('groups.users.index', ['group'=> $group]) }}"><i class="bi bi-person-add"></i></a>
+                                    @endcan
+                                    <x-users-of-a-group :users="$group->users" />
+                                </td>
                                 <td>
                                     @can('deleteGroup')
                                     <i class="bi bi-trash btn-delete-group text-danger" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#exampleModal" data-groupid="{{$group->id}}" data-groupname="{{$group->name}}"></i>

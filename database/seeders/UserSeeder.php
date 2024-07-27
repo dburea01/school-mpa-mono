@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Group;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\UserGroup;
 use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder
@@ -26,9 +28,32 @@ class UserSeeder extends Seeder
             'role_id' => 'TEACHER',
         ]);
 
-        // create some parents
-        $parents = User::factory()->count(100)->create([
-            'role_id' => 'PARENT',
-        ]);
+        $groups = Group::all();
+
+            foreach ($groups as $group) {
+                $parents = User::factory()->count(rand(1,2))->create([
+                    'role_id' => 'PARENT',
+                    'last_name' => $group->name,
+                ]);
+
+                $this->createUserGroup($group, $parents);
+
+                $students = User::factory()->count(random_int(1, 3))->create([
+                    'role_id' => 'STUDENT',
+                    'last_name' => $group->name,
+                ]);
+
+                $this->createUserGroup($group, $students);
+            }
+    }
+
+    public function createUserGroup(Group $group, $users)
+    {
+        foreach ($users as $user) {
+            UserGroup::factory()->create([
+                'group_id' => $group->id,
+                'user_id' => $user->id,
+            ]);
+        }
     }
 }

@@ -39,7 +39,7 @@
                             </label>
 
                             <div class="col-sm-8">
-                                <input type="text" class="form-control form-control-sm @error('name') is-invalid @enderror" required name="name" id="name" maxlength="50" value="{{ old('name', $group->name) }}">
+                                <input type="text" class="form-control form-control-sm @error('name') is-invalid @enderror text-uppercase" required name="name" id="name" maxlength="50" value="{{ old('name', $group->name) }}">
                                 @error('name')
                                 <span class="text-danger">{{ $message }}</span>
                                 @enderror

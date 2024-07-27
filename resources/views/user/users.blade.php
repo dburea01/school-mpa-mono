@@ -59,6 +59,7 @@
                                 <th>Nom</th>
                                 <th>Rôle</th>
                                 <th>Status</th>
+                                <th>Groupe(s)</th>
                                 <th>&nbsp;</th>
                             </tr>
                         </thead>
@@ -75,6 +76,10 @@
                                 </td>
                                 <td>{{ $user->role->name }}</td>
                                 <td>{{ $user->login_status_id }}</td>
+                                <td>
+                                    <x-groups-of-an-user :groups="$user->groups" />
+                                </td>
+
                                 <td>
                                     @if($user->role_id != 'ADMIN' && auth()->user()->can('updateUser'))
                                     <i class="bi bi-trash btn-delete-user text-danger" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#exampleModal" data-userid="{{$user->id}}" data-username="{{$user->full_name}}"></i>

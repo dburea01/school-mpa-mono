@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 /**
@@ -44,6 +45,16 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
+    public function civility(): BelongsTo
+    {
+        return $this->belongsTo(Civility::class);
+    }
+
+    public function groups(): BelongsToMany
+    {
+        return $this->belongsToMany(Group::class, 'user_groups');
+    }
+
     protected function setLastNameAttribute(string $value): void
     {
         $this->attributes['last_name'] = strtoupper($value);
@@ -78,6 +89,11 @@ class User extends Authenticatable
     public function getFullNameAttribute(): string
     {
         return $this->first_name.' '.$this->last_name;
+    }
+
+    public function getFullNameWithCivilityAttribute(): string
+    {
+        return $this->civility->short_name.' '.$this->first_name.' '.$this->last_name;
     }
 
     public function isAdmin(): bool

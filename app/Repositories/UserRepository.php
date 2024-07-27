@@ -17,7 +17,7 @@ class UserRepository
      */
     public function index(array $request)
     {
-        $query = User::with('role')->orderBy('last_name');
+        $query = User::with(['role', 'civility', 'groups'])->orderBy('last_name');
 
         $query->when(isset($request['role_id']), function ($q) use ($request) {
             return $q->where('role_id', $request['role_id']);

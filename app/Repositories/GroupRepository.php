@@ -14,7 +14,7 @@ class GroupRepository
      */
     public function index(array $request)
     {
-        $query = Group::orderBy('name');
+        $query = Group::with('users')->orderBy('name');
 
         $query->when(isset($request['name']), function ($q) use ($request) {
             return $q->where('name', 'like' , '%'.$request['name'].'%');
