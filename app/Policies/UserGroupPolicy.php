@@ -2,26 +2,20 @@
 
 namespace App\Policies;
 
+use App\Models\Group;
 use App\Models\User;
 use App\Models\UserGroup;
-use Illuminate\Auth\Access\Response;
 
 class UserGroupPolicy
 {
+    use TraitCheckAuthorization;
+
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        //
-    }
-
-    /**
-     * Determine whether the user can view the model.
-     */
-    public function view(User $user, UserGroup $userGroup): bool
-    {
-        //
+        return $this->isAuthorized($user, 'viewAnyUserGroup');
     }
 
     /**
@@ -29,7 +23,7 @@ class UserGroupPolicy
      */
     public function create(User $user): bool
     {
-        //
+        return $this->isAuthorized($user, 'createUserGroup');
     }
 
     /**
@@ -37,30 +31,14 @@ class UserGroupPolicy
      */
     public function update(User $user, UserGroup $userGroup): bool
     {
-        //
+        return false;
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, UserGroup $userGroup): bool
+    public function delete(User $user, Group $group): bool
     {
-        //
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, UserGroup $userGroup): bool
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, UserGroup $userGroup): bool
-    {
-        //
+        return $this->isAuthorized($user, 'deleteUserGroup');
     }
 }

@@ -33,7 +33,11 @@ Route::middleware(['auth'])->group(function () {
 
     Route::resource('periods', PeriodController::class);
     Route::resource('groups', GroupController::class);
-    Route::resource('groups.users', UserGroupController::class)->scoped()->only(['index', 'create', 'destroy']);
+    // Route::resource('groups.users', UserGroupController::class)->scoped();
+    Route::get('groups/{group}/users', [UserGroupController::class, 'index'])->scopeBindings()->name('groups.users.index');
+    Route::post('groups/{group}/users', [UserGroupController::class, 'store'])->scopeBindings()->name('groups.users.store');
+    Route::delete('groups/{group}/users/{user}', [UserGroupController::class, 'destroy'])
+        ->scopeBindings()->whereUuid(['school', 'group', 'user']);
 });
 
 Route::fallback(function () {

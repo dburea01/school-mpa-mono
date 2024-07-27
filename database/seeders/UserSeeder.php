@@ -30,21 +30,21 @@ class UserSeeder extends Seeder
 
         $groups = Group::all();
 
-            foreach ($groups as $group) {
-                $parents = User::factory()->count(rand(1,2))->create([
-                    'role_id' => 'PARENT',
-                    'last_name' => $group->name,
-                ]);
+        foreach ($groups as $group) {
+            $parents = User::factory()->count(rand(1, 2))->create([
+                'role_id' => 'PARENT',
+                'last_name' => $group->name,
+            ]);
 
-                $this->createUserGroup($group, $parents);
+            $this->createUserGroup($group, $parents);
 
-                $students = User::factory()->count(random_int(1, 3))->create([
-                    'role_id' => 'STUDENT',
-                    'last_name' => $group->name,
-                ]);
+            $students = User::factory()->count(random_int(1, 3))->create([
+                'role_id' => 'STUDENT',
+                'last_name' => $group->name,
+            ]);
 
-                $this->createUserGroup($group, $students);
-            }
+            $this->createUserGroup($group, $students);
+        }
     }
 
     public function createUserGroup(Group $group, $users)

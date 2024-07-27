@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreGroupRequest;
-use App\Http\Requests\StorePeriodRequest;
 use App\Models\Group;
-use App\Models\Period;
 use App\Repositories\GroupRepository;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;

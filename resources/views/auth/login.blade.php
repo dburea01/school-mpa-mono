@@ -77,6 +77,7 @@
                 $admin = App\Models\User::where('role_id', 'ADMIN')->where('login_status_id', 'VALIDATED')->first();
                 $teacher = App\Models\User::where('role_id', 'TEACHER')->where('login_status_id', 'VALIDATED')->first();
                 $parent = App\Models\User::where('role_id', 'PARENT')->where('login_status_id', 'VALIDATED')->first();
+                $student = App\Models\User::where('role_id', 'STUDENT')->where('login_status_id', 'VALIDATED')->first();
                 @endphp
 
 
@@ -92,6 +93,10 @@
                     <tr>
                         <th class="text-end">parent</th>
                         <td>{{ $parent->email ?? 'unknown' }}</td>
+                    </tr>
+                    <tr>
+                        <th class="text-end">élève</th>
+                        <td>{{ $student->email ?? 'unknown' }}</td>
                     </tr>
                 </table>
 

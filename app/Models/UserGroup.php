@@ -9,17 +9,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class UserGroup extends Model
 {
-    use HasFactory, HasUuids, HasCreatedUpdatedBy;
+    use HasCreatedUpdatedBy, HasFactory, HasUuids;
 
     public $incrementing = false;
 
     protected $keyType = 'string';
 
     protected $fillable =
-    [
-        'user_id',
-        'group_id',
-    ];
+        [
+            'user_id',
+            'group_id',
+        ];
 
     public function group(): BelongsTo
     {

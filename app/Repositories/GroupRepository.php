@@ -3,21 +3,20 @@
 namespace App\Repositories;
 
 use App\Models\Group;
-use App\Models\Period;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class GroupRepository
 {
     /**
      * @param  array<string>  $request
-     * @return LengthAwarePaginator<Group>
+     * @return  LengthAwarePaginator<Group>
      */
     public function index(array $request)
     {
         $query = Group::with('users')->orderBy('name');
 
         $query->when(isset($request['name']), function ($q) use ($request) {
-            return $q->where('name', 'like' , '%'.$request['name'].'%');
+            return $q->where('name', 'like', '%'.$request['name'].'%');
         });
 
         return $query->paginate();

@@ -93,7 +93,9 @@ class User extends Authenticatable
 
     public function getFullNameWithCivilityAttribute(): string
     {
-        return $this->civility->short_name.' '.$this->first_name.' '.$this->last_name;
+        $civilityShortName = $this->civility ? $this->civility->short_name : '';
+
+        return $civilityShortName.' '.$this->first_name.' '.$this->last_name;
     }
 
     public function isAdmin(): bool
