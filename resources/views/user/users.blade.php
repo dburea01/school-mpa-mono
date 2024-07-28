@@ -68,7 +68,7 @@
                             @foreach ($users as $user)
                             <tr>
                                 <td>
-                                    @can('modifier utilisateur')
+                                    @can('updateUser')
                                     <a href="{{ route('users.edit', ['user' => $user]) }}">{{ $user->full_name }}</a>
                                     @else
                                     {{ $user->full_name }}
@@ -81,7 +81,7 @@
                                 </td>
 
                                 <td>
-                                    @if($user->role_id != 'ADMIN' && auth()->user()->can('updateUser'))
+                                    @if($user->role_id != 'ADMIN' && auth()->user()->can('deleteUser'))
                                     <i class="bi bi-trash btn-delete-user text-danger" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#exampleModal" data-userid="{{$user->id}}" data-username="{{$user->full_name}}"></i>
                                     @endif
                                 </td>

@@ -106,7 +106,7 @@ class UserController extends Controller
      */
     public function show(User $user): void
     {
-        //
+        $this->authorize('view', $user);
     }
 
     /**

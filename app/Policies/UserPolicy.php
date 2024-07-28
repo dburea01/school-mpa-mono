@@ -16,12 +16,17 @@ class UserPolicy
         return $this->isAuthorized($user, 'viewAnyUser');
     }
 
+    public function view(User $user): bool
+    {
+        return $this->isAuthorized($user, 'viewUser');
+    }
+
     /**
      * Determine whether the user can create models.
      */
     public function create(User $user): bool
     {
-        return false;
+        return $this->isAuthorized($user, 'createUser');
     }
 
     /**
