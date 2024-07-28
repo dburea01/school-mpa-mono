@@ -17,6 +17,11 @@ class PeriodPolicy
         return $this->isAuthorized($user, 'viewAnyPeriod');
     }
 
+    public function view(User $user, Period $period): bool
+    {
+        return $this->isAuthorized($user, 'viewPeriod');
+    }
+
     /**
      * Determine whether the user can create models.
      */

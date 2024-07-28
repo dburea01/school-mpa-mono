@@ -61,6 +61,14 @@ class PeriodController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     */
+    public function show(Period $period): void
+    {
+        $this->authorize('view', $period);
+    }
+
+    /**
      * Show the form for editing the specified resource.
      */
     public function edit(Period $period): View
