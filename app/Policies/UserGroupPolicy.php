@@ -37,7 +37,7 @@ class UserGroupPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Group $group): bool
+    public function delete(User $user): bool
     {
         return $this->isAuthorized($user, 'deleteUserGroup');
     }

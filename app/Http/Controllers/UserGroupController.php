@@ -32,7 +32,9 @@ class UserGroupController extends Controller
      */
     public function index(Group $group, Request $request): View
     {
+        
         $this->authorize('viewAny', UserGroup::class);
+
         $groupWithUsers = $this->userGroupRepository->allUsersOfAGroup($group);
         $usersFiltered = $request->has('name') && $request->name !== '' ?
             $this->userRepository->index($request->all()) : [];
@@ -58,7 +60,7 @@ class UserGroupController extends Controller
 
         try {
             $this->userGroupRepository->insert($group, $userId);
-            
+
             /** @var User $user */
             $user = User::find($request->user_id);
 

@@ -39,6 +39,10 @@ return new class extends Migration
             ['id' => 'updateGroup',   'name' => 'Modifier un groupe'],
             ['id' => 'deleteGroup',   'name' => 'Supprimer un groupe'],
 
+            ['id' => 'viewAnyUserGroup',  'name' => 'Voir les utilisateurs d\'un groupe'],
+            ['id' => 'createUserGroup',   'name' => 'Ajouter un utilisateur à un groupe'],
+            ['id' => 'deleteUserGroup',   'name' => 'Supprimer un utilisateur d\'un groupe'],
+
         ];
 
         foreach ($tasks as $task) {

@@ -17,6 +17,11 @@ class GroupPolicy
         return $this->isAuthorized($user, 'viewAnyGroup');
     }
 
+    public function view(User $user, Group $group): bool
+    {
+        return $this->isAuthorized($user, 'viewGroup');
+    }
+
     /**
      * Determine whether the user can create models.
      */

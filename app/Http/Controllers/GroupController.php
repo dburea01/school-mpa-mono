@@ -64,6 +64,14 @@ class GroupController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     */
+    public function show(Group $group): void
+    {
+        $this->authorize('view', $group);
+    }
+
+    /**
      * Show the form for editing the specified resource.
      */
     public function edit(Group $group): View
