@@ -36,33 +36,33 @@ return new class extends Migration
         Schema::dropIfExists('subjects');
     }
 
-    public function initSubjects()
+    public function initSubjects(): void
     {
 
         $subjects = [
             [
                 'short_name' => 'FRA',
-                'name' => 'Français'
+                'name' => 'Français',
             ],
             [
                 'short_name' => 'MATH',
-                'name' => 'Mathématiques'
+                'name' => 'Mathématiques',
             ],
             [
                 'short_name' => 'ENG',
-                'name' => 'Anglais'
+                'name' => 'Anglais',
             ],
             [
                 'short_name' => 'DEU',
-                'name' => 'Allemand'
+                'name' => 'Allemand',
             ],
             [
                 'short_name' => 'LAT',
-                'name' => 'Latin'
+                'name' => 'Latin',
             ],
             [
                 'short_name' => 'GREC',
-                'name' => 'Grec'
+                'name' => 'Grec',
             ],
             [
                 'short_name' => 'ESP',
@@ -70,23 +70,23 @@ return new class extends Migration
             ],
             [
                 'short_name' => 'HIS/GEO',
-                'name' => 'Histoire & Géographie'
+                'name' => 'Histoire & Géographie',
             ],
             [
                 'short_name' => 'SVT',
-                'name' => 'Sciences de la vie et de la terre'
+                'name' => 'Sciences de la vie et de la terre',
             ],
             [
                 'short_name' => 'EPS',
-                'name' => 'Education physique & sportive'
+                'name' => 'Education physique & sportive',
             ],
             [
                 'short_name' => 'MUS',
-                'name' => 'Musique'
+                'name' => 'Musique',
             ],
             [
                 'short_name' => 'PHI',
-                'name' => 'Philosophie'
+                'name' => 'Philosophie',
             ],
             [
                 'short_name' => 'ART',

@@ -3,12 +3,10 @@
 namespace Tests\Feature;
 
 use App\Models\Group;
-use App\Models\Period;
 use App\Models\RoleTask;
 use App\Models\User;
 use App\Models\UserGroup;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class PolicyUserGroupTest extends TestCase
@@ -55,10 +53,6 @@ class PolicyUserGroupTest extends TestCase
         $this->get($this->url)->assertOk();
     }
 
-   
-
-   
-
     public function test_an_admin_can_add_an_user_to_a_group(): void
     {
         $this->actingAs($this->admin);
@@ -81,11 +75,11 @@ class PolicyUserGroupTest extends TestCase
         $user = User::factory()->create(['role_id' => 'STUDENT']);
         UserGroup::create([
             'group_id' => $this->group->id,
-            'user_id' => $user->id
+            'user_id' => $user->id,
         ]);
 
         $this->actingAs($this->admin);
-        $this->delete($this->url . '/'. $user->id)->assertRedirect($this->url.'?name=');
+        $this->delete($this->url.'/'.$user->id)->assertRedirect($this->url.'?name=');
     }
 
     public function test_an_authorized_user_can_remove_an_user_from_a_group(): void
@@ -93,15 +87,15 @@ class PolicyUserGroupTest extends TestCase
         $user = User::factory()->create(['role_id' => 'STUDENT']);
         UserGroup::create([
             'group_id' => $this->group->id,
-            'user_id' => $user->id
+            'user_id' => $user->id,
         ]);
 
         $this->actingAs($this->userNotAdmin);
 
         RoleTask::where('task_id', 'deleteUserGroup')->where('role_id', $this->userNotAdmin->role_id)->delete();
-        $this->delete($this->url . '/'. $user->id)->assertForbidden();
+        $this->delete($this->url.'/'.$user->id)->assertForbidden();
 
         RoleTask::create(['task_id' => 'deleteUserGroup', 'role_id' => $this->userNotAdmin->role_id]);
-        $this->delete($this->url . '/'. $user->id)->assertRedirect($this->url.'?name=');
+        $this->delete($this->url.'/'.$user->id)->assertRedirect($this->url.'?name=');
     }
 }

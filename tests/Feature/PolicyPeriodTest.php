@@ -6,7 +6,6 @@ use App\Models\Period;
 use App\Models\RoleTask;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class PolicyPeriodTest extends TestCase
@@ -18,8 +17,6 @@ class PolicyPeriodTest extends TestCase
     private User $userNotAdmin;
 
     private Period $period;
-
-    private User $teacher;
 
     private string $url;
 
@@ -75,7 +72,7 @@ class PolicyPeriodTest extends TestCase
     public function test_an_admin_can_create_a_period(): void
     {
         $this->actingAs($this->admin);
-        $this->get($this->url . '/create')->assertOk();
+        $this->get($this->url.'/create')->assertOk();
         $this->post($this->url)->assertInvalid();
     }
 
@@ -84,18 +81,18 @@ class PolicyPeriodTest extends TestCase
         $this->actingAs($this->userNotAdmin);
 
         RoleTask::where('task_id', 'createPeriod')->where('role_id', $this->userNotAdmin->role_id)->delete();
-        $this->get($this->url . '/create')->assertForbidden();
+        $this->get($this->url.'/create')->assertForbidden();
         $this->post($this->url)->assertForbidden();
 
         RoleTask::create(['task_id' => 'createPeriod', 'role_id' => $this->userNotAdmin->role_id]);
-        $this->get($this->url. '/create')->assertOK();
+        $this->get($this->url.'/create')->assertOK();
         $this->post($this->url)->assertInvalid();
     }
 
     public function test_an_admin_can_edit_a_period(): void
     {
         $this->actingAs($this->admin);
-        $this->get($this->url . '/'.$this->period->id.'/edit')->assertOk();
+        $this->get($this->url.'/'.$this->period->id.'/edit')->assertOk();
         $this->post($this->url)->assertInvalid();
     }
 
@@ -104,18 +101,18 @@ class PolicyPeriodTest extends TestCase
         $this->actingAs($this->userNotAdmin);
 
         RoleTask::where('task_id', 'updatePeriod')->where('role_id', $this->userNotAdmin->role_id)->delete();
-        $this->get($this->url . '/'. $this->period->id.'/edit')->assertForbidden();
-        $this->put($this->url . '/'. $this->period->id)->assertForbidden();
+        $this->get($this->url.'/'.$this->period->id.'/edit')->assertForbidden();
+        $this->put($this->url.'/'.$this->period->id)->assertForbidden();
 
         RoleTask::create(['task_id' => 'updatePeriod', 'role_id' => $this->userNotAdmin->role_id]);
-        $this->get($this->url. '/'. $this->period->id.'/edit')->assertOK();
-        $this->put($this->url. '/'. $this->period->id)->assertInvalid();
+        $this->get($this->url.'/'.$this->period->id.'/edit')->assertOK();
+        $this->put($this->url.'/'.$this->period->id)->assertInvalid();
     }
 
     public function test_an_admin_can_delete_a_period(): void
     {
         $this->actingAs($this->admin);
-        $this->delete($this->url . '/'. $this->period->id)->assertRedirect('periods');
+        $this->delete($this->url.'/'.$this->period->id)->assertRedirect('periods');
     }
 
     public function test_an_authorized_user_can_delete_a_period(): void
@@ -123,9 +120,9 @@ class PolicyPeriodTest extends TestCase
         $this->actingAs($this->userNotAdmin);
 
         RoleTask::where('task_id', 'deletePeriod')->where('role_id', $this->userNotAdmin->role_id)->delete();
-        $this->delete($this->url . '/'. $this->period->id)->assertForbidden();
+        $this->delete($this->url.'/'.$this->period->id)->assertForbidden();
 
         RoleTask::create(['task_id' => 'deletePeriod', 'role_id' => $this->userNotAdmin->role_id]);
-        $this->delete($this->url . '/'. $this->period->id)->assertRedirect('periods');
+        $this->delete($this->url.'/'.$this->period->id)->assertRedirect('periods');
     }
 }

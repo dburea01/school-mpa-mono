@@ -2,7 +2,6 @@
 
 namespace App\Policies;
 
-use App\Models\Group;
 use App\Models\User;
 use App\Models\UserGroup;
 

@@ -157,7 +157,14 @@ class UserController extends Controller
     {
         $this->authorize('viewAny', User::class);
 
-        $users = $this->userRepository->getDuplicatedUser($request->last_name, $request->first_name, $request->id);
+        /** @var string $lastName */
+        $lastName = $request->input('last_name');
+        /** @var string $firstName */
+        $firstName = $request->input('first_name');
+        /** @var string $userIdToIgnore */
+        $userIdToIgnore = $request->input('id');
+
+        $users = $this->userRepository->getDuplicatedUser($lastName, $firstName, $userIdToIgnore);
 
         return UserResourceBasic::collection($users);
     }

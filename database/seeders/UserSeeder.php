@@ -6,6 +6,7 @@ use App\Models\Group;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\UserGroup;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder
@@ -47,7 +48,10 @@ class UserSeeder extends Seeder
         }
     }
 
-    public function createUserGroup(Group $group, $users)
+    /**
+     * @param  Collection<User>  $users
+     */
+    public function createUserGroup(Group $group, Collection $users): void
     {
         foreach ($users as $user) {
             UserGroup::factory()->create([

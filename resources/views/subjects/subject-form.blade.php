@@ -125,7 +125,7 @@
             <div class="card-header text-center"><i class="bi bi-info-circle"></i> Aide</div>
             <div class="card-body">
 
-                <p>Créez / modifiez votre matière.</p>
+                <p>Créer / modifier une matière.</p>
 
                 <p>Contrôles :
                 <ul>

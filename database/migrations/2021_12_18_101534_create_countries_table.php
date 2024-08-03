@@ -35,7 +35,7 @@ class CreateCountriesTable extends Migration
         Schema::dropIfExists('countries');
     }
 
-    public function initCountriesSome()
+    public function initCountriesSome(): void
     {
         $countries = [
             [
@@ -60,7 +60,7 @@ class CreateCountriesTable extends Migration
         }
     }
 
-    public function initCountriesAll()
+    public function initCountriesAll(): void
     {
         DB::insert("
         

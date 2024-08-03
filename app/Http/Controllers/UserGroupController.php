@@ -32,7 +32,7 @@ class UserGroupController extends Controller
      */
     public function index(Group $group, Request $request): View
     {
-        
+
         $this->authorize('viewAny', UserGroup::class);
 
         $groupWithUsers = $this->userGroupRepository->allUsersOfAGroup($group);
@@ -63,7 +63,6 @@ class UserGroupController extends Controller
 
             /** @var User $user */
             $user = User::find($request->user_id);
-
 
             return redirect("/groups/$group->id/users?name=$name")->with('success', "$user->full_name ajouté au groupe $group->name");
         } catch (\Throwable $th) {

@@ -20,7 +20,6 @@ class SubjectRepository
         $subject->is_active = array_key_exists('is_active', $data) ? true : false;
         $subject->save();
 
-
         return $subject;
     }
 
@@ -30,7 +29,6 @@ class SubjectRepository
         $subject->fill($data);
         $subject->is_active = array_key_exists('is_active', $data) ? true : false;
         $subject->save();
-
 
         return $subject;
     }

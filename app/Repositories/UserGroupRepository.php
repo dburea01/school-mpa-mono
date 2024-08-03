@@ -5,11 +5,8 @@ declare(strict_types=1);
 namespace App\Repositories;
 
 use App\Models\Group;
-use App\Models\School;
 use App\Models\User;
 use App\Models\UserGroup;
-use Illuminate\Contracts\Database\Eloquent\Builder;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class UserGroupRepository

@@ -31,10 +31,10 @@ class StoreSubjectRequest extends FormRequest
      */
     public function rules(): array
     {
-        $rules =  [
+        $rules = [
             'short_name' => [
                 'required',
-                'max:10'
+                'max:10',
             ],
             'name' => 'required|max:50',
             'comment' => 'max:500',
@@ -64,7 +64,7 @@ class StoreSubjectRequest extends FormRequest
             'short_name.max' => '10 caractères max pour le nom court de la matière',
             'short_name.unique' => 'Le nom court existe déjà',
 
-            'name.required' => "Le nom de la matière est obligatoire",
+            'name.required' => 'Le nom de la matière est obligatoire',
             'name.max' => '50 caractères max pour le nom de la matière',
 
             'comment.max' => 'Commentaire trop long',

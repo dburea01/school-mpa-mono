@@ -9,7 +9,7 @@ class GroupRepository
 {
     /**
      * @param  array<string>  $request
-     * @return  LengthAwarePaginator<Group>
+     * @return LengthAwarePaginator<Group>
      */
     public function index(array $request)
     {

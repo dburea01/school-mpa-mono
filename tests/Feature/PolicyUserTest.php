@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use App\Models\RoleTask;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class PolicyUserTest extends TestCase
@@ -17,8 +16,6 @@ class PolicyUserTest extends TestCase
     private User $userNotAdmin;
 
     private User $student;
-
-    private User $teacher;
 
     private string $url;
 
@@ -74,7 +71,7 @@ class PolicyUserTest extends TestCase
     public function test_an_admin_can_create_an_user(): void
     {
         $this->actingAs($this->admin);
-        $this->get($this->url . '/create')->assertOk();
+        $this->get($this->url.'/create')->assertOk();
         $this->post($this->url)->assertInvalid();
     }
 
@@ -83,18 +80,18 @@ class PolicyUserTest extends TestCase
         $this->actingAs($this->userNotAdmin);
 
         RoleTask::where('task_id', 'createUser')->where('role_id', $this->userNotAdmin->role_id)->delete();
-        $this->get($this->url . '/create')->assertForbidden();
+        $this->get($this->url.'/create')->assertForbidden();
         $this->post($this->url)->assertForbidden();
 
         RoleTask::create(['task_id' => 'createUser', 'role_id' => $this->userNotAdmin->role_id]);
-        $this->get($this->url. '/create')->assertOK();
+        $this->get($this->url.'/create')->assertOK();
         $this->post($this->url)->assertInvalid();
     }
 
     public function test_an_admin_can_edit_an_user(): void
     {
         $this->actingAs($this->admin);
-        $this->get($this->url . '/'.$this->student->id.'/edit')->assertOk();
+        $this->get($this->url.'/'.$this->student->id.'/edit')->assertOk();
         $this->post($this->url)->assertInvalid();
     }
 
@@ -103,18 +100,18 @@ class PolicyUserTest extends TestCase
         $this->actingAs($this->userNotAdmin);
 
         RoleTask::where('task_id', 'updateUser')->where('role_id', $this->userNotAdmin->role_id)->delete();
-        $this->get($this->url . '/'. $this->student->id.'/edit')->assertForbidden();
-        $this->put($this->url . '/'. $this->student->id)->assertForbidden();
+        $this->get($this->url.'/'.$this->student->id.'/edit')->assertForbidden();
+        $this->put($this->url.'/'.$this->student->id)->assertForbidden();
 
         RoleTask::create(['task_id' => 'updateUser', 'role_id' => $this->userNotAdmin->role_id]);
-        $this->get($this->url. '/'. $this->student->id.'/edit')->assertOK();
-        $this->put($this->url. '/'. $this->student->id)->assertInvalid();
+        $this->get($this->url.'/'.$this->student->id.'/edit')->assertOK();
+        $this->put($this->url.'/'.$this->student->id)->assertInvalid();
     }
 
     public function test_an_admin_can_delete_an_user(): void
     {
         $this->actingAs($this->admin);
-        $this->delete($this->url . '/'. $this->student->id)->assertRedirect('users');
+        $this->delete($this->url.'/'.$this->student->id)->assertRedirect('users');
     }
 
     public function test_an_authorized_user_can_delete_an_user(): void
@@ -122,9 +119,9 @@ class PolicyUserTest extends TestCase
         $this->actingAs($this->userNotAdmin);
 
         RoleTask::where('task_id', 'deleteUser')->where('role_id', $this->userNotAdmin->role_id)->delete();
-        $this->delete($this->url . '/'. $this->student->id)->assertForbidden();
+        $this->delete($this->url.'/'.$this->student->id)->assertForbidden();
 
         RoleTask::create(['task_id' => 'deleteUser', 'role_id' => $this->userNotAdmin->role_id]);
-        $this->delete($this->url . '/'. $this->student->id)->assertRedirect('users');
+        $this->delete($this->url.'/'.$this->student->id)->assertRedirect('users');
     }
 }

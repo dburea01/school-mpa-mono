@@ -3,11 +3,9 @@
 namespace Tests\Feature;
 
 use App\Models\Group;
-use App\Models\Period;
 use App\Models\RoleTask;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class PolicyGroupTest extends TestCase
@@ -74,7 +72,7 @@ class PolicyGroupTest extends TestCase
     public function test_an_admin_can_create_a_group(): void
     {
         $this->actingAs($this->admin);
-        $this->get($this->url . '/create')->assertOk();
+        $this->get($this->url.'/create')->assertOk();
         $this->post($this->url)->assertInvalid();
     }
 
@@ -83,18 +81,18 @@ class PolicyGroupTest extends TestCase
         $this->actingAs($this->userNotAdmin);
 
         RoleTask::where('task_id', 'createGroup')->where('role_id', $this->userNotAdmin->role_id)->delete();
-        $this->get($this->url . '/create')->assertForbidden();
+        $this->get($this->url.'/create')->assertForbidden();
         $this->post($this->url)->assertForbidden();
 
         RoleTask::create(['task_id' => 'createGroup', 'role_id' => $this->userNotAdmin->role_id]);
-        $this->get($this->url. '/create')->assertOK();
+        $this->get($this->url.'/create')->assertOK();
         $this->post($this->url)->assertInvalid();
     }
 
     public function test_an_admin_can_edit_a_group(): void
     {
         $this->actingAs($this->admin);
-        $this->get($this->url . '/'.$this->group->id.'/edit')->assertOk();
+        $this->get($this->url.'/'.$this->group->id.'/edit')->assertOk();
         $this->post($this->url)->assertInvalid();
     }
 
@@ -103,18 +101,18 @@ class PolicyGroupTest extends TestCase
         $this->actingAs($this->userNotAdmin);
 
         RoleTask::where('task_id', 'updateGroup')->where('role_id', $this->userNotAdmin->role_id)->delete();
-        $this->get($this->url . '/'. $this->group->id.'/edit')->assertForbidden();
-        $this->put($this->url . '/'. $this->group->id)->assertForbidden();
+        $this->get($this->url.'/'.$this->group->id.'/edit')->assertForbidden();
+        $this->put($this->url.'/'.$this->group->id)->assertForbidden();
 
         RoleTask::create(['task_id' => 'updateGroup', 'role_id' => $this->userNotAdmin->role_id]);
-        $this->get($this->url. '/'. $this->group->id.'/edit')->assertOK();
-        $this->put($this->url. '/'. $this->group->id)->assertInvalid();
+        $this->get($this->url.'/'.$this->group->id.'/edit')->assertOK();
+        $this->put($this->url.'/'.$this->group->id)->assertInvalid();
     }
 
     public function test_an_admin_can_delete_a_group(): void
     {
         $this->actingAs($this->admin);
-        $this->delete($this->url . '/'. $this->group->id)->assertRedirect('groups');
+        $this->delete($this->url.'/'.$this->group->id)->assertRedirect('groups');
     }
 
     public function test_an_authorized_user_can_delete_a_group(): void
@@ -122,9 +120,9 @@ class PolicyGroupTest extends TestCase
         $this->actingAs($this->userNotAdmin);
 
         RoleTask::where('task_id', 'deleteGroup')->where('role_id', $this->userNotAdmin->role_id)->delete();
-        $this->delete($this->url . '/'. $this->group->id)->assertForbidden();
+        $this->delete($this->url.'/'.$this->group->id)->assertForbidden();
 
         RoleTask::create(['task_id' => 'deleteGroup', 'role_id' => $this->userNotAdmin->role_id]);
-        $this->delete($this->url . '/'. $this->group->id)->assertRedirect('groups');
+        $this->delete($this->url.'/'.$this->group->id)->assertRedirect('groups');
     }
 }
