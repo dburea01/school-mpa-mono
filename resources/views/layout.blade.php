@@ -60,6 +60,7 @@
                                 @can('viewAny', App\models\User::class)<li><a class="dropdown-item" href="{{ route('users.index') }}">Liste utilisateurs</a></li>@endcan
                                 @can('viewAny', App\models\Group::class)<li><a class="dropdown-item" href="{{ route('groups.index') }}">Liste groupes</a></li>@endcan
                                 @can('viewAny', App\models\Period::class)<li><a class="dropdown-item" href="{{ route('periods.index') }}">Liste périodes</a></li>@endcan
+                                @can('viewAny', App\models\Subject::class)<li><a class="dropdown-item" href="{{ route('subjects.index') }}">Liste matières</a></li>@endcan
 
                                 <li>
                                     <hr class="dropdown-divider">

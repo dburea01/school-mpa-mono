@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\PeriodController;
+use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserGroupController;
 use Illuminate\Support\Facades\Route;
@@ -38,6 +39,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('groups/{group}/users', [UserGroupController::class, 'store'])->scopeBindings()->name('groups.users.store');
     Route::delete('groups/{group}/users/{user}', [UserGroupController::class, 'destroy'])
         ->scopeBindings()->whereUuid(['school', 'group', 'user']);
+    Route::resource('subjects', SubjectController::class)->whereUuid('subject');
 });
 
 Route::fallback(function () {

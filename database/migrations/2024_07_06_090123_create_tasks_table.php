@@ -43,6 +43,11 @@ return new class extends Migration
             ['id' => 'createUserGroup',   'name' => 'Ajouter un utilisateur à un groupe'],
             ['id' => 'deleteUserGroup',   'name' => 'Supprimer un utilisateur d\'un groupe'],
 
+            ['id' => 'viewAnySubject',  'name' => 'Voir toutes les matières'],
+            ['id' => 'viewSubject',     'name' => 'Voir une matière'],
+            ['id' => 'createSubject',   'name' => 'Créer une matière'],
+            ['id' => 'updateSubject',   'name' => 'Modifier une matière'],
+            ['id' => 'deleteSubject',   'name' => 'Supprimer une matière'],
         ];
 
         foreach ($tasks as $task) {

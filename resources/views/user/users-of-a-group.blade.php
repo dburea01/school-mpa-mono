@@ -34,7 +34,7 @@
                             </td>
                             <td>{{ $userOfTheGroup->role->name }}</td>
                             <td>
-                                @can('createGroup')
+                                @can('delete', App\Models\UserGroup::class)
                                 <form class="form-inline" method="POST" action="/groups/{{ $group->id }}/users/{{ $userOfTheGroup->id }}?name={{ $name }}">
                                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                     @method('DELETE')
@@ -96,7 +96,7 @@
                                 $groupWithUsers->users->doesntcontain(function ($userOfTheGroup) use ($userFiltered) {
                                 return $userOfTheGroup->id === $userFiltered->id;
                                 }))
-                                @can('createGroup')
+                                @can('create', App\Models\UserGroup::class)
                                 <form action="/groups/{{ $group->id }}/users?name={{$name}}" method="POST">
                                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                     <input type="hidden" name="user_id" value="{{ $userFiltered->id }}">
@@ -107,6 +107,7 @@
                                     <i class="bi bi-person-plus" aria-hidden="true"></i> </button>
                                     --}}
                                 </form>
+                                @else
                                 @endcan
                                 @endif
 

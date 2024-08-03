@@ -29,6 +29,8 @@ return new class extends Migration
             ['role_id' => 'TEACHER', 'task_id' => 'viewUser'],
             ['role_id' => 'TEACHER', 'task_id' => 'viewAnyGroup'],
             ['role_id' => 'TEACHER', 'task_id' => 'viewGroup'],
+            ['role_id' => 'TEACHER', 'task_id' => 'viewAnySubject'],
+            ['role_id' => 'TEACHER', 'task_id' => 'viewSubject'],
         ];
 
         foreach ($roleTasks as $roleTask) {
