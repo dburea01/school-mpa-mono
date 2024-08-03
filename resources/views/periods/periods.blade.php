@@ -28,6 +28,7 @@
                             <th>Nom</th>
                             <th>Date début</th>
                             <th>Date fin</th>
+                            <th>Classes</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -52,6 +53,17 @@
                             </td>
                             <td>
                                 {{ $period->end_date }}
+                            </td>
+                            <td>
+
+
+                                @can('viewAny', App\Models\Classroom::class)
+                                <a href=" {{ route('classrooms.index', ['period' => $period->id]) }}">
+                                    {{ $period->classrooms_count }}
+                                </a>
+                                @else
+                                {{ $period->classrooms_count }}
+                                @endcan
                             </td>
 
                         </tr>

@@ -62,6 +62,16 @@
                                 @can('viewAny', App\models\Period::class)<li><a class="dropdown-item" href="{{ route('periods.index') }}">Liste périodes</a></li>@endcan
                                 @can('viewAny', App\models\Subject::class)<li><a class="dropdown-item" href="{{ route('subjects.index') }}">Liste matières</a></li>@endcan
 
+                                @php
+                                $periodRepository = new App\Repositories\PeriodRepository();
+                                $currentPeriod = $periodRepository->getCurrentPeriod();
+                                @endphp
+                                @if($currentPeriod)
+                                @can('viewAny', App\models\Classroom::class)<li>
+                                    <a class="dropdown-item" href="{{ route('classrooms.index', ['period' => $currentPeriod->id ]) }}">Liste classes</a>
+                                </li>
+                                @endcan
+                                @endif
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>

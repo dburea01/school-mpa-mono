@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ClassroomController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\PeriodController;
@@ -40,6 +41,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('groups/{group}/users/{user}', [UserGroupController::class, 'destroy'])
         ->scopeBindings()->whereUuid(['school', 'group', 'user']);
     Route::resource('subjects', SubjectController::class)->whereUuid('subject');
+    Route::resource('periods/{period}/classrooms', ClassroomController::class)->whereUuid(['period', 'classroom'])->scoped();
 });
 
 Route::fallback(function () {

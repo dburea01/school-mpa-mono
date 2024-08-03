@@ -53,12 +53,12 @@ class Period extends Model
         }
     }
 
-    /*
     public function classrooms(): HasMany
     {
         return $this->hasMany(Classroom::class);
     }
 
+    /*
     public function assignments(): HasManyThrough
     {
         return $this->hasManyThrough(Assignment::class, Classroom::class);

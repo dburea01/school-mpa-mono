@@ -48,6 +48,12 @@ return new class extends Migration
             ['id' => 'createSubject',   'name' => 'Créer une matière'],
             ['id' => 'updateSubject',   'name' => 'Modifier une matière'],
             ['id' => 'deleteSubject',   'name' => 'Supprimer une matière'],
+
+            ['id' => 'viewAnyClassroom',  'name' => 'Voir toutes les classes'],
+            ['id' => 'viewClassroom',     'name' => 'Voir une classe'],
+            ['id' => 'createClassroom',   'name' => 'Créer une classe'],
+            ['id' => 'updateClassroom',   'name' => 'Modifier une classe'],
+            ['id' => 'deleteClassroom',   'name' => 'Supprimer une classe'],
         ];
 
         foreach ($tasks as $task) {
