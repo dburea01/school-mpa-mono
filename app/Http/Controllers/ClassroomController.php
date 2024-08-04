@@ -67,7 +67,7 @@ class ClassroomController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Classroom $classroom): void
+    public function show(Period $period, Classroom $classroom): void
     {
         $this->authorize('view', $classroom);
     }
