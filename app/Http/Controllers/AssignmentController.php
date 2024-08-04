@@ -5,15 +5,39 @@ namespace App\Http\Controllers;
 use App\Models\Assignment;
 use App\Http\Requests\StoreAssignmentRequest;
 use App\Http\Requests\UpdateAssignmentRequest;
+use App\Models\Classroom;
+use App\Repositories\AssignmentRepository;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\Request;
 
 class AssignmentController extends Controller
 {
+    use AuthorizesRequests;
+
+    public AssignmentRepository $assignmentRepository;
+
+    public function __construct(AssignmentRepository $assignmentRepository)
+    {
+        $this->assignmentRepository = $assignmentRepository;
+    }
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request, Classroom $classroom)
     {
-        //
+        $this->authorize('viewAny', Assignment::class);
+
+        $assignments = $this->assignmentRepository->index([
+            'classroom_id' => $classroom->id,
+            'role_id' => $request->query('role_id', '')
+        ]);
+
+        return view('assignments.assignments', [
+            'classroom' => $classroom,
+            'assignments' => $assignments,
+            'role_id' => $request->query('role_id', ''),
+        ]);
     }
 
     /**

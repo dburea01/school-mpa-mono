@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClassroomController;
 use App\Http\Controllers\DashboardController;
@@ -42,6 +43,7 @@ Route::middleware(['auth'])->group(function () {
         ->scopeBindings()->whereUuid(['school', 'group', 'user']);
     Route::resource('subjects', SubjectController::class)->whereUuid('subject');
     Route::resource('periods/{period}/classrooms', ClassroomController::class)->whereUuid(['period', 'classroom'])->scoped();
+    Route::resource('classrooms/{classroom}/assignments', AssignmentController::class)->whereUuid(['classroom', 'assignment'])->scoped();
 });
 
 Route::fallback(function () {

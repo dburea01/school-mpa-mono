@@ -27,11 +27,13 @@
                             <th>Nom</th>
                             <th>Enseignants</th>
                             <th>Elèves</th>
+                            <th>&nbsp;</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($classrooms as $classroom)
                         <tr>
+
                             <td>
                                 @can('update', [App\Models\Classroom::class, $classroom])
                                 <a href=" {{ route('classrooms.edit', ['period' => $period, 'classroom' => $classroom]) }}">
@@ -53,6 +55,14 @@
                                 todo
                             </td>
                             <td>todo</td>
+                            <td>
+                                @can('viewAny', [App\Models\Assignment::class])
+                                <a href=" {{ route('assignments.index', ['classroom' => $classroom]) }}">
+                                    <i class="bi bi-people"></i>
+                                </a>
+                                @endcan
+                            </td>
+
 
                         </tr>
                         @endforeach
