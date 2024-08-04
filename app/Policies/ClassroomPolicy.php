@@ -7,59 +7,30 @@ use App\Models\User;
 
 class ClassroomPolicy
 {
-    /**
-     * Determine whether the user can view any models.
-     */
+    use TraitCheckAuthorization;
+
     public function viewAny(User $user): bool
     {
-        //
+        return $this->isAuthorized($user, 'viewAnyClassroom');
     }
 
-    /**
-     * Determine whether the user can view the model.
-     */
     public function view(User $user, Classroom $classroom): bool
     {
-        //
+        return $this->isAuthorized($user, 'viewClassroom');
     }
 
-    /**
-     * Determine whether the user can create models.
-     */
     public function create(User $user): bool
     {
-        //
+        return $this->isAuthorized($user, 'createClassroom');
     }
 
-    /**
-     * Determine whether the user can update the model.
-     */
     public function update(User $user, Classroom $classroom): bool
     {
-        //
+        return $this->isAuthorized($user, 'updateClassroom');
     }
 
-    /**
-     * Determine whether the user can delete the model.
-     */
     public function delete(User $user, Classroom $classroom): bool
     {
-        //
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, Classroom $classroom): bool
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, Classroom $classroom): bool
-    {
-        //
+        return $this->isAuthorized($user, 'deleteClassroom');
     }
 }
