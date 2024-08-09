@@ -1,66 +1,142 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# A propos de **frecole**
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+**frecole** est un outil de gestion d'établissement scolaire, simple, offrant une alternative aux établissements ne pouvant pas acquérir une des nombreuses solutions du marché.
 
-## About Laravel
+**frecole** permet ces fonctionnalités :
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- Gestion des utilisateurs (création/modification/suppression)
+- Rôles utilisateur : chaque rôle (enseignant, élève, parent...) donne des droits d'accés à l'application
+- Gestion des matières
+- Gestion des années scolaires
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Pour chaque année scolaire :
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- Gestion des classes
+- Gestion des affectations (élèves et enseignants)
+- Gestion des devoirs
+- Gestion des corrections
+- Accés aux résultats scolaires (parents, élèves, enseignants)
 
-## Learning Laravel
+Le modèle de données est consultable ici : [modèle de données](https://docs.google.com/drawings/d/1EbIsxDt3z9tIoRHQU_xx-jazaEomfl7eew0EOv8sZoE/edit?usp=sharing "Modèle de données de frecole")
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+**frecole** a été développé en PHP avec le merveilleux framework [laravel](https://laravel.com/)
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+Une démonstration compléte est disponible ici : [https://school-mpa-mono-8f20b5d7a8b2.herokuapp.com/](https://school-mpa-mono-8f20b5d7a8b2.herokuapp.com/)
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+# Installation - pré requis
 
-## Laravel Sponsors
+**frecole** nécessite l'utilisation de :
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- PHP 8.1
+- composer (pour installer les dépendances PHP)
+- node (pour installer les dépendances JS)
 
-### Premium Partners
+# Installation
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+- Cloner le projet
 
-## Contributing
+> git clone @todo
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+- Entrer dans le répertoire d'installation
 
-## Code of Conduct
+> cd @todo
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+- Installer les dépendances PHP
 
-## Security Vulnerabilities
+> composer install
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+- Installer les dépendances JS
 
-## License
+> npm install
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- Initialiser vos environnements. Copier le fichier .env.example en .env
+
+> COPY .env.example .env
+
+Si vous souhaitez utiliser les tests, initialisez également l'environnement de test
+> COPY .env.example .env.testing
+
+# Base de données
+
+## sqlite
+
+Par défaut, **frecole** utilise la base de données SQLITE (fournie avec l'installation de PHP). Le fichier d'environnement *.env* pointe vers cette base de données.
+
+Mais vous pouvez également choisir d'utiliser une autre base de données (voir ci-dessous).
+
+## postgre
+
+@todo
+
+## Initialisation des tables
+
+Exécuter la migration pour créer les tables. La migration alimente également quelques tables :
+
+- les matières
+- les civilités
+- les pays
+- les rôles
+
+Libre à vous par la suite de compléter, modifier ces listes.
+
+> php artisan migrate:fresh
+
+Pour créer quelques données de test (des utilisateurs, des années scolaires, des affectations, des notes...), vous pouvez également lancer la migration en précisant --seed :
+
+> php artisan migrate:fresh --seed
+
+# Lancement du projet
+
+A partir du répertoire d'installation, lancez
+
+> php artisan serve
+
+Ceci lancera l'application sur le port 8000, **frecole** sera alors disponible sur [localhost:8000](http://localhost:8000)
+
+# Lancement du projet en mode développement
+
+Si vous souhaitez développer sur le projet, vous pouver exécuter *vite* en parallèle :
+
+> npm run dev
+
+Ceci inspectera en temps réel toute modification dans le projet, rafraichira le site automatiquement, et buildera des ressources javascript et css optimisés pour la production. Voir également [https://laravel.com/docs/11.x/vite](https://laravel.com/docs/11.x/vite)
+
+# Les tests
+
+**frecole** est testé. Pour le moment majoritairement sur les authorizations (un coup de main est le bienvenu pour le reste....).
+
+Avant de lancer les tests:
+
+- créez votre base de données de test (postgre OU sqlite)
+- créez votre environnement de test, voir le fichier *.env.testing*
+  
+Pour lancer les tests :
+> php artisan test
+
+# Les autorisations
+
+**frecole** est fourni avec ces rôles
+
+- ADMIN (administrateur - a accés à tout)
+- TEACHER (enseignant - accés limité)
+- PARENT (parent - accés limité)
+- STUDENT (élève - accés limité)
+
+A chacun de ces rôles correspond une liste de tâches. Voir la matrice de ces tâches ici [https://docs.google.com/spreadsheets/d/1GB4SWRHhzk6gIeP6052KiuQ903_O8UaOWN6J4lz_eBE/edit?usp=sharing](https://docs.google.com/spreadsheets/d/1GB4SWRHhzk6gIeP6052KiuQ903_O8UaOWN6J4lz_eBE/edit?usp=sharing)
+
+L'attribution par défaut des tâches par rôles est défini dans le fichier migration @todo. Libre à vous de modifier cette attribution. **ATTENTION:sujet sensible....**
+
+# Traduction de **frecole**
+
+**frecole** est fourni pas défaut en langue française. Mais l'application est traduite également en langue anglaise.
+
+Pour modifier la langue par défaut, voir le paramétre **APP_LOCALE** dans le fichier d'environnement **.env**
+
+- en français : APP_LOCALE=fr
+- en anglais : APP_LOCALE=en
+
+Libre à vous d'ajouter des traductions. Voir le fonctionnement ici [https://laravel.com/docs/11.x/localization](https://laravel.com/docs/11.x/localization)
+
+# Contribution
+
+@todo
