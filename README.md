@@ -33,9 +33,10 @@ Une démonstration compléte est disponible ici : [https://school-mpa-mono-8f20b
 
 # Installation
 
-- Cloner le projet
+- Cloner le projet ```git clone```
 
 > git clone @todo
+
 
 - Entrer dans le répertoire d'installation
 
