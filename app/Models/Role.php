@@ -22,6 +22,7 @@ class Role extends Model
     protected $fillable = [
         'id',
         'name', 'comment',
-        'displayable',
+        'is_active',
+        'is_assignable',
     ];
 }

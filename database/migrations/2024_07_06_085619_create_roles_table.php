@@ -16,7 +16,8 @@ return new class extends Migration
             $table->string('id')->primary();
             $table->string('name');
             $table->string('comment')->nullable();
-            $table->boolean('displayable')->default(false);
+            $table->boolean('is_active')->default(false);
+            $table->boolean('is_assignable')->default(false);
             $table->string('created_by');
             $table->string('updated_by')->nullable();
             $table->timestamps();
@@ -26,47 +27,50 @@ return new class extends Migration
             [
                 'id' => 'DIRECTOR',
                 'name' => 'Directeur',
-                'displayable' => true,
+                'is_active' => true,
+                'is_assignable' => true,
             ],
             [
                 'id' => 'TEACHER',
                 'name' => 'Enseignant',
-                'displayable' => true,
+                'is_active' => true,
+                'is_assignable' => true,
             ],
             [
                 'id' => 'PARENT',
                 'name' => 'Parent',
-                'displayable' => true,
+                'is_active' => true,
             ],
             [
                 'id' => 'STUDENT',
                 'name' => 'Elève',
-                'displayable' => true,
+                'is_active' => true,
+                'is_assignable' => true,
             ],
             [
                 'id' => 'SUPERVISOR',
                 'name' => 'Surveillant',
-                'displayable' => true,
+                'is_active' => true,
             ],
             [
                 'id' => 'CPE',
                 'name' => 'Conseiller principal éducation',
-                'displayable' => true,
+                'is_active' => true,
             ],
             [
                 'id' => 'ACCOUNTANT',
                 'name' => 'Comptable',
-                'displayable' => true,
+                'is_active' => true,
             ],
             [
                 'id' => 'SECRETARY',
                 'name' => 'Secrétaire',
-                'displayable' => true,
+                'is_active' => true,
             ],
             [
                 'id' => 'ADMIN',
                 'name' => 'Administrateur',
-                'displayable' => true,
+                'is_active' => true,
             ],
 
         ];

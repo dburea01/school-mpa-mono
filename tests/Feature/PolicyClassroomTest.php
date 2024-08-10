@@ -18,6 +18,7 @@ class PolicyClassroomTest extends TestCase
     private User $userNotAdmin;
 
     private Period $period;
+
     private Classroom $classroom;
 
     private string $url;

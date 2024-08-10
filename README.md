@@ -23,7 +23,7 @@ Le modèle de données est consultable ici : [modèle de données](https://docs.
 
 Une démonstration compléte est disponible ici : [https://school-mpa-mono-8f20b5d7a8b2.herokuapp.com/](https://school-mpa-mono-8f20b5d7a8b2.herokuapp.com/)
 
-# Installation - pré requis
+## Installation - pré requis
 
 **frecole** nécessite l'utilisation de :
 
@@ -31,12 +31,11 @@ Une démonstration compléte est disponible ici : [https://school-mpa-mono-8f20b
 - composer (pour installer les dépendances PHP)
 - node (pour installer les dépendances JS)
 
-# Installation
+## Installation
 
-- Cloner le projet ```git clone```
+- Cloner le projet
 
 > git clone @todo
-
 
 - Entrer dans le répertoire d'installation
 
@@ -57,15 +56,15 @@ Une démonstration compléte est disponible ici : [https://school-mpa-mono-8f20b
 Si vous souhaitez utiliser les tests, initialisez également l'environnement de test
 > COPY .env.example .env.testing
 
-# Base de données
+## Base de données
 
-## sqlite
+### sqlite
 
 Par défaut, **frecole** utilise la base de données SQLITE (fournie avec l'installation de PHP). Le fichier d'environnement *.env* pointe vers cette base de données.
 
 Mais vous pouvez également choisir d'utiliser une autre base de données (voir ci-dessous).
 
-## postgre
+### postgre
 
 @todo
 
@@ -86,7 +85,7 @@ Pour créer quelques données de test (des utilisateurs, des années scolaires, 
 
 > php artisan migrate:fresh --seed
 
-# Lancement du projet
+## Lancement du projet
 
 A partir du répertoire d'installation, lancez
 
@@ -94,7 +93,7 @@ A partir du répertoire d'installation, lancez
 
 Ceci lancera l'application sur le port 8000, **frecole** sera alors disponible sur [localhost:8000](http://localhost:8000)
 
-# Lancement du projet en mode développement
+## Lancement du projet en mode développement
 
 Si vous souhaitez développer sur le projet, vous pouver exécuter *vite* en parallèle :
 
@@ -102,7 +101,7 @@ Si vous souhaitez développer sur le projet, vous pouver exécuter *vite* en par
 
 Ceci inspectera en temps réel toute modification dans le projet, rafraichira le site automatiquement, et buildera des ressources javascript et css optimisés pour la production. Voir également [https://laravel.com/docs/11.x/vite](https://laravel.com/docs/11.x/vite)
 
-# Les tests
+## Les tests
 
 **frecole** est testé. Pour le moment majoritairement sur les authorizations (un coup de main est le bienvenu pour le reste....).
 
@@ -114,7 +113,7 @@ Avant de lancer les tests:
 Pour lancer les tests :
 > php artisan test
 
-# Les autorisations
+## Les autorisations
 
 **frecole** est fourni avec ces rôles
 
@@ -127,7 +126,7 @@ A chacun de ces rôles correspond une liste de tâches. Voir la matrice de ces t
 
 L'attribution par défaut des tâches par rôles est défini dans le fichier migration @todo. Libre à vous de modifier cette attribution. **ATTENTION:sujet sensible....**
 
-# Traduction de **frecole**
+## Traduction de **frecole**
 
 **frecole** est fourni pas défaut en langue française. Mais l'application est traduite également en langue anglaise.
 
@@ -138,6 +137,10 @@ Pour modifier la langue par défaut, voir le paramétre **APP_LOCALE** dans le f
 
 Libre à vous d'ajouter des traductions. Voir le fonctionnement ici [https://laravel.com/docs/11.x/localization](https://laravel.com/docs/11.x/localization)
 
-# Contribution
+## Contribution
 
 @todo
+
+## Licence
+
+**frecole** is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

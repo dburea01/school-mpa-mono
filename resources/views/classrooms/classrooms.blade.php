@@ -52,9 +52,18 @@
                                 @endif
                             </td>
                             <td>
-                                todo
+                                @can('viewAny', [App\Models\Assignment::class])
+                                <a href=" {{ route('assignments.index', ['classroom' => $classroom, 'role_id' => 'TEACHER']) }}">
+                                    {{ $classroom->teachers_count }}
+                                </a>
+                                @endcan
                             </td>
-                            <td>todo</td>
+                            <td>@can('viewAny', [App\Models\Assignment::class])
+                                <a href=" {{ route('assignments.index', ['classroom' => $classroom, 'role_id' => 'STUDENT']) }}">
+                                    {{ $classroom->students_count }}
+                                </a>
+                                @endcan
+                            </td>
                             <td>
                                 @can('viewAny', [App\Models\Assignment::class])
                                 <a href=" {{ route('assignments.index', ['classroom' => $classroom]) }}">

@@ -4,13 +4,22 @@ namespace App\Repositories;
 
 use App\Models\Classroom;
 use App\Models\Period;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 
 class ClassroomRepository
 {
     public function index(Period $period): Collection
     {
-        return Classroom::where('period_id', $period->id)->orderBy('short_name')->get();
+        return Classroom::withCount([
+            'users as students_count' => function (Builder $query) {
+                $query->where('role_id', 'STUDENT');
+            },
+            'users as teachers_count' => function (Builder $query) {
+                $query->where('role_id', 'TEACHER');
+            },
+        ])
+            ->where('period_id', $period->id)->orderBy('short_name')->get();
     }
 
     /** @param array<string,string> $data */

@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Assignment;
 use App\Http\Requests\StoreAssignmentRequest;
 use App\Http\Requests\UpdateAssignmentRequest;
+use App\Models\Assignment;
 use App\Models\Classroom;
 use App\Repositories\AssignmentRepository;
+use App\Repositories\RoleRepository;
+use App\Repositories\SubjectRepository;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 
@@ -16,9 +18,15 @@ class AssignmentController extends Controller
 
     public AssignmentRepository $assignmentRepository;
 
-    public function __construct(AssignmentRepository $assignmentRepository)
+    public RoleRepository $roleRepository;
+
+    public SubjectRepository $subjectRepository;
+
+    public function __construct(AssignmentRepository $assignmentRepository, RoleRepository $roleRepository, SubjectRepository $subjectRepository)
     {
         $this->assignmentRepository = $assignmentRepository;
+        $this->roleRepository = $roleRepository;
+        $this->subjectRepository = $subjectRepository;
     }
 
     /**
@@ -28,15 +36,23 @@ class AssignmentController extends Controller
     {
         $this->authorize('viewAny', Assignment::class);
 
-        $assignments = $this->assignmentRepository->index([
-            'classroom_id' => $classroom->id,
-            'role_id' => $request->query('role_id', '')
-        ]);
+        $roleId = $request->query('role_id', '');
+
+        $assignments = $this->assignmentRepository->index(
+            $classroom->id,
+            $roleId
+        );
+
+        //dd($assignments);
+        // dd($this->roleRepository->index(true));
 
         return view('assignments.assignments', [
             'classroom' => $classroom,
             'assignments' => $assignments,
-            'role_id' => $request->query('role_id', ''),
+            'role_id' => $roleId,
+            'roles' => $this->roleRepository->index(true),
+            'subjects' => $this->subjectRepository->all()
+
         ]);
     }
 

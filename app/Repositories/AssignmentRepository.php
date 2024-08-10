@@ -9,27 +9,18 @@ use Illuminate\Database\Eloquent\Collection;
 
 class AssignmentRepository
 {
-    public function index(array $request): Collection
+    public function index(?string $classroomId, string $roleId): Collection
     {
+
         $query = Assignment::with(['user', 'subject', 'classroom']);
 
-        $query->when(isset($request['user_id']), function ($q) use ($request) {
-            return $q->where('user_id', $request['user_id']);
-        });
-
-        $query->when(isset($request['classroom_id']), function ($q) use ($request) {
-            return $q->where('classroom_id', $request['classroom_id']);
-        });
-
-        $query->when(isset($request['subject_id']), function ($q) use ($request) {
-            return $q->where('subject_id', $request['subject_id']);
+        $query->when(isset($classroomId), function ($q) use ($classroomId) {
+            return $q->where('classroom_id', $classroomId);
         });
 
         $assignments = $query->get();
 
-        if (isset($request['role_id']) && $request['role_id'] != '') {
-            $roleId = $request['role_id'];
-
+        if (isset($roleId) && $roleId != '') {
             $assignments = $assignments->filter(function ($assignment) use ($roleId) {
                 /** @phpstan-ignore-next-line */
                 return $assignment->user->role_id == $roleId;
