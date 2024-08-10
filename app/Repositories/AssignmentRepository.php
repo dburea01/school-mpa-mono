@@ -5,12 +5,37 @@ declare(strict_types=1);
 namespace App\Repositories;
 
 use App\Models\Assignment;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class AssignmentRepository
 {
-    public function index(?string $classroomId, string $roleId): Collection
+    public function index(string $classroomId, ?string $roleId): Collection
     {
+
+        $query = DB::table('users')
+            ->join('assignments', 'assignments.user_id', 'users.id')
+            ->join('roles', 'users.role_id', 'roles.id')
+            ->leftjoin('subjects',  'subjects.id', 'assignments.subject_id')
+            ->where('assignments.classroom_id', $classroomId)
+            ->select(
+                'users.id as user_id',
+                'users.last_name',
+                'users.first_name',
+                'users.gender_id',
+                'assignments.id as assignment_id',
+                'roles.id as role_id',
+                'roles.name as role_name',
+                'subjects.id as subject_id',
+                'subjects.name as subject_name'
+            )
+            ->orderBy('last_name')->orderBy('first_name');
+
+        if (isset($roleId) and $roleId != '') {
+            $query->where('users.role_id', $roleId);
+        }
+
+        return $query->get();
 
         $query = Assignment::with(['user', 'subject', 'classroom']);
 

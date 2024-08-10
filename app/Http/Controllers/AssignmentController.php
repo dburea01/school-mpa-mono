@@ -43,15 +43,15 @@ class AssignmentController extends Controller
             $roleId
         );
 
-        //dd($assignments);
+        // dd($assignments);
         // dd($this->roleRepository->index(true));
 
         return view('assignments.assignments', [
             'classroom' => $classroom,
             'assignments' => $assignments,
             'role_id' => $roleId,
-            'roles' => $this->roleRepository->index(true),
-            'subjects' => $this->subjectRepository->all()
+            // 'roles' => $this->roleRepository->index(true),
+            // 'subjects' => $this->subjectRepository->all()
 
         ]);
     }
