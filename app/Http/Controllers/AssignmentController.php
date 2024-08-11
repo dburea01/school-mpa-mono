@@ -4,55 +4,52 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreAssignmentRequest;
 use App\Http\Requests\UpdateAssignmentRequest;
+use App\Http\Requests\ViewAssignmentRequest;
 use App\Models\Assignment;
 use App\Models\Classroom;
 use App\Repositories\AssignmentRepository;
-use App\Repositories\RoleRepository;
-use App\Repositories\SubjectRepository;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
+use App\Repositories\PeriodRepository;
 
 class AssignmentController extends Controller
 {
     use AuthorizesRequests;
 
     public AssignmentRepository $assignmentRepository;
+    public PeriodRepository $periodRepository;
 
-    public RoleRepository $roleRepository;
 
-    public SubjectRepository $subjectRepository;
 
-    public function __construct(AssignmentRepository $assignmentRepository, RoleRepository $roleRepository, SubjectRepository $subjectRepository)
+    public function __construct(AssignmentRepository $assignmentRepository, PeriodRepository $periodRepository)
     {
         $this->assignmentRepository = $assignmentRepository;
-        $this->roleRepository = $roleRepository;
-        $this->subjectRepository = $subjectRepository;
+        $this->periodRepository = $periodRepository;
     }
 
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request, Classroom $classroom)
+    public function index(ViewAssignmentRequest $request)
     {
-        $this->authorize('viewAny', Assignment::class);
+        // get the current period
+        $currentPeriod = $this->periodRepository->getCurrentPeriod();
+        abort_if(!$currentPeriod, 404, 'Pas de période définie.');
 
         $roleId = $request->query('role_id', '');
+        $classroomId = $request->query('classroom_id', '');
 
         $assignments = $this->assignmentRepository->index(
-            $classroom->id,
+            $classroomId,
             $roleId
         );
 
-        // dd($assignments);
-        // dd($this->roleRepository->index(true));
-
         return view('assignments.assignments', [
-            'classroom' => $classroom,
+            'classroomId' => $classroomId,
+            'classroom' => Classroom::find($classroomId),
             'assignments' => $assignments,
             'role_id' => $roleId,
-            // 'roles' => $this->roleRepository->index(true),
-            // 'subjects' => $this->subjectRepository->all()
-
+            'period' => $currentPeriod
         ]);
     }
 

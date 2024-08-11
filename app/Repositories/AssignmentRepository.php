@@ -10,14 +10,14 @@ use Illuminate\Support\Facades\DB;
 
 class AssignmentRepository
 {
-    public function index(string $classroomId, ?string $roleId): Collection
+    public function index(?string $classroomId, ?string $roleId): Collection
     {
 
         $query = DB::table('users')
             ->join('assignments', 'assignments.user_id', 'users.id')
             ->join('roles', 'users.role_id', 'roles.id')
+            ->join('classrooms', 'classrooms.id', 'assignments.classroom_id')
             ->leftjoin('subjects',  'subjects.id', 'assignments.subject_id')
-            ->where('assignments.classroom_id', $classroomId)
             ->select(
                 'users.id as user_id',
                 'users.last_name',
@@ -26,6 +26,8 @@ class AssignmentRepository
                 'assignments.id as assignment_id',
                 'roles.id as role_id',
                 'roles.name as role_name',
+                'classrooms.name as classroom_name',
+                'classrooms.short_name as classroom_short_name',
                 'subjects.id as subject_id',
                 'subjects.name as subject_name'
             )
@@ -33,6 +35,9 @@ class AssignmentRepository
 
         if (isset($roleId) and $roleId != '') {
             $query->where('users.role_id', $roleId);
+        }
+        if (isset($classroomId) and $classroomId != '') {
+            $query->where('assignments.classroom_id', $classroomId);
         }
 
         return $query->get();

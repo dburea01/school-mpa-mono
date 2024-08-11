@@ -43,7 +43,7 @@ Route::middleware(['auth'])->group(function () {
         ->scopeBindings()->whereUuid(['school', 'group', 'user']);
     Route::resource('subjects', SubjectController::class)->whereUuid('subject');
     Route::resource('periods/{period}/classrooms', ClassroomController::class)->whereUuid(['period', 'classroom'])->scoped();
-    Route::resource('classrooms/{classroom}/assignments', AssignmentController::class)->whereUuid(['classroom', 'assignment'])->scoped();
+    Route::resource('assignments', AssignmentController::class)->whereUuid('assignment');
 });
 
 Route::fallback(function () {

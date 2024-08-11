@@ -27,10 +27,10 @@ class AssignmentSeeder extends Seeder
 
         foreach ($classrooms as $classroom) {
 
-            $students = $students->random(30);
-            $teachers = $teachers->random(5);
+            $studentsRandom = $students->random(rand(20,40));
+            $teachersRandom = $teachers->random(rand(5,10));
 
-            foreach ($students as $student) {
+            foreach ($studentsRandom as $student) {
                 Assignment::factory()->create([
                     'classroom_id' => $classroom->id,
                     'user_id' => $student->id,
@@ -39,7 +39,7 @@ class AssignmentSeeder extends Seeder
                 ]);
             }
 
-            foreach ($teachers as $teacher) {
+            foreach ($teachersRandom as $teacher) {
                 Assignment::factory()->create([
                     'classroom_id' => $classroom->id,
                     'user_id' => $teacher->id,
