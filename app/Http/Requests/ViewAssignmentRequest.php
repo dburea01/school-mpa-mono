@@ -27,16 +27,22 @@ class ViewAssignmentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'classroom_id' => 'nullable|exists:classrooms,id',
-            'role_id' => 'nullable|exists:roles,id'
+            'classroom_id' => 'required|exists:classrooms,id',
+            'role_id' => 'nullable|exists:roles,id',
         ];
     }
 
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array<string, string>
+     */
     public function messages(): array
     {
         return [
             'role_id.exists' => 'Le rôle est incorrect',
             'classroom_id.exists' => 'La classe est incorrecte',
+            'classroom_id.required' => 'La classe est obligatoire',
         ];
     }
 }

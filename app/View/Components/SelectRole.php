@@ -18,12 +18,12 @@ class SelectRole extends Component
 
     public string $id;
 
-    public ?string $isAssignable;
+    public ?bool $isAssignable;
 
     /**
      * Create a new component instance.
      */
-    public function __construct($value, $name, $id, $isAssignable = null)
+    public function __construct(string $value, string $name, string $id, bool $isAssignable = null)
     {
 
         $this->value = $value;

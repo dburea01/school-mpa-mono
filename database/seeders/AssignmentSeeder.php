@@ -27,8 +27,8 @@ class AssignmentSeeder extends Seeder
 
         foreach ($classrooms as $classroom) {
 
-            $studentsRandom = $students->random(rand(20,40));
-            $teachersRandom = $teachers->random(rand(5,10));
+            $studentsRandom = $students->random(rand(20, 40));
+            $teachersRandom = $teachers->random(rand(5, 10));
 
             foreach ($studentsRandom as $student) {
                 Assignment::factory()->create([

@@ -8,18 +8,17 @@ use App\Http\Requests\ViewAssignmentRequest;
 use App\Models\Assignment;
 use App\Models\Classroom;
 use App\Repositories\AssignmentRepository;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Http\Request;
 use App\Repositories\PeriodRepository;
+use Illuminate\Contracts\View\View;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class AssignmentController extends Controller
 {
     use AuthorizesRequests;
 
     public AssignmentRepository $assignmentRepository;
+
     public PeriodRepository $periodRepository;
-
-
 
     public function __construct(AssignmentRepository $assignmentRepository, PeriodRepository $periodRepository)
     {
@@ -30,13 +29,15 @@ class AssignmentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(ViewAssignmentRequest $request)
+    public function index(ViewAssignmentRequest $request): View
     {
         // get the current period
         $currentPeriod = $this->periodRepository->getCurrentPeriod();
-        abort_if(!$currentPeriod, 404, 'Pas de période définie.');
+        abort_if(! $currentPeriod, 404, 'Pas de période définie.');
 
+        /** @var string $roleId */
         $roleId = $request->query('role_id', '');
+        /** @var string $classroomId */
         $classroomId = $request->query('classroom_id', '');
 
         $assignments = $this->assignmentRepository->index(
@@ -45,11 +46,10 @@ class AssignmentController extends Controller
         );
 
         return view('assignments.assignments', [
-            'classroomId' => $classroomId,
             'classroom' => Classroom::find($classroomId),
             'assignments' => $assignments,
             'role_id' => $roleId,
-            'period' => $currentPeriod
+            'period' => $currentPeriod,
         ]);
     }
 

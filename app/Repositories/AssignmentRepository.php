@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Repositories;
 
 use App\Models\Assignment;
+use App\Models\Classroom;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
@@ -17,7 +18,7 @@ class AssignmentRepository
             ->join('assignments', 'assignments.user_id', 'users.id')
             ->join('roles', 'users.role_id', 'roles.id')
             ->join('classrooms', 'classrooms.id', 'assignments.classroom_id')
-            ->leftjoin('subjects',  'subjects.id', 'assignments.subject_id')
+            ->leftjoin('subjects', 'subjects.id', 'assignments.subject_id')
             ->select(
                 'users.id as user_id',
                 'users.last_name',
@@ -42,6 +43,7 @@ class AssignmentRepository
 
         return $query->get();
 
+        /*
         $query = Assignment::with(['user', 'subject', 'classroom']);
 
         $query->when(isset($classroomId), function ($q) use ($classroomId) {
@@ -52,14 +54,16 @@ class AssignmentRepository
 
         if (isset($roleId) && $roleId != '') {
             $assignments = $assignments->filter(function ($assignment) use ($roleId) {
-                /** @phpstan-ignore-next-line */
+                
                 return $assignment->user->role_id == $roleId;
             });
         }
 
         return $assignments->sortBy('user.last_name');
+        */
     }
 
+    /** @param array<string,string> $data */
     public function insert(array $data): Assignment
     {
         $assignment = new Assignment();
@@ -69,6 +73,7 @@ class AssignmentRepository
         return $assignment;
     }
 
+    /** @param array<string,string> $data */
     public function update(Assignment $assignment, array $data): Assignment
     {
         $assignment->fill($data);
@@ -80,5 +85,34 @@ class AssignmentRepository
     public function delete(Assignment $assignment): void
     {
         $assignment->delete();
+    }
+
+    public function repartition_assignment_by_role(Classroom $classroom): Collection
+    {
+        // repartition by role
+        $repartitionByRole = DB::table('users')
+            ->join('assignments', 'assignments.user_id', 'users.id')
+            ->join('roles', 'users.role_id', 'roles.id')
+            ->join('classrooms', 'classrooms.id', 'assignments.classroom_id')
+            ->leftjoin('subjects', 'subjects.id', 'assignments.subject_id')
+            ->where('assignments.classroom_id', $classroom->id)
+            ->select('roles.name as role_name', DB::raw('count(roles.id) as quantity'))
+            ->groupBy('roles.id')
+            ->get();
+
+        return $repartitionByRole;
+    }
+
+    public function repartition_assignment_by_gender(Classroom $classroom): Collection
+    {
+        $repartitionByGender = DB::table('users')
+            ->join('assignments', 'assignments.user_id', 'users.id')
+            ->where('assignments.classroom_id', $classroom->id)
+            ->where('users.role_id', 'STUDENT')
+            ->select('users.gender_id', DB::raw('count(users.gender_id) as quantity'))
+            ->groupBy('users.gender_id')
+            ->get();
+
+        return $repartitionByGender;
     }
 }

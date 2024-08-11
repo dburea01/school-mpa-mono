@@ -14,10 +14,10 @@
                 <div class="card shadow">
                     <div class="card-header text-center">Filtres</div>
                     <div class="card-body">
-                        <form class="row" action="{{ route('assignments.index', ['classroom_id'=>$classroomId]) }}">
+                        <form class="row" action="{{ route('assignments.index', ['classroom'=>$classroom]) }}">
 
                             <div class="mt-1">
-                                <x-select-classroom-of-period :period="$period" :value="$classroomId" name="classroom_id" id="classroom_id" />
+                                <x-select-classroom-of-period :period="$period" :value="$classroom->id" name="classroom_id" id="classroom_id" />
                                 @error('classroom_id')
                                 <span class="text-danger">{{ $message }}</span>
                                 @enderror
@@ -43,8 +43,9 @@
         <div class="row mt-3">
             <div class="col">
                 <div class="card shadow">
-                    <div class="card-header text-center">Répartition par sexe</div>
-                    <div class="card-body">@todo
+                    <div class="card-header text-center">Résumé de la classe <strong><span class="text-primary">{{ $classroom->short_name }}</span></strong></div>
+                    <div class="card-body">
+                        <x-table-summary-assignment :classroom="$classroom" />
                     </div>
                 </div>
             </div>
@@ -56,15 +57,7 @@
 
         <div class="card shadow">
             <div class="card-header text-center">
-                <strong>{{ count($assignments) }}</strong> affectation(s) -&nbsp;
-                @switch($classroom)
-                @case(null)
-                toute classe
-                @break
-                @default
-                classe <span class="text-primary">{{ $classroom->short_name }}</span>
-
-                @endswitch
+                Affectation(s) - classe <strong><span class="text-primary">{{ $classroom->short_name }}</span></strong>
             </div>
             <div class="card-body">
                 <table class="table table-sm table-hover table-bordered" aria-label="list of the assignments of a classroom">
