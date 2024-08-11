@@ -33,13 +33,17 @@ class AssignmentController extends Controller
     {
         // get the current period
         $currentPeriod = $this->periodRepository->getCurrentPeriod();
-        abort_if(! $currentPeriod, 404, 'Pas de période définie.');
+        abort_if(!$currentPeriod, 404, 'Pas de période définie.');
 
         /** @var string $roleId */
         $roleId = $request->query('role_id', '');
         /** @var string $classroomId */
-        $classroomId = $request->query('classroom_id', '');
-
+        $classroomId = $request->query('classroom_id');
+        if ($classroomId == '') {
+            $classroom = Classroom::where('period_id', $currentPeriod->id)->orderBy('short_name')->first();
+            abort_if(!$classroom, 404, 'Pas de classe pour cette période.');
+            $classroomId = $classroom->id;
+        }
         $assignments = $this->assignmentRepository->index(
             $classroomId,
             $roleId

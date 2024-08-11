@@ -27,7 +27,7 @@ class ViewAssignmentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'classroom_id' => 'required|exists:classrooms,id',
+            'classroom_id' => 'nullable|exists:classrooms,id',
             'role_id' => 'nullable|exists:roles,id',
         ];
     }
