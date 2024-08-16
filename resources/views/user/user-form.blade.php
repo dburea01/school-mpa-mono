@@ -35,11 +35,10 @@
                     <div class="card-body">
                         {{-- role --}}
                         <div class="row mb-3">
-                            <label for="role_id" class="col-sm-4 col-form-label col-form-label-sm text-truncate text-sm-end">
-                                Rôle : *</label>
+                            <label for="role_id" class="col-sm-4 col-form-label col-form-label-sm text-truncate text-sm-end">Rôle : *</label>
 
                             <div class="col-sm-8">
-                                <x-select-role name="role_id" id="role_id" required="true" :value="old('role_id', $user->role_id)" placeholder=" " />
+                                <x-select-role name="role_id" id="role_id" required="true" :value="old('role_id', $user->role_id)" />
 
                                 @if ($errors->has('role_id'))
                                 <span class="text-danger">{{ $errors->first('role_id') }}</span>
@@ -47,9 +46,9 @@
                             </div>
                         </div>
 
-                        {{-- last name --}}
+                        {{-- user --}}
                         <div class="row mb-3">
-                            <label for="last_name" class="col-sm-4 col-form-label col-form-label-sm text-truncate text-sm-end">
+                            <label for="user_name" class="col-sm-4 col-form-label col-form-label-sm text-truncate text-sm-end">
                                 Nom : *</label>
 
                             <div class="col-sm-8">

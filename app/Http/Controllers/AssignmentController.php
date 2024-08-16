@@ -7,10 +7,13 @@ use App\Http\Requests\UpdateAssignmentRequest;
 use App\Http\Requests\ViewAssignmentRequest;
 use App\Models\Assignment;
 use App\Models\Classroom;
+use App\Models\User;
 use App\Repositories\AssignmentRepository;
 use App\Repositories\PeriodRepository;
-use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class AssignmentController extends Controller
 {
@@ -60,9 +63,20 @@ class AssignmentController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request): View
     {
-        //
+        $this->authorize('create', Assignment::class);
+
+        abort_if(! $request->has('classroom_id'), 404, 'Classe obligatoire pour créer une affectation');
+        $classroom = Classroom::findOrFail($request->classroom_id);
+        
+        $assignment = new Assignment();
+        $assignment->classroom_id = $request->classroom_id;
+
+        return view('assignments.assignment-form', [
+            'assignment' => $assignment,
+            'classroom' => $classroom,
+        ]);
     }
 
     /**
@@ -86,7 +100,12 @@ class AssignmentController extends Controller
      */
     public function edit(Assignment $assignment)
     {
-        //
+        $this->authorize('update', [Assignment::class, $assignment]);
+    
+        return view('assignments.assignment-form', [
+            'assignment' => $assignment,
+            'classroom' => Classroom::find($assignment->classroom_id),
+        ]);
     }
 
     /**
@@ -100,8 +119,22 @@ class AssignmentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Assignment $assignment)
+    public function destroy(Assignment $assignment, Request $request): RedirectResponse
     {
-        //
+        $this->authorize('delete', $assignment);
+
+        // find the user name and the classroom name, for the message sent to the redirection
+        $user = User::find($assignment->user_id);
+        $classroom = Classroom::find($assignment->classroom_id);
+
+        try {
+            $this->assignmentRepository->delete($assignment);
+
+            return redirect()
+                ->route('assignments.index', ['classroom_id' => $request->input('classroom_id')])
+                ->with('success', "Utilisateur $user->full_name retiré de la classe $classroom->short_name");
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', "Utilisateur non retiré");
+        }
     }
 }

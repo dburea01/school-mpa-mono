@@ -20,6 +20,7 @@ class AssignmentRepository
             ->join('classrooms', 'classrooms.id', 'assignments.classroom_id')
             ->leftjoin('subjects', 'subjects.id', 'assignments.subject_id')
             ->select(
+                'assignments.id',
                 'users.id as user_id',
                 'users.last_name',
                 'users.first_name',
@@ -27,6 +28,7 @@ class AssignmentRepository
                 'assignments.id as assignment_id',
                 'roles.id as role_id',
                 'roles.name as role_name',
+                'classrooms.id as classroom_id',
                 'classrooms.name as classroom_name',
                 'classrooms.short_name as classroom_short_name',
                 'subjects.id as subject_id',

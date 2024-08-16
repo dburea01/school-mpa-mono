@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreUserRequest;
+use App\Http\Resources\UserResource;
 use App\Http\Resources\UserResourceBasic;
 use App\Models\Role;
 use App\Models\User;
@@ -174,5 +175,15 @@ class UserController extends Controller
         $this->authorize('create', User::class);
 
         return view('user.potential-duplicated-user');
+    }
+
+    public function getUsersByNameAndRole(Request $request)
+    {
+        $name = $request->input('name');
+        $roleId = $request->input('role_id');
+
+        $users = $this->userRepository->getUsersByNameAndRole($name, $roleId);
+
+        return UserResourceBasic::collection($users);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Assignment;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreAssignmentRequest extends FormRequest
@@ -11,6 +12,14 @@ class StoreAssignmentRequest extends FormRequest
      */
     public function authorize(): bool
     {
+        if ($this->user() && $this->method() == 'POST') {
+            return $this->user()->can('create', Assignment::class);
+        }
+
+        if ($this->user() && $this->method() == 'PUT') {
+            return $this->user()->can('update', $this->route('assignment'));
+        }
+
         return false;
     }
 
@@ -21,8 +30,11 @@ class StoreAssignmentRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            //
+        $rules = [
+            'classroom_id' => 'required|exists:classroom,id',
+            
+            'name' => 'required|max:50',
+            'comment' => 'max:500',
         ];
     }
 }

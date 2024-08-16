@@ -25,13 +25,13 @@ class UserRepository
 
         $query->when(isset($request['name']), function ($q) use ($request) {
             return $q->where(function (Builder $query2) use ($request) {
-                $query2->where('last_name', 'like', '%'.$request['name'].'%')
-                    ->orWhere('first_name', 'like', '%'.$request['name'].'%');
+                $query2->where('last_name', 'like', '%' . $request['name'] . '%')
+                    ->orWhere('first_name', 'like', '%' . $request['name'] . '%');
             });
         });
 
         $query->when(isset($request['email']), function ($q) use ($request) {
-            return $q->where('email', 'like', '%'.$request['email'].'%');
+            return $q->where('email', 'like', '%' . $request['email'] . '%');
         });
 
         $query->when(isset($request['login_status_id']), function ($q) use ($request) {
@@ -113,5 +113,23 @@ class UserRepository
         });
 
         return $query->get();
+    }
+
+    public function getUsersByNameAndRole(string $name, ?string $roleId)
+    {
+        $query = User::with(['role', 'civility'])->orderBy('last_name');
+
+        $query->when(filled($roleId), function ($q) use ($roleId) {
+            return $q->where('role_id', $roleId);
+        });
+
+        $query->when(filled($name), function ($q) use ($name) {
+            return $q->where(function (Builder $query2) use ($name) {
+                $query2->where('last_name', 'like', '%' . $name . '%')
+                    ->orWhere('first_name', 'like', '%' . $name . '%');
+            });
+        });
+
+        return $query->take(10)->get();
     }
 }
