@@ -2,8 +2,6 @@
 
 namespace App\View\Components;
 
-use App\Models\Country;
-use App\Models\Subject;
 use App\Repositories\SubjectRepository;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\View\Component;

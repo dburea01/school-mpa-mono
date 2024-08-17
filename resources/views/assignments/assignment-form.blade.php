@@ -38,7 +38,8 @@
                             </label>
 
                             <div class="col-sm-8">
-                                <input type="text" class="form-control form-control-sm @error('classroom_id') is-invalid @enderror" readonly disabled required name="classroom_id" id="classroom_id" value="{{ old('classroom_id', $assignment->classroom->short_name) }}">
+                                <input type="text" class="form-control form-control-sm @error('classroom_id') is-invalid @enderror" readonly disabled required name="classroom_name" id="classroom_name" value="{{ $assignment->classroom->short_name }}">
+                                <input type="text" required name="classroom_id" id="classroom_id" value="{{ old('classroom_id', $assignment->classroom_id) }}">
                                 @error('classroom_id')
                                 <span class="text-danger">{{ $message }}</span>
                                 @enderror
@@ -46,29 +47,36 @@
                         </div>
 
                         {{-- role --}}
+                        @if (! $assignment->id)
                         <div class="row mb-3">
                             <label for="role_id" class="col-sm-4 col-form-label col-form-label-sm text-truncate text-sm-end">
                                 Rôle :
                             </label>
 
                             <div class="col-sm-8">
-                                <x-select-role name="role_id" id="role_id" required="true" :value="old('role_id', 'STUDENT')" placeholder=" " />
+                                <x-select-role name="role_id" id="role_id" required="true" value="{{ old('role_id') }}" placeholder=" " />
 
                                 @if ($errors->has('role_id'))
                                 <span class="text-danger">{{ $errors->first('role_id') }}</span>
                                 @endif
                             </div>
                         </div>
+                        @endif
 
                         {{-- user to assign --}}
                         <div class="row mb-3">
                             <label for="user_name" class="col-sm-4 col-form-label col-form-label-sm text-truncate text-sm-end">
-                                Utilisateur :
+                                Utilisateur : *
                             </label>
                             <div class="col-sm-8">
-                                <input class="form-control form-control-sm" id="user_name" type="text"
-                                    placeholder="-- Chercher une personne avec son rôle --">
-                                <input type="text" id="user_id" name="user_id">
+                                <input class="form-control form-control-sm" id="user_name" type="text" name="user_name" value="{{ old('user_name', $user->full_name) }}"
+                                    placeholder="-- Chercher une personne avec son rôle --" @if ($assignment->id) readonly disabled @endif>
+
+                                @error('user_id')
+                                <span class="text-danger">{{ $message }}</span>
+                                @enderror
+
+                                <input type="text" id="user_id" name="user_id" value="{{ old('user_id', $user->id) }}">
                             </div>
                         </div>
 
@@ -79,7 +87,7 @@
                             </label>
 
                             <div class="col-sm-8">
-                                <x-select-subject name="subject_id" id="subject_id" required="false" :value="old('subject_id', '')" placeholder=" " />
+                                <x-select-subject name="subject_id" id="subject_id" required="false" :value="old('subject_id', $assignment->subject_id)" placeholder=" " />
 
                                 @error('subject_id')
                                 <span class="text-danger">{{ $message }}</span>
@@ -131,7 +139,7 @@
                                 Commentaire :</label>
 
                             <div class="col-sm-8">
-                                <textarea class="form-control form-control-sm @error('comment') is-invalid @enderror" name="comment" id="comment" rows="3" maxlength="500">{{ old('comment', $classroom->comment) }}</textarea>
+                                <textarea class="form-control form-control-sm @error('comment') is-invalid @enderror" name="comment" id="comment" rows="3" maxlength="500">{{ old('comment', $assignment->comment) }}</textarea>
                                 @error('comment')
                                 <span class="text-danger">{{ $message }}</span>
                                 @enderror
@@ -234,14 +242,18 @@
 <script>
     $(document).ready(function() {
 
+
         $('#role_id').on('change', function() {
-            console.log($('#role_id').val())
-            if ($('#role_id').val() != 'STUDENT') {
+            showHideSubject($('#role_id').val())
+        })
+
+        function showHideSubject(roleId) {
+            if (roleId != 'STUDENT') {
                 $('#subjects-row').show()
             } else {
                 $('#subjects-row').hide()
             }
-        })
+        }
 
         $("#user_name").autocomplete({
             source: function(request, response) {
@@ -256,8 +268,9 @@
                         var resp = $.map(data.data, function(obj) {
                             console.log(obj)
                             return {
-                                value: obj.first_name + ' ' + obj.last_name + ' (' + obj.role + ')',
-                                id: obj.id
+                                value: obj.first_name + ' ' + obj.last_name + ' (' + obj.role.name + ')',
+                                user_id: obj.id,
+                                role: obj.role
                             }
                         })
                         response(resp);
@@ -266,7 +279,9 @@
             },
             minLength: 2,
             select: function(event, ui) {
-                $('#user_id').val(ui.item.id)
+                console.log(ui)
+                $('#user_id').val(ui.item.user_id)
+                showHideSubject(ui.item.role.id)
             }
         });
 

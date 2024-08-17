@@ -23,7 +23,7 @@ class SelectRole extends Component
     /**
      * Create a new component instance.
      */
-    public function __construct(string $value, string $name, string $id, bool $isAssignable = null)
+    public function __construct(string $value, string $name, string $id, ?bool $isAssignable = null)
     {
 
         $this->value = $value;

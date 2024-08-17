@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreUserRequest;
-use App\Http\Resources\UserResource;
 use App\Http\Resources\UserResourceBasic;
 use App\Models\Role;
 use App\Models\User;
@@ -177,9 +176,11 @@ class UserController extends Controller
         return view('user.potential-duplicated-user');
     }
 
-    public function getUsersByNameAndRole(Request $request)
+    public function getUsersByNameAndRole(Request $request): AnonymousResourceCollection
     {
+        /** @var string $name */
         $name = $request->input('name');
+        /** @var string $roleId */
         $roleId = $request->input('role_id');
 
         $users = $this->userRepository->getUsersByNameAndRole($name, $roleId);

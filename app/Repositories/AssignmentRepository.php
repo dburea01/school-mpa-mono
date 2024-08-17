@@ -56,7 +56,7 @@ class AssignmentRepository
 
         if (isset($roleId) && $roleId != '') {
             $assignments = $assignments->filter(function ($assignment) use ($roleId) {
-                
+
                 return $assignment->user->role_id == $roleId;
             });
         }
