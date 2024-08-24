@@ -36,6 +36,7 @@ class WorkController extends Controller
             'subjectId' => $request->query('subject_id', ''),
             'classroomId' => $request->query('classroom_id', ''),
             'workTypeId' => $request->query('work_type_id', ''),
+            'workStatusId' => $request->query('work_status_id', ''),
         ]);
     }
 

@@ -30,6 +30,10 @@
                         <x-select-work-type name="work_type_id" id="work_type_id" required="false" :value="old('work_type_id', $workTypeId)" placeholder="-- type --" />
                     </div>
 
+                    <div class="mt-1">
+                        <x-select-work-status name="work_status_id" id="work_status_id" required="false" :value="old('work_status_id', $workStatusId)" placeholder="-- status --" />
+                    </div>
+
                     <div class="d-grid gap-2 mt-3">
                         <button type="submit" class="btn btn-primary btn-sm">Filtrer</button>
                     </div>
@@ -69,7 +73,7 @@
                             <tr>
                                 <td>
                                     @can('updateWork', $work)
-                                    <a href="{{ route('works.edit', ['work' => $work]) }}">{{ $work->title }}</a>
+                                    <a href="{{ route('works.edit', ['work' => $work->id]) }}">{{ $work->title }}</a>
                                     @else
                                     {{ $work->title }}
                                     @endcan
@@ -78,11 +82,10 @@
                                     <x-tooltip-comment :comment="$work->description" />
                                     @endif
                                 </td>
-                                <td>{{ $work->workType->short_name }}</td>
-
-                                <td>{{ $work->classroom->short_name }}</td>
-                                <td>{{ $work->subject->short_name }}</td>
-                                <td>{{ $work->workStatus->name }}</td>
+                                <td>{{ $work->work_type_short_name }}</td>
+                                <td>{{ $work->classroom_short_name }}</td>
+                                <td>{{ $work->subject_short_name }}</td>
+                                <td>{{ $work->work_status_name }}</td>
 
                                 <td>
                                     @can('deleteWork', $work->id)
