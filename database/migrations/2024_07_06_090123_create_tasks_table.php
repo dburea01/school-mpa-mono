@@ -60,6 +60,12 @@ return new class extends Migration
             ['id' => 'createAssignment',   'name' => 'Créer une affectation dans une classe'],
             ['id' => 'updateAssignment',   'name' => 'Modifier une affectation'],
             ['id' => 'deleteAssignment',   'name' => 'Supprimer une affectation'],
+
+            ['id' => 'viewAnyWorkType',  'name' => 'Voir tous les types de travail'],
+            ['id' => 'viewWorkType',     'name' => 'Voir un type de travail'],
+            ['id' => 'createWorkType',   'name' => 'Créer un type de travail'],
+            ['id' => 'updateWorkType',   'name' => 'Modifier un type de travail'],
+            ['id' => 'deleteWorkType',   'name' => 'Supprimer un type de travail'],
         ];
 
         foreach ($tasks as $task) {

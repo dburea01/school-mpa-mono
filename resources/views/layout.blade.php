@@ -73,6 +73,8 @@
                                 @endcan
                                 @endif
 
+                                @can('viewAny', App\models\WorkType::class)<li><a class="dropdown-item" href="{{ route('work-types.index') }}">Liste types de travail</a></li>@endcan
+
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>

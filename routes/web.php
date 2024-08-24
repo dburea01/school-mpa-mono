@@ -9,6 +9,7 @@ use App\Http\Controllers\PeriodController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserGroupController;
+use App\Http\Controllers\WorkTypeController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -44,6 +45,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('periods/{period}/classrooms', ClassroomController::class)->whereUuid(['period', 'classroom'])->scoped();
     // Route::resource('assignments', AssignmentController::class)->whereUuid('assignment');
     Route::resource('classrooms/{classroom}/assignments', AssignmentController::class)->whereUuid(['classroom', 'assignment'])->scoped();
+    Route::resource('work-types', WorkTypeController::class)->whereNumber('work_type');
 });
 
 Route::fallback(function () {
