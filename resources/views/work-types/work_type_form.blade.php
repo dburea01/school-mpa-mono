@@ -62,7 +62,7 @@
                         {{-- is_active --}}
                         <div class="row mb-3">
                             <label for="is_active" class="col-sm-4 col-form-label col-form-label-sm text-truncate text-sm-end">
-                                Active ? :</label>
+                                Actif ? :</label>
 
                             <div class="col-sm-8">
                                 <div class="form-check form-check-inline">

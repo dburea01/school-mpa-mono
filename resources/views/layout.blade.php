@@ -78,7 +78,7 @@
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                @can('viewAny', App\models\Work::class)<li><a class="dropdown-item" href="{{ route('works.index') }}">Liste travaux</a></li>@endcan
                             </ul>
                         </li>
 

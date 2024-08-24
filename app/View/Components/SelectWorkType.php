@@ -2,14 +2,16 @@
 
 namespace App\View\Components;
 
-use App\Repositories\SubjectRepository;
+use App\Models\Civility;
+use App\Models\WorkType;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\View\Component;
 
-class SelectSubject extends Component
+class SelectWorkType extends Component
 {
-    public Collection $subjects;
+    public Collection $workTypes;
 
+    public ?string $placeholder;
     public string $name;
 
     public string $id;
@@ -18,22 +20,20 @@ class SelectSubject extends Component
 
     public ?string $value;
 
-    public ?string $placeholder;
-
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct(string $name, string $id, bool $required, ?string $value = null, ?string $placeholder = null)
+    public function __construct(?string $placeholder = null, string $name, string $id, bool $required, ?string $value = null)
     {
-        $subjectRepository = new SubjectRepository();
-        $this->subjects = $subjectRepository->all();
+
+        $this->workTypes = WorkType::orderBy('name')->where('is_active', true)->get();
+        $this->placeholder = $placeholder;
         $this->name = $name;
         $this->id = $id;
         $this->required = $required;
         $this->value = $value;
-        $this->placeholder = $placeholder;
     }
 
     /**
@@ -43,6 +43,8 @@ class SelectSubject extends Component
      */
     public function render()
     {
-        return view('components.select-subject');
+       
+
+        return view('components.select-work-type');
     }
 }
