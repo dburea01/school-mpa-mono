@@ -66,10 +66,11 @@ class AssignmentRepository
     }
 
     /** @param array<string,string> $data */
-    public function insert(array $data): Assignment
+    public function insert(Classroom $classroom, array $data): Assignment
     {
         $assignment = new Assignment();
         $assignment->fill($data);
+        $assignment->classroom_id = $classroom->id;
         $assignment->save();
 
         return $assignment;

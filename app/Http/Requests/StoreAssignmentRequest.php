@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\Assignment;
+use App\Models\Classroom;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -35,34 +36,34 @@ class StoreAssignmentRequest extends FormRequest
 
         $userId = $this->user_id;
         $subjectId = $this->subject_id;
-        $classroomId = $this->classroom_id;
+        /** @var Classroom $classroom */
+        $classroom = $this->route('classroom');
 
         $rules = [
-            'classroom_id' => 'required|uuid|exists:classrooms,id',
-            'comment' => 'max:500',
-            'start_date' => 'nullable|date_format:d/m/Y',
-            'end_date' => 'nullable|date_format:d/m/Y|after:start_date',
             'user_id' => [
                 'required',
                 'uuid',
                 'exists:users,id',
             ],
+            'start_date' => 'nullable|date_format:d/m/Y',
+            'end_date' => 'nullable|date_format:d/m/Y|after:start_date',
+            'comment' => 'max:500',
         ];
 
         if ($this->method() == 'POST') {
             $rules['user_id'][] = Rule::unique('assignments')
-                ->where(function (Builder $query) use ($classroomId, $userId, $subjectId) {
+                ->where(function (Builder $query) use ($classroom, $userId, $subjectId) {
                     return $query->where('user_id', $userId)
-                        ->where('classroom_id', $classroomId)
+                        ->where('classroom_id', $classroom->id)
                         ->where('subject_id', $subjectId);
                 });
         }
 
         if ($this->method() == 'PUT') {
             $rules['user_id'][] = Rule::unique('assignments')
-                ->where(function (Builder $query) use ($classroomId, $userId, $subjectId) {
+                ->where(function (Builder $query) use ($classroom, $userId, $subjectId) {
                     return $query->where('user_id', $userId)
-                        ->where('classroom_id', $classroomId)
+                        ->where('classroom_id', $classroom->id)
                         ->where('subject_id', $subjectId);
                 })
                 ->ignore($this->route('assignment'));
@@ -79,10 +80,6 @@ class StoreAssignmentRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'classroom_id.required' => 'La classe est obligatoire',
-            'classroom_id.uuid' => 'Classe incorrecte (uuid)',
-            'classroom_id.exists' => 'Classe inconnue',
-
             'user_id.required' => 'Utilisateur est obligatoire',
             'user_id.uuid' => 'Utilisateur incorrect (uuid)',
             'user_id.exists' => 'Utilisateur inconnu',

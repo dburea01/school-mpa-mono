@@ -7,43 +7,30 @@ use App\Models\User;
 
 class AssignmentPolicy
 {
-    /**
-     * Determine whether the user can view any models.
-     */
+    use TraitCheckAuthorization;
+
     public function viewAny(User $user): bool
     {
-        return true;
+        return $this->isAuthorized($user, 'viewAnyAssignment');
     }
 
-    /**
-     * Determine whether the user can view the model.
-     */
     public function view(User $user, Assignment $assignment): bool
     {
-        return true;
+        return $this->isAuthorized($user, 'viewAssignment');
     }
 
-    /**
-     * Determine whether the user can create models.
-     */
     public function create(User $user): bool
     {
-        return true;
+        return $this->isAuthorized($user, 'createAssignment');
     }
 
-    /**
-     * Determine whether the user can update the model.
-     */
     public function update(User $user, Assignment $assignment): bool
     {
-        return true;
+        return $this->isAuthorized($user, 'updateAssignment');
     }
 
-    /**
-     * Determine whether the user can delete the model.
-     */
     public function delete(User $user, Assignment $assignment): bool
     {
-        return true;
+        return $this->isAuthorized($user, 'deleteAssignment');
     }
 }

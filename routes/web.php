@@ -32,19 +32,18 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('users', UserController::class);
     Route::get('users-by-name-and-role', [UserController::class, 'getUsersByNameAndRole'])->name('getUsersByNameAndRole');
 
-    // Route::get('/find-duplicated-users', [UserController::class, 'findDuplicatedUser'])->name('getDuplicatedUsers');
     Route::get('/potential-duplicated-user', [UserController::class, 'potentialDuplicatedUser'])->name('potentialDuplicatedUser');
 
     Route::resource('periods', PeriodController::class);
     Route::resource('groups', GroupController::class);
-    // Route::resource('groups.users', UserGroupController::class)->scoped();
     Route::get('groups/{group}/users', [UserGroupController::class, 'index'])->scopeBindings()->name('groups.users.index');
     Route::post('groups/{group}/users', [UserGroupController::class, 'store'])->scopeBindings()->name('groups.users.store');
     Route::delete('groups/{group}/users/{user}', [UserGroupController::class, 'destroy'])
         ->scopeBindings()->whereUuid(['school', 'group', 'user']);
     Route::resource('subjects', SubjectController::class)->whereUuid('subject');
     Route::resource('periods/{period}/classrooms', ClassroomController::class)->whereUuid(['period', 'classroom'])->scoped();
-    Route::resource('assignments', AssignmentController::class)->whereUuid('assignment');
+    // Route::resource('assignments', AssignmentController::class)->whereUuid('assignment');
+    Route::resource('classrooms/{classroom}/assignments', AssignmentController::class)->whereUuid(['classroom', 'assignment'])->scoped();
 });
 
 Route::fallback(function () {

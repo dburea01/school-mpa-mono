@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreAssignmentRequest;
-use App\Http\Requests\ViewAssignmentRequest;
 use App\Models\Assignment;
 use App\Models\Classroom;
 use App\Models\User;
@@ -31,47 +30,34 @@ class AssignmentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(ViewAssignmentRequest $request): View
+    public function index(Classroom $classroom, Request $request): View
     {
-        // get the current period
-        $currentPeriod = $this->periodRepository->getCurrentPeriod();
-        abort_if(! $currentPeriod, 404, 'Pas de période définie.');
+        $this->authorize('viewAny', Assignment::class);
 
         /** @var string $roleId */
         $roleId = $request->query('role_id', '');
-        /** @var string $classroomId */
-        $classroomId = $request->query('classroom_id');
-        if ($classroomId == '') {
-            $classroom = Classroom::where('period_id', $currentPeriod->id)->orderBy('short_name')->first();
-            abort_if(! $classroom, 404, 'Pas de classe pour cette période.');
-            $classroomId = $classroom->id;
-        }
+
         $assignments = $this->assignmentRepository->index(
-            $classroomId,
+            $classroom->id,
             $roleId
         );
 
         return view('assignments.assignments', [
-            'classroom' => Classroom::find($classroomId),
+            'classroom' => $classroom,
             'assignments' => $assignments,
             'role_id' => $roleId,
-            'period' => $currentPeriod,
         ]);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Request $request): View
+    public function create(Classroom $classroom): View
     {
         $this->authorize('create', Assignment::class);
 
-        abort_if(! $request->has('classroom_id'), 404, 'Classe obligatoire pour créer une affectation');
-        $classroom = Classroom::findOrFail($request->classroom_id);
-
         $assignment = new Assignment();
-        /** @phpstan-ignore-next-line */
-        $assignment->classroom_id = $request->input('classroom_id');
+        $assignment->classroom_id = $classroom->id;
 
         return view('assignments.assignment-form', [
             'assignment' => $assignment,
@@ -83,19 +69,17 @@ class AssignmentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreAssignmentRequest $request): RedirectResponse
+    public function store(Classroom $classroom, StoreAssignmentRequest $request): RedirectResponse
     {
         // see the authorizations in the form request
         try {
-            $assignment = $this->assignmentRepository->insert($request->all());
+            $assignment = $this->assignmentRepository->insert($classroom, $request->all());
 
             /** @var User $assignedUser */
             $assignedUser = User::find($assignment->user_id);
-            /** @var Classroom $classroom */
-            $classroom = Classroom::find($assignment->classroom_id);
 
             return redirect()
-                ->route('assignments.index', ['classroom_id' => $assignment->classroom_id])
+                ->route('assignments.index', ['classroom' => $classroom, 'role_id' => $assignedUser->role_id])
                 ->with('success', "Affectation de $assignedUser->full_name créée dans classe $classroom->short_name");
         } catch (\Throwable $th) {
             return back()->with('error', $th->getMessage());
@@ -105,15 +89,15 @@ class AssignmentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Assignment $assignment): void
+    public function show(Classroom $classroom, Assignment $assignment): void
     {
-        //
+        $this->authorize('view', $assignment);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Assignment $assignment): View
+    public function edit(Classroom $classroom, Assignment $assignment): View
     {
         $this->authorize('update', [Assignment::class, $assignment]);
 
@@ -127,7 +111,7 @@ class AssignmentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(StoreAssignmentRequest $request, Assignment $assignment): RedirectResponse
+    public function update(Classroom $classroom, Assignment $assignment, StoreAssignmentRequest $request): RedirectResponse
     {
         // see the authorizations in the form request
         try {
@@ -137,7 +121,7 @@ class AssignmentController extends Controller
             $assignedUser = User::find($assignment->user_id);
 
             return redirect()
-                ->route('assignments.index', ['classroom_id' => $assignment->classroom_id])
+                ->route('assignments.index', ['classroom' => $classroom, 'role_id' => $assignedUser->role_id])
                 ->with('success', "Affectation de $assignedUser->full_name modifiée");
         } catch (\Throwable $th) {
             return back()->with('error', $th->getMessage());
@@ -147,21 +131,19 @@ class AssignmentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Assignment $assignment, Request $request): RedirectResponse
+    public function destroy(Classroom $classroom, Assignment $assignment): RedirectResponse
     {
         $this->authorize('delete', $assignment);
 
-        // find the user name and the classroom name, for the message sent to the redirection
+        // find the user name for the message sent to the redirection
         /** @var User $user */
         $user = User::find($assignment->user_id);
-        /** @var Classroom $classroom */
-        $classroom = Classroom::find($assignment->classroom_id);
 
         try {
             $this->assignmentRepository->delete($assignment);
 
             return redirect()
-                ->route('assignments.index', ['classroom_id' => $request->input('classroom_id')])
+                ->route('assignments.index', ['classroom' => $classroom, 'role_id' => $user->role_id])
                 ->with('success', "Utilisateur $user->full_name retiré de la classe $classroom->short_name");
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Utilisateur non retiré');

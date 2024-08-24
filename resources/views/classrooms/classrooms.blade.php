@@ -53,20 +53,20 @@
                             </td>
                             <td>
                                 @can('viewAny', [App\Models\Assignment::class])
-                                <a href=" {{ route('assignments.index', ['classroom_id' => $classroom->id, 'role_id' => 'TEACHER']) }}">
+                                <a href=" {{ route('assignments.index', ['classroom' => $classroom, 'role_id' => 'TEACHER']) }}">
                                     {{ $classroom->teachers_count }}
                                 </a>
                                 @endcan
                             </td>
                             <td>@can('viewAny', [App\Models\Assignment::class])
-                                <a href=" {{ route('assignments.index', ['classroom_id' => $classroom->id, 'role_id' => 'STUDENT']) }}">
+                                <a href=" {{ route('assignments.index', ['classroom' => $classroom, 'role_id' => 'STUDENT']) }}">
                                     {{ $classroom->students_count }}
                                 </a>
                                 @endcan
                             </td>
                             <td>
                                 @can('viewAny', [App\Models\Assignment::class])
-                                <a href=" {{ route('assignments.index', ['classroom_id' => $classroom->id]) }}">
+                                <a href=" {{ route('assignments.index', ['classroom' => $classroom]) }}">
                                     <i class="bi bi-people"></i>
                                 </a>
                                 @endcan

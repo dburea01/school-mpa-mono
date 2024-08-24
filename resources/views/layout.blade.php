@@ -72,7 +72,7 @@
                                 </li>
                                 @endcan
                                 @endif
-                                @can('viewAny', App\models\Assignment::class)<li><a class="dropdown-item" href="{{ route('assignments.index') }}">Liste affectations</a></li>@endcan
+
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>

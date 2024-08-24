@@ -54,6 +54,12 @@ return new class extends Migration
             ['id' => 'createClassroom',   'name' => 'Créer une classe'],
             ['id' => 'updateClassroom',   'name' => 'Modifier une classe'],
             ['id' => 'deleteClassroom',   'name' => 'Supprimer une classe'],
+
+            ['id' => 'viewAnyAssignment',  'name' => 'Voir toutes les affectations d\'une classe'],
+            ['id' => 'viewAssignment',     'name' => 'Voir une affectation'],
+            ['id' => 'createAssignment',   'name' => 'Créer une affectation dans une classe'],
+            ['id' => 'updateAssignment',   'name' => 'Modifier une affectation'],
+            ['id' => 'deleteAssignment',   'name' => 'Supprimer une affectation'],
         ];
 
         foreach ($tasks as $task) {
