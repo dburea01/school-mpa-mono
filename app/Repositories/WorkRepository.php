@@ -3,18 +3,18 @@
 namespace App\Repositories;
 
 use App\Models\Period;
-use App\Models\School;
+use App\Models\User;
 use App\Models\Work;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Contracts\Pagination\Paginator;
-use Illuminate\Database\Eloquent\Builder as Builder2;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class WorkRepository
 {
-    public function index(Period $period, array $request): Paginator
+    /** @param array<string,string> $request */
+    public function index(Period $period, User $user, array $request): Paginator
     {
         $query = DB::table('works')
             ->join('work_statuses', 'works.work_status_id', 'work_statuses.id')
@@ -27,7 +27,7 @@ class WorkRepository
             ->select(
                 'works.id',
                 'works.title',
-                'works.description',
+                'works.instruction',
                 'works.estimated_duration',
                 'works.expected_at',
 
@@ -45,8 +45,6 @@ class WorkRepository
                 'work_statuses.name as work_status_name'
             )
             ->orderBy('espected_at', 'desc');
-
-
 
         if (isset($request['title']) && filled($request['title'])) {
             $query->where(function (Builder $query2) use ($request) {
@@ -73,19 +71,20 @@ class WorkRepository
 
         // more filters regarding the role of the connected user.
         // If the user is not the admin, he can see only the works of the classrooms he is assigned
-        if (! Auth::user()->isAdmin()) {
+        if (! $user->isAdmin()) {
             $assignmentRepository = new AssignmentRepository();
 
-            $authorizedClassrooms = $assignmentRepository->getAuthorizedClassrooms(Auth::user(), $period)->pluck('id')->toArray();
+            $authorizedClassrooms = $assignmentRepository->getAuthorizedClassrooms($user, $period)->pluck('id')->toArray();
             $query->whereIn('classroom_id', $authorizedClassrooms);
 
-            $authorizedSubjects = $assignmentRepository->getAuthorizedSubjects(Auth::user(), $period)->pluck('id')->toArray();
+            $authorizedSubjects = $assignmentRepository->getAuthorizedSubjects($user, $period)->pluck('id')->toArray();
             $query->whereIn('subject_id', $authorizedSubjects);
         }
 
         return $query->paginate();
     }
 
+    /** @param array<string,string> $data */
     public function insert(array $data): Work
     {
         $work = new Work();
@@ -95,6 +94,7 @@ class WorkRepository
         return $work;
     }
 
+    /** @param array<string,string> $data */
     public function update(Work $work, array $data): Work
     {
         $work->fill($data);

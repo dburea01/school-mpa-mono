@@ -25,11 +25,11 @@ class WorkFactory extends Factory
 
         return [
             'title' => fake()->sentence(2),
-            'instruction' => fake()->sentence(),
             'given_at' => $givenAt,
             'expected_at' => $expectedAt,
             'estimated_duration' => random_int(10, 120),
             'instruction' => fake()->sentence(),
+            'comment' => fake()->sentence(),
             'note_min' => 0,
             'note_max' => random_int(10, 20),
             'note_increment' => fake()->boolean() ? fake()->randomElement([0.25, 0.5, 1]) : null,

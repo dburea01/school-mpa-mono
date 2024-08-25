@@ -8,7 +8,6 @@ use App\Models\Subject;
 use App\Models\Work;
 use App\Models\WorkStatus;
 use App\Models\WorkType;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class WorkSeeder extends Seeder

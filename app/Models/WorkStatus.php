@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class WorkStatus extends Model
 {
-    use HasFactory, HasCreatedUpdatedBy;
+    use HasCreatedUpdatedBy, HasFactory;
 
     public $incrementing = false;
 

@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Work;
 use App\Http\Requests\StoreWorkRequest;
 use App\Http\Requests\UpdateWorkRequest;
 use App\Models\Period;
-use App\Repositories\PeriodRepository;
+use App\Models\Work;
 use App\Repositories\WorkRepository;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class WorkController extends Controller
 {
@@ -30,7 +31,7 @@ class WorkController extends Controller
         // dd($this->workRepository->all($currentPeriod, $request->all()));
         return view('works.works', [
             'period' => $period,
-            'works' => $this->workRepository->index($period, $request->all()),
+            'works' => $this->workRepository->index($period, Auth::user(), $request->all()),
             'title' => $request->query('title', ''),
             'subjectId' => $request->query('subject_id', ''),
             'classroomId' => $request->query('classroom_id', ''),
@@ -42,7 +43,7 @@ class WorkController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Period $period)
+    public function create(Period $period): View
     {
         $this->authorize('create', Work::class);
 
@@ -62,7 +63,7 @@ class WorkController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Period $period, StoreWorkRequest $request)
+    public function store(Period $period, StoreWorkRequest $request): RedirectResponse
     {
         //
     }
@@ -70,7 +71,7 @@ class WorkController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Work $work)
+    public function show(Work $work): void
     {
         //
     }
@@ -78,7 +79,7 @@ class WorkController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Work $work)
+    public function edit(Work $work): View
     {
         //
     }
@@ -86,7 +87,7 @@ class WorkController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateWorkRequest $request, Work $work)
+    public function update(UpdateWorkRequest $request, Work $work): RedirectResponse
     {
         //
     }
@@ -94,7 +95,7 @@ class WorkController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Work $work)
+    public function destroy(Work $work): RedirectResponse
     {
         //
     }

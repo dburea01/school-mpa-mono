@@ -19,19 +19,19 @@
                     </div>
 
                     <div class="mt-1">
-                        <x-select-classroom-of-period :period="$period" :value="$classroomId" name="classroom_id" id="classroom_id" />
+                        <x-select-authorized-classroom-of-period :period="$period" :user="Auth::user()" :value="$classroomId" name="classroom_id" id="classroom_id" :required="false" placeholder="-- classe --" />
                     </div>
 
                     <div class="mt-1">
-                        <x-select-subject name="subject_id" id="subject_id" required="false" :value="old('subject_id', $subjectId)" placeholder="-- matière --" />
+                        <x-select-authorized-subject name="subject_id" id="subject_id" :required="false" :period="$period" :user="Auth::user()" :value="old('subject_id', $subjectId)" placeholder="-- matière --" />
                     </div>
 
                     <div class="mt-1">
-                        <x-select-work-type name="work_type_id" id="work_type_id" required="false" :value="old('work_type_id', $workTypeId)" placeholder="-- type --" />
+                        <x-select-work-type name="work_type_id" id="work_type_id" :required="false" :value="old('work_type_id', $workTypeId)" placeholder="-- type --" />
                     </div>
 
                     <div class="mt-1">
-                        <x-select-work-status name="work_status_id" id="work_status_id" required="false" :value="old('work_status_id', $workStatusId)" placeholder="-- status --" />
+                        <x-select-work-status name="work_status_id" id="work_status_id" :required="false" :value="old('work_status_id', $workStatusId)" placeholder="-- status --" />
                     </div>
 
                     <div class="d-grid gap-2 mt-3">
@@ -78,8 +78,8 @@
                                     {{ $work->title }}
                                     @endcan
 
-                                    @if ($work->description != '')
-                                    <x-tooltip-comment :comment="$work->description" />
+                                    @if ($work->instruction != '')
+                                    <x-tooltip-comment :comment="$work->instruction" />
                                     @endif
                                 </td>
                                 <td>{{ $work->work_type_short_name }}</td>

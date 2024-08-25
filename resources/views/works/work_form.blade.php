@@ -53,7 +53,7 @@
                             </label>
 
                             <div class="col-sm-8">
-                                @todo
+                                <x-select-authorized-classroom-of-period :period="$period" :user="Auth::user()" :value="old('classroom_id', $work->classroom_id)" name="classroom_id" id="classroom_id" required="true" placeholder="" />
                                 @error('classroom_id')
                                 <span class="text-danger">{{ $message }}</span>
                                 @enderror
@@ -67,7 +67,7 @@
                             </label>
 
                             <div class="col-sm-8">
-                                @todo
+                                <x-select-authorized-subject name="subject_id" id="subject_id" required="true" :period="$period" :user="Auth::user()" :value="old('subject_id', $work->subject_id)" placeholder="" />
                                 @error('subject_id')
                                 <span class="text-danger">{{ $message }}</span>
                                 @enderror

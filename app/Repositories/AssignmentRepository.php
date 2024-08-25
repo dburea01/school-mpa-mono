@@ -7,6 +7,7 @@ namespace App\Repositories;
 use App\Models\Assignment;
 use App\Models\Classroom;
 use App\Models\Period;
+use App\Models\Subject;
 use App\Models\User;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -121,24 +122,35 @@ class AssignmentRepository
         return $repartitionByGender;
     }
 
-    public function getAuthorizedClassrooms(User $user, Period $period)
+    public function getAuthorizedClassrooms(User $user, Period $period): Collection
     {
-        return DB::table('assignments')
-            ->join('classrooms', 'classrooms.id', 'assignments.classroom_id')
-            ->where('classrooms.period_id', $period->id)
-            ->where('assignments.user_id', $user->id)
-            ->select('classrooms.*')
-            ->get();
+        if ($user->isAdmin()) {
+            return Classroom::where('period_id', $period->id)->orderBy('short_name')->get();
+        } else {
+            return DB::table('assignments')
+                ->join('classrooms', 'classrooms.id', 'assignments.classroom_id')
+                ->where('classrooms.period_id', $period->id)
+                ->where('assignments.user_id', $user->id)
+                ->select('classrooms.*')
+                ->orderBy('classrooms.short_name')
+                ->get();
+        }
     }
 
-    public function getAuthorizedSubjects(User $user, Period $period)
+    public function getAuthorizedSubjects(User $user, Period $period): Collection
     {
-        return DB::table('assignments')
-            ->join('classrooms', 'classrooms.id', 'assignments.classroom_id')
-            ->join('subjects', 'subjects.id', 'assignments.subject_id')
-            ->where('classrooms.period_id', $period->id)
-            ->where('assignments.user_id', $user->id)
-            ->select('subjects.*')
-            ->get();
+        if ($user->isAdmin()) {
+            return Subject::orderBy('short_name')->get();
+        } else {
+            return DB::table('assignments')
+                ->join('classrooms', 'classrooms.id', 'assignments.classroom_id')
+                ->join('subjects', 'subjects.id', 'assignments.subject_id')
+                ->where('classrooms.period_id', $period->id)
+                ->where('assignments.user_id', $user->id)
+                ->select('subjects.*')
+                ->distinct()
+                ->orderBy('subjects.short_name')
+                ->get();
+        }
     }
 }

@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
             PeriodSeeder::class,
             ClassroomSeeder::class,
             AssignmentSeeder::class,
-            WorkSeeder::class
+            WorkSeeder::class,
         ]);
     }
 }

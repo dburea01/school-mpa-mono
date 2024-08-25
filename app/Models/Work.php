@@ -10,8 +10,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Work extends Model
 {
-    use HasFactory;
     use HasCreatedUpdatedBy;
+    use HasFactory;
     use HasUuids;
 
     protected $fillable = [

@@ -11,6 +11,7 @@ class SelectWorkStatus extends Component
     public Collection $workStatuses;
 
     public ?string $placeholder;
+
     public string $name;
 
     public string $id;
@@ -24,7 +25,7 @@ class SelectWorkStatus extends Component
      *
      * @return void
      */
-    public function __construct(?string $placeholder = null, string $name, string $id, bool $required, ?string $value = null)
+    public function __construct(?string $placeholder, string $name, string $id, bool $required, ?string $value = null)
     {
 
         $this->workStatuses = WorkStatus::orderBy('position')->get();
@@ -42,7 +43,6 @@ class SelectWorkStatus extends Component
      */
     public function render()
     {
-
 
         return view('components.select-work-status');
     }

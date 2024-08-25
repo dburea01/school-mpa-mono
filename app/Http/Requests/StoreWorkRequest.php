@@ -37,11 +37,11 @@ class StoreWorkRequest extends FormRequest
             'subject_id' => 'required|exists:subjects,id',
             'work_status_id' => 'required|exists:work_statuses,id',
 
-            'estimated_duration' => 'numeric|min:0|max:180',
-            'expected_at' => 'date_format:d/m/Y',
-            'note_min' => 'numeric|min:0',
-            'note_max' => 'numeric|max:100|gt:note_min',
-            'note_increment' => 'numeric|min:0.1|max:1',
+            'estimated_duration' => 'nullable|numeric|min:0|max:180',
+            'expected_at' => 'nullable|date_format:d/m/Y',
+            'note_min' => 'nullable|numeric|min:0',
+            'note_max' => 'nullable|numeric|max:100|gt:note_min',
+            'note_increment' => 'nullable|numeric|min:0.1|max:1',
 
             'instruction' => 'max:500',
             'comment' => 'max:500',
@@ -78,14 +78,14 @@ class StoreWorkRequest extends FormRequest
             'estimated_duration.max' => 'Veuillez saisir une valeur inférieure à 180 minutes',
 
             'expected_at.date_format' => 'Format de date incorrect (jj/mm/aaaaa)',
-            
+
             'note_min.numeric' => 'Veuillez saisir une valeur numérique',
             'note_min.min' => 'Veuillez saisir une valeur positive',
-            
+
             'note_max.numeric' => 'Veuillez saisir une valeur numérique',
             'note_max.max' => 'Veuillez saisir une valeur inférieure à 100',
             'note_max.gt' => 'Veuillez saisir une valeur supérieure au minimum',
-            
+
             'note_increment.numeric' => 'Veuillez saisir une valeur numérique',
             'note_increment.min' => 'Veuillez saisir une valeur supérieure ou égale à 0.1',
             'note_increment.max' => 'Veuillez saisir une valeur inférieure ou égale à 1.0',
