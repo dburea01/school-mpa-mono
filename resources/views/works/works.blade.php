@@ -13,13 +13,13 @@
         <div class="card shadow">
             <div class="card-header text-center">Filtres</div>
             <div class="card-body">
-                <form class="row" action="{{ route('works.index') }}" id="form-users">
+                <form class="row" action="{{ route('works.index', ['period' => $period]) }}" id="form-users">
                     <div class="mt-1">
                         <input type="text" class="form-control form-control-sm mr-sm-2" name="title" id="title" placeholder="Filtrer par titre/description" value="{{ $title }}">
                     </div>
 
                     <div class="mt-1">
-                        <x-select-classroom-of-period :period="$period" :value="$classroomId" name="classroom_id" id="classroom_id" />       
+                        <x-select-classroom-of-period :period="$period" :value="$classroomId" name="classroom_id" id="classroom_id" />
                     </div>
 
                     <div class="mt-1">
@@ -47,9 +47,9 @@
 
         <div class="card mt-3 mt-md-0 shadow">
             <div class="card-header text-center">
-                Liste des travaux ({{ $works->count() }}/{{ $works->total() }})
+                Liste des travaux ({{ $works->count() }}/{{ $works->total() }}) <strong>{{ $period->name }}</strong>
                 @can('create', App\Models\Work::class)
-                <a href="{{ route('works.create') }}">Créer travail</a>
+                <a href="{{ route('works.create', ['period'=>$period]) }}">Créer travail</a>
                 @endcan
             </div>
             <div class="card-body">
@@ -73,7 +73,7 @@
                             <tr>
                                 <td>
                                     @can('updateWork', $work)
-                                    <a href="{{ route('works.edit', ['work' => $work->id]) }}">{{ $work->title }}</a>
+                                    <a href="{{ route('works.edit', ['period'=>$period, 'work' => $work->id]) }}">{{ $work->title }}</a>
                                     @else
                                     {{ $work->title }}
                                     @endcan
@@ -90,6 +90,10 @@
                                 <td>
                                     @can('deleteWork', $work->id)
                                     <i class="bi bi-trash btn-delete-work text-danger" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#exampleModal" data-workid="{{$work->id}}" data-worktitle="{{$work->title}}"></i>
+                                    @endif
+
+                                    @can('noteWork', $work->id)
+                                    <a href="#">Corriger @todo</a>
                                     @endif
                                 </td>
                             </tr>

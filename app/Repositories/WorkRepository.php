@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\DB;
 
 class WorkRepository
 {
-    public function all(Period $period, array $request): Paginator
+    public function index(Period $period, array $request): Paginator
     {
         $query = DB::table('works')
             ->join('work_statuses', 'works.work_status_id', 'work_statuses.id')
@@ -71,14 +71,25 @@ class WorkRepository
             $query->where('works.work_status_id', $request['work_status_id']);
         }
 
+        // more filters regarding the role of the connected user.
+        // If the user is not the admin, he can see only the works of the classrooms he is assigned
+        if (! Auth::user()->isAdmin()) {
+            $assignmentRepository = new AssignmentRepository();
+
+            $authorizedClassrooms = $assignmentRepository->getAuthorizedClassrooms(Auth::user(), $period)->pluck('id')->toArray();
+            $query->whereIn('classroom_id', $authorizedClassrooms);
+
+            $authorizedSubjects = $assignmentRepository->getAuthorizedSubjects(Auth::user(), $period)->pluck('id')->toArray();
+            $query->whereIn('subject_id', $authorizedSubjects);
+        }
+
         return $query->paginate();
     }
 
-    public function insert(School $school, array $data): Work
+    public function insert(array $data): Work
     {
         $work = new Work();
         $work->fill($data);
-        $work->school_id = $school->id;
         $work->save();
 
         return $work;

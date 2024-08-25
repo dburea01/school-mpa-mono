@@ -21,7 +21,7 @@ return new class extends Migration
             $table->decimal('note_min', 8, 2)->nullable();
             $table->decimal('note_max', 8, 2)->nullable();
             $table->decimal('note_increment', 8, 2)->nullable();
-            $table->text('description')->nullable();
+            $table->text('intruction')->nullable();
             $table->date('given_at')->nullable();
             $table->date('expected_at')->nullable();
             $table->tinyInteger('estimated_duration')->nullable()->comment('duration in minutes');

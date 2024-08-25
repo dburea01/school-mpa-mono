@@ -61,24 +61,37 @@
                                 @can('viewAny', App\models\Group::class)<li><a class="dropdown-item" href="{{ route('groups.index') }}">Liste groupes</a></li>@endcan
                                 @can('viewAny', App\models\Period::class)<li><a class="dropdown-item" href="{{ route('periods.index') }}">Liste périodes</a></li>@endcan
                                 @can('viewAny', App\models\Subject::class)<li><a class="dropdown-item" href="{{ route('subjects.index') }}">Liste matières</a></li>@endcan
+                                @can('viewAny', App\models\WorkType::class)<li><a class="dropdown-item" href="{{ route('work-types.index') }}">Liste types de travail</a></li>@endcan
 
                                 @php
                                 $periodRepository = new App\Repositories\PeriodRepository();
                                 $currentPeriod = $periodRepository->getCurrentPeriod();
                                 @endphp
                                 @if($currentPeriod)
-                                @can('viewAny', App\models\Classroom::class)<li>
-                                    <a class="dropdown-item" href="{{ route('classrooms.index', ['period' => $currentPeriod->id ]) }}">Liste classes</a>
-                                </li>
-                                @endcan
-                                @endif
-
-                                @can('viewAny', App\models\WorkType::class)<li><a class="dropdown-item" href="{{ route('work-types.index') }}">Liste types de travail</a></li>@endcan
-
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
-                                @can('viewAny', App\models\Work::class)<li><a class="dropdown-item" href="{{ route('works.index') }}">Liste travaux</a></li>@endcan
+                                <li>
+                                    <a class="dropdown-item disabled" aria-disabled="true">{{ $currentPeriod->name }}</a>
+                                </li>
+                                @can('viewAny', App\models\Classroom::class)
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('classrooms.index', ['period' => $currentPeriod->id ]) }}">Liste classes</a>
+                                </li>
+                                @endcan
+
+                                @can('viewAny', App\models\Work::class)
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('works.index', ['period' => $currentPeriod->id]) }}">Liste travaux</a>
+                                </li>
+                                @endcan
+
+                                @endif
+
+
+
+
+
                             </ul>
                         </li>
 

@@ -25,7 +25,7 @@ class WorkFactory extends Factory
 
         return [
             'title' => fake()->sentence(2),
-            'description' => fake()->sentence(),
+            'instruction' => fake()->sentence(),
             'given_at' => $givenAt,
             'expected_at' => $expectedAt,
             'estimated_duration' => random_int(10, 120),

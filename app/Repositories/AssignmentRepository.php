@@ -6,6 +6,8 @@ namespace App\Repositories;
 
 use App\Models\Assignment;
 use App\Models\Classroom;
+use App\Models\Period;
+use App\Models\User;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
@@ -117,5 +119,26 @@ class AssignmentRepository
             ->get();
 
         return $repartitionByGender;
+    }
+
+    public function getAuthorizedClassrooms(User $user, Period $period)
+    {
+        return DB::table('assignments')
+            ->join('classrooms', 'classrooms.id', 'assignments.classroom_id')
+            ->where('classrooms.period_id', $period->id)
+            ->where('assignments.user_id', $user->id)
+            ->select('classrooms.*')
+            ->get();
+    }
+
+    public function getAuthorizedSubjects(User $user, Period $period)
+    {
+        return DB::table('assignments')
+            ->join('classrooms', 'classrooms.id', 'assignments.classroom_id')
+            ->join('subjects', 'subjects.id', 'assignments.subject_id')
+            ->where('classrooms.period_id', $period->id)
+            ->where('assignments.user_id', $user->id)
+            ->select('subjects.*')
+            ->get();
     }
 }
