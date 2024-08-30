@@ -21,7 +21,7 @@ class Work extends Model
         'classroom_id',
         'work_status_id',
         'title',
-        'description',
+        'comment',
         'given_at',
         'expected_at',
         'estimated_duration',

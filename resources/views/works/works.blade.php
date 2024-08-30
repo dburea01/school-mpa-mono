@@ -15,7 +15,7 @@
             <div class="card-body">
                 <form class="row" action="{{ route('works.index', ['period' => $period]) }}" id="form-users">
                     <div class="mt-1">
-                        <input type="text" class="form-control form-control-sm mr-sm-2" name="title" id="title" placeholder="Filtrer par titre/description" value="{{ $title }}">
+                        <input type="text" class="form-control form-control-sm mr-sm-2" name="title" id="title" placeholder="Filtrer par titre/instruction" value="{{ $title }}">
                     </div>
 
                     <div class="mt-1">

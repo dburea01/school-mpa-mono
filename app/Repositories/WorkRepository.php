@@ -49,7 +49,7 @@ class WorkRepository
         if (isset($request['title']) && filled($request['title'])) {
             $query->where(function (Builder $query2) use ($request) {
                 $query2->where('works.title', 'like', '%' . $request['title'] . '%')
-                    ->orWhere('works.description', 'like', '%' . $request['title'] . '%');
+                    ->orWhere('works.instruction', 'like', '%' . $request['title'] . '%');
             });
         }
 

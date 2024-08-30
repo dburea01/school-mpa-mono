@@ -65,38 +65,67 @@ class WorkController extends Controller
      */
     public function store(Period $period, StoreWorkRequest $request): RedirectResponse
     {
-        //
+        // see the authorizations in the form request
+        try {
+            $work = $this->workRepository->insert($request->all());
+
+            return redirect()->route('works.index', ['period' => $period])
+                ->with('success', "Travail $work->title créé");
+        } catch (\Throwable $th) {
+            return back()->with('error', $th->getMessage());
+        }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Work $work): void
+    public function show(Period $period, Work $work): void
     {
-        //
+        $this->authorize('view', $work);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Work $work): View
+    public function edit(Period $period, Work $work): View
     {
-        //
+        $this->authorize('update', $work);
+
+        return view('works.work_form', [
+            'period' => $period,
+            'work' => $work,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateWorkRequest $request, Work $work): RedirectResponse
+    public function update(StoreWorkRequest $request, Period $period, Work $work): RedirectResponse
     {
-        //
+        // see the authorizations in the form request
+        try {
+            $workUpdated = $this->workRepository->update($work, $request->all());
+
+            return redirect()->route('works.index', ['period' => $period])
+                ->with('success', "Travail $workUpdated->title modifié");
+        } catch (\Throwable $th) {
+            return back()->with('error', $th->getMessage());
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Work $work): RedirectResponse
+    public function destroy(Period $period, Work $work): RedirectResponse
     {
-        //
+        $this->authorize('delete', $period);
+        try {
+            $this->workRepository->delete($work);
+
+            return redirect()->route('works.index', ['period' => $period])
+            ->with('success', "Travail $work->title supprimé");
+        } catch (\Throwable $th) {
+            return back()->with('error', $th->getMessage());
+        }
     }
 }
