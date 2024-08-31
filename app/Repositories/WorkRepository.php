@@ -8,7 +8,6 @@ use App\Models\Work;
 use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\JoinClause;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class WorkRepository
@@ -48,8 +47,8 @@ class WorkRepository
 
         if (isset($request['title']) && filled($request['title'])) {
             $query->where(function (Builder $query2) use ($request) {
-                $query2->where('works.title', 'like', '%' . $request['title'] . '%')
-                    ->orWhere('works.instruction', 'like', '%' . $request['title'] . '%');
+                $query2->where('works.title', 'like', '%'.$request['title'].'%')
+                    ->orWhere('works.instruction', 'like', '%'.$request['title'].'%');
             });
         }
 

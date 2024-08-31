@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreWorkRequest;
-use App\Http\Requests\UpdateWorkRequest;
 use App\Models\Period;
+use App\Models\User;
 use App\Models\Work;
 use App\Repositories\WorkRepository;
 use Illuminate\Contracts\View\View;
@@ -28,10 +28,12 @@ class WorkController extends Controller
     {
         $this->authorize('viewAny', Work::class);
 
-        // dd($this->workRepository->all($currentPeriod, $request->all()));
+        /** @var User $user */
+        $user = Auth::user();
+
         return view('works.works', [
             'period' => $period,
-            'works' => $this->workRepository->index($period, Auth::user(), $request->all()),
+            'works' => $this->workRepository->index($period, $user, $request->all()),
             'title' => $request->query('title', ''),
             'subjectId' => $request->query('subject_id', ''),
             'classroomId' => $request->query('classroom_id', ''),
@@ -122,8 +124,10 @@ class WorkController extends Controller
         try {
             $this->workRepository->delete($work);
 
-            return redirect()->route('works.index', ['period' => $period])
-            ->with('success', "Travail $work->title supprimé");
+            return redirect()->route('works.index', [
+                'period' => $period,
+            ])
+                ->with('success', "Travail $work->title supprimé");
         } catch (\Throwable $th) {
             return back()->with('error', $th->getMessage());
         }

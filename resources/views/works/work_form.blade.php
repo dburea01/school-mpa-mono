@@ -283,13 +283,12 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Supprimer travail²
-                    <strong>{{ $work->title }}</strong>
+                <h5 class="modal-title" id="exampleModalLabel">Supprimer travail <strong>{{ $work->title }}</strong>
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p>Attention, vous vous apprétez à supprimer un travail. Vous supprimerez également toutes les notes relatives à ce devoir.
+                <p>Attention, vous vous apprêtez à supprimer un travail. Vous supprimerez également toutes les notes relatives à ce devoir.
                 </p>
 
                 <h2 class="text-danger text-center"><strong>Action irréversible.</strong></h2>

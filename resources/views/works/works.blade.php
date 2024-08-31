@@ -89,7 +89,14 @@
 
                                 <td>
                                     @can('deleteWork', $work->id)
-                                    <i class="bi bi-trash btn-delete-work text-danger" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#exampleModal" data-workid="{{$work->id}}" data-worktitle="{{$work->title}}"></i>
+                                    <i class="bi bi-trash btn-delete-work text-danger"
+                                        style="cursor: pointer;"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#exampleModal"
+                                        data-workid="{{$work->id}}"
+                                        data-worktitle="{{$work->title}}">
+                                    </i>
+
                                     @endif
 
                                     @can('noteWork', $work->id)
@@ -114,20 +121,24 @@
 
     </div>
 
-    {{-- modal to delete user --}}
+    {{-- modal to delete work --}}
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Supprimer <span id="user-name-to-delete"></span></h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Supprimer <strong><span class="work-title-to-delete"></span></strong></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>La suppression est irréversible. Veuillez confirmer votre choix.</p>
-                    <p>Si votre souhait est que cet utilisateur ne puisse plus se connecter, vous pouvez également modifier son status en "BLOCKED" sans le supprimer.</p>
+                    <p>Attention, vous vous apprétez à supprimer un travail. Vous supprimerez également toutes les notes relatives à ce travail.
+                    </p>
+
+                    <h2 class="text-danger text-center"><strong>Action irréversible.</strong></h2>
+                    <p>Veuillez confirmer la suppression du travail <strong class="work-title-to-delete"></strong></p>
+
                 </div>
                 <div class="modal-footer">
-                    <form id="btn-confirm-delete-user" class="form-inline" method="POST">
+                    <form id="btn-confirm-delete-work" class="form-inline" method="POST" data-url="/periods/{{ $period->id }}/works/">
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         @method('DELETE')
                         <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal"><i class="bi bi-chevron-left"></i> Annuler</button>
@@ -146,20 +157,16 @@
 <script>
     $(document).ready(function() {
 
-        $('.btn-delete-user').click(function() {
-            let userId = $(this).attr('data-userid')
-            let userName = $(this).attr('data-username')
+        $('.btn-delete-work').click(function() {
+            let workId = $(this).attr('data-workid')
+            let workTitle = $(this).attr('data-worktitle')
+            let url = $('#btn-confirm-delete-work').attr('data-url')
 
-            $('#user-name-to-delete').text(userName)
-            $('#btn-confirm-delete-user').attr('action', '/users/' + userId)
+            $('.work-title-to-delete').text(workTitle)
+            $('#btn-confirm-delete-work').attr('action', function(i, value) {
+                return url + workId
+            })
         })
-
-        $('.mode').click(function() {
-            let mode = $(this).attr('data-mode')
-            $('#mode').val(mode)
-            $('#form-users').submit()
-        })
-
     });
 </script>
 @endsection

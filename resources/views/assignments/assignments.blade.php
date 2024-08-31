@@ -139,7 +139,7 @@
                 <p>La suppression d'une affectation est irréversible. Veuillez confirmer votre choix.</p>
             </div>
             <div class="modal-footer">
-                <form id="form-confirm-delete-assignment" class="form-inline" method="POST" action="/classrooms/{{ $classroom->id }}/assignments/">
+                <form id="form-confirm-delete-assignment" class="form-inline" method="POST" data-url="/classrooms/{{ $classroom->id }}/assignments/">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     @method('DELETE')
                     <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal"><i class="bi bi-chevron-left"></i> Annuler</button>
@@ -164,11 +164,12 @@
             let classroomName = $(this).attr('data-classroom-name')
             let classroomId = $(this).attr('data-classroom-id')
             let assignmentId = $(this).attr('data-assignment-id')
+            let url = $('#form-confirm-delete-assignment').attr('data-url')
 
             $('#user-name-to-delete').text(userName)
             $('#classroom-name-to-delete').text(classroomName)
             $('#form-confirm-delete-assignment').attr('action', function(i, value) {
-                return value + assignmentId
+                return url + assignmentId
             })
 
 
