@@ -41,4 +41,9 @@ class Classroom extends Model
     {
         return $this->belongsToMany(User::class, 'assignments');
     }
+
+    public function works(): HasMany
+    {
+        return $this->hasMany(Work::class);
+    }
 }

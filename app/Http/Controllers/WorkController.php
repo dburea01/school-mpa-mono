@@ -120,7 +120,7 @@ class WorkController extends Controller
      */
     public function destroy(Period $period, Work $work): RedirectResponse
     {
-        $this->authorize('delete', $period);
+        $this->authorize('delete', $work);
         try {
             $this->workRepository->delete($work);
 

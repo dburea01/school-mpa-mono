@@ -9,7 +9,7 @@ class PeriodRepository
 {
     public function all(): Collection
     {
-        return Period::withCount('classrooms')->orderBy('start_date', 'desc')->get();
+        return Period::withCount(['classrooms', 'works'])->orderBy('start_date', 'desc')->get();
     }
 
     /** @param array<string,string> $data */

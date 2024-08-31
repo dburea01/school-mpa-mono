@@ -27,7 +27,7 @@
                             <th>Nom</th>
                             <th>Enseignants</th>
                             <th>Elèves</th>
-                            <th>&nbsp;</th>
+                            <th>Travaux</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -51,24 +51,26 @@
                                 <x-tooltip-comment :comment="$classroom->comment" />
                                 @endif
                             </td>
-                            <td>
+                            <td class="text-center">
                                 @can('viewAny', [App\Models\Assignment::class])
                                 <a href=" {{ route('assignments.index', ['classroom' => $classroom, 'role_id' => 'TEACHER']) }}">
                                     {{ $classroom->teachers_count }}
                                 </a>
                                 @endcan
                             </td>
-                            <td>@can('viewAny', [App\Models\Assignment::class])
+                            <td class="text-center">@can('viewAny', [App\Models\Assignment::class])
                                 <a href=" {{ route('assignments.index', ['classroom' => $classroom, 'role_id' => 'STUDENT']) }}">
                                     {{ $classroom->students_count }}
                                 </a>
                                 @endcan
                             </td>
-                            <td>
-                                @can('viewAny', [App\Models\Assignment::class])
-                                <a href=" {{ route('assignments.index', ['classroom' => $classroom]) }}">
-                                    <i class="bi bi-people"></i>
+                            <td class="text-center">
+                                @can('viewAny', [App\Models\Works::class])
+                                <a href=" {{ route('works.index', ['period' => $period, 'classroom_id' => $classroom->id]) }}">
+                                    {{ $classroom->works_count }}
                                 </a>
+                                @else
+                                {{ $classroom->works_counts }}
                                 @endcan
                             </td>
 

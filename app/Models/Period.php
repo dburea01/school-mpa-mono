@@ -63,15 +63,11 @@ class Period extends Model
     {
         return $this->hasManyThrough(Assignment::class, Classroom::class);
     }
+        */
+        
 
     public function works(): HasManyThrough
     {
         return $this->hasManyThrough(Work::class, Classroom::class);
     }
-
-    public function reports(): HasMany
-    {
-        return $this->hasMany(Report::class);
-    }
-        */
 }
