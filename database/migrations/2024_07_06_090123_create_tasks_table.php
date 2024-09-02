@@ -67,6 +67,12 @@ return new class extends Migration
             ['id' => 'updateWorkType',   'name' => 'Modifier un type de travail'],
             ['id' => 'deleteWorkType',   'name' => 'Supprimer un type de travail'],
 
+            ['id' => 'viewAnyAppreciation',  'name' => 'Voir toutes les appreciations'],
+            ['id' => 'viewAppreciation',     'name' => 'Voir une appreciation'],
+            ['id' => 'createAppreciation',   'name' => 'Créer une appreciation'],
+            ['id' => 'updateAppreciation',   'name' => 'Modifier une appreciation'],
+            ['id' => 'deleteAppreciation',   'name' => 'Supprimer une appreciation'],
+
             ['id' => 'viewAnyWork',  'name' => 'Voir tous les travaux'],
             ['id' => 'viewWork',     'name' => 'Voir un travail'],
             ['id' => 'createWork',   'name' => 'Créer un travail'],

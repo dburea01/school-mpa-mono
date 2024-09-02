@@ -35,7 +35,7 @@ class PolicyWorkTest extends TestCase
         $this->userNotAdmin = User::factory()->create(['role_id' => 'TEACHER']);
         $this->period = Period::factory()->create();
         $this->work = $this->buildWork($this->period);
-        $this->url = '/periods/' . $this->period->id . '/works';
+        $this->url = '/periods/'.$this->period->id.'/works';
     }
 
     public function test_you_must_be_authenticated_to_access_classrooms(): void
@@ -63,7 +63,7 @@ class PolicyWorkTest extends TestCase
     public function test_an_admin_can_view_a_work(): void
     {
         $this->actingAs($this->admin);
-        $this->get($this->url . '/' . $this->work->id)->assertOk();
+        $this->get($this->url.'/'.$this->work->id)->assertOk();
     }
 
     public function test_an_authorized_user_can_view_a_work(): void
@@ -71,16 +71,16 @@ class PolicyWorkTest extends TestCase
         $this->actingAs($this->userNotAdmin);
 
         RoleTask::where('task_id', 'viewWork')->where('role_id', $this->userNotAdmin->role_id)->delete();
-        $this->get($this->url . '/' . $this->work->id)->assertForbidden();
+        $this->get($this->url.'/'.$this->work->id)->assertForbidden();
 
         RoleTask::create(['task_id' => 'viewWork', 'role_id' => $this->userNotAdmin->role_id]);
-        $this->get($this->url . '/' . $this->work->id)->assertOK();
+        $this->get($this->url.'/'.$this->work->id)->assertOK();
     }
 
     public function test_an_admin_can_create_a_work(): void
     {
         $this->actingAs($this->admin);
-        $this->get($this->url . '/create')->assertOk();
+        $this->get($this->url.'/create')->assertOk();
         $this->post($this->url)->assertInvalid();
     }
 
@@ -89,18 +89,18 @@ class PolicyWorkTest extends TestCase
         $this->actingAs($this->userNotAdmin);
 
         RoleTask::where('task_id', 'createWork')->where('role_id', $this->userNotAdmin->role_id)->delete();
-        $this->get($this->url . '/create')->assertForbidden();
+        $this->get($this->url.'/create')->assertForbidden();
         $this->post($this->url)->assertForbidden();
 
         RoleTask::create(['task_id' => 'createWork', 'role_id' => $this->userNotAdmin->role_id]);
-        $this->get($this->url . '/create')->assertOK();
+        $this->get($this->url.'/create')->assertOK();
         $this->post($this->url)->assertInvalid();
     }
 
     public function test_an_admin_can_edit_a_work(): void
     {
         $this->actingAs($this->admin);
-        $this->get($this->url . '/' . $this->work->id . '/edit')->assertOk();
+        $this->get($this->url.'/'.$this->work->id.'/edit')->assertOk();
         $this->post($this->url)->assertInvalid();
     }
 
@@ -109,18 +109,18 @@ class PolicyWorkTest extends TestCase
         $this->actingAs($this->userNotAdmin);
 
         RoleTask::where('task_id', 'updateWork')->where('role_id', $this->userNotAdmin->role_id)->delete();
-        $this->get($this->url . '/' . $this->work->id . '/edit')->assertForbidden();
-        $this->put($this->url . '/' . $this->work->id)->assertForbidden();
+        $this->get($this->url.'/'.$this->work->id.'/edit')->assertForbidden();
+        $this->put($this->url.'/'.$this->work->id)->assertForbidden();
 
         RoleTask::create(['task_id' => 'updateWork', 'role_id' => $this->userNotAdmin->role_id]);
-        $this->get($this->url . '/' . $this->work->id . '/edit')->assertOK();
-        $this->put($this->url . '/' . $this->work->id)->assertInvalid();
+        $this->get($this->url.'/'.$this->work->id.'/edit')->assertOK();
+        $this->put($this->url.'/'.$this->work->id)->assertInvalid();
     }
 
     public function test_an_admin_can_delete_a_work(): void
     {
         $this->actingAs($this->admin);
-        $this->delete($this->url . '/' . $this->work->id)->assertRedirect('periods/' . $this->period->id . '/works');
+        $this->delete($this->url.'/'.$this->work->id)->assertRedirect('periods/'.$this->period->id.'/works');
     }
 
     public function test_an_authorized_user_can_delete_a_work(): void
@@ -128,10 +128,10 @@ class PolicyWorkTest extends TestCase
         $this->actingAs($this->userNotAdmin);
 
         RoleTask::where('task_id', 'deleteWork')->where('role_id', $this->userNotAdmin->role_id)->delete();
-        $this->delete($this->url . '/' . $this->work->id)->assertForbidden();
+        $this->delete($this->url.'/'.$this->work->id)->assertForbidden();
 
         RoleTask::create(['task_id' => 'deleteWork', 'role_id' => $this->userNotAdmin->role_id]);
-        $this->delete($this->url . '/' . $this->work->id)->assertRedirect('periods/' . $this->period->id . '/works');
+        $this->delete($this->url.'/'.$this->work->id)->assertRedirect('periods/'.$this->period->id.'/works');
     }
 
     public function buildWork(Period $period): Work
@@ -139,7 +139,7 @@ class PolicyWorkTest extends TestCase
         $classroom = Classroom::factory()->create(['period_id' => $period->id]);
         $subject = Subject::factory()->create();
         $workType = WorkType::factory()->create();
-        $workStatus = WorkStatus::first();
+        $workStatus = WorkStatus::firstOrCreate();
 
         return Work::factory()->create([
             'classroom_id' => $classroom->id,

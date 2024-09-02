@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AppreciationController;
 use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClassroomController;
@@ -43,6 +44,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('groups/{group}/users/{user}', [UserGroupController::class, 'destroy'])
         ->scopeBindings()->whereUuid(['school', 'group', 'user']);
     Route::resource('subjects', SubjectController::class)->whereUuid('subject');
+    Route::resource('appreciations', AppreciationController::class)->whereNumber('appreciation');
     Route::resource('periods/{period}/classrooms', ClassroomController::class)->whereUuid(['period', 'classroom'])->scoped();
     // Route::resource('assignments', AssignmentController::class)->whereUuid('assignment');
     Route::resource('classrooms/{classroom}/assignments', AssignmentController::class)->whereUuid(['classroom', 'assignment'])->scoped();

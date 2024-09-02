@@ -62,6 +62,7 @@
                                 @can('viewAny', App\models\Period::class)<li><a class="dropdown-item" href="{{ route('periods.index') }}">Liste périodes</a></li>@endcan
                                 @can('viewAny', App\models\Subject::class)<li><a class="dropdown-item" href="{{ route('subjects.index') }}">Liste matières</a></li>@endcan
                                 @can('viewAny', App\models\WorkType::class)<li><a class="dropdown-item" href="{{ route('work-types.index') }}">Liste types de travail</a></li>@endcan
+                                @can('viewAny', App\models\Appreication::class)<li><a class="dropdown-item" href="{{ route('appreciations.index') }}">Liste appreciations</a></li>@endcan
 
                                 @php
                                 $periodRepository = new App\Repositories\PeriodRepository();
