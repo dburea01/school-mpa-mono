@@ -32,7 +32,7 @@ class StoreAppreciationRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'position' => 'required|numeric|integer|gt:0',
+            'position' => 'required|numeric|integer|gte:0',
             'short_name' => [
                 'required',
                 'max:10',
@@ -61,6 +61,11 @@ class StoreAppreciationRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'position.required' => 'La position est obligatoire',
+            'position.numeric' => 'La position doit être numérique, entière, positive ou nulle',
+            'position.int' => 'La position doit être numérique, entière, positive ou nulle',
+            'position.gte' => 'La position doit être numérique, entière, positive ou nulle',
+
             'short_name.required' => "Le nom court de l'appréciation est obligatoire",
             'short_name.max' => "10 caractères max pour le nom court de l'appréciation",
             'short_name.unique' => 'Le nom court existe déjà',
