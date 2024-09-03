@@ -90,6 +90,7 @@
                                 <td>
                                     @can('deleteWork', $work->id)
                                     <i class="bi bi-trash btn-delete-work text-danger"
+                                        title="supprimer"
                                         style="cursor: pointer;"
                                         data-bs-toggle="modal"
                                         data-bs-target="#exampleModal"
@@ -99,8 +100,8 @@
 
                                     @endif
 
-                                    @can('noteWork', $work->id)
-                                    <a href="#">Corriger @todo</a>
+                                    @can('viewAnyResult', \App\Models\Result::class)
+                                    <a href="{{ route('results.index', ['work'=>$work->id]) }}" title="notes"><i class="bi bi-123"></i></a>
                                     @endif
                                 </td>
                             </tr>

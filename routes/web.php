@@ -7,6 +7,7 @@ use App\Http\Controllers\ClassroomController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\PeriodController;
+use App\Http\Controllers\ResultController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserGroupController;
@@ -51,6 +52,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('work-types', WorkTypeController::class)->whereNumber('work_type');
     // Route::resource('works', WorkController::class)->whereUuid('work');
     Route::resource('periods/{period}/works', WorkController::class)->whereUuid(['period', 'work']);
+    Route::resource('works/{work}/results', ResultController::class)->only(['index', 'store'])->whereUuid('work')->scoped();
 });
 
 Route::fallback(function () {
