@@ -18,7 +18,6 @@ class ResultRepository
     public function getUsersWithResults(Work $work): Collection
     {
 
-
         // get the assigned users + their results
         $usersWithResults = DB::table('users')
             ->join('assignments', function (JoinClause $join) use ($work) {
@@ -47,18 +46,17 @@ class ResultRepository
         return $usersWithResults;
     }
 
+    /** @param array<string,string> $data */
     public function insert(Work $work, array $data): Result
     {
         $result = new Result();
         $result->work_id = $work->id;
         $result->user_id = $data['user_id'];
-        if (array_key_exists('is_absent', $data['result'][$data['index']])) {
-            $result->is_absent = true;
-        } else {
-            $result->note = $data['result'][$data['index']]['note'];
-            $result->appreciation_id = $data['result'][$data['index']]['appreciation_id'];
-            $result->comment = $data['result'][$data['index']]['comment'];
-        }
+
+        $result->is_absent = $data['is_absent'];
+        $result->note = $data['note'];
+        $result->appreciation_id = $data['appreciation_id'];
+        $result->comment = $data['comment'];
 
         $result->save();
 
@@ -72,31 +70,27 @@ class ResultRepository
             ->delete();
     }
 
-    public function getResultsByUser(School $school, User $user, array $request): LengthAwarePaginator
+    /** @param array<string,string> $data */
+    public function getResultsByUser(User $user, array $request): LengthAwarePaginator
     {
 
         $query = DB::table('results')
             ->join('works', 'results.work_id', 'works.id')
-            ->leftJoin('appreciations', function (JoinClause $join) use ($school) {
-                $join->on('results.appreciation_id', 'appreciations.id')
-                    ->where('appreciations.school_id', $school->id);
+            ->leftJoin('appreciations', function (JoinClause $join) {
+                $join->on('results.appreciation_id', 'appreciations.id');
             })
-            ->leftJoin('subjects', function (JoinClause $join) use ($school) {
-                $join->on('works.subject_id', 'subjects.id')
-                    ->where('subjects.school_id', $school->id);
+            ->leftJoin('subjects', function (JoinClause $join) {
+                $join->on('works.subject_id', 'subjects.id');
             })
-            ->leftJoin('classrooms', function (JoinClause $join) use ($school) {
-                $join->on('works.classroom_id', 'classrooms.id')
-                    ->where('classrooms.school_id', $school->id);
+            ->leftJoin('classrooms', function (JoinClause $join)  {
+                $join->on('works.classroom_id', 'classrooms.id');
             })
-            ->leftJoin('work_types', function (JoinClause $join) use ($school) {
-                $join->on('works.work_type_id', 'work_types.id')
-                    ->where('work_types.school_id', $school->id);
+            ->leftJoin('work_types', function (JoinClause $join) {
+                $join->on('works.work_type_id', 'work_types.id');
             })
-            ->where('results.school_id', $school->id)
             ->where('results.user_id', $user->id)
             ->when(isset($request['search']), function (QueryBuilder $query) use ($request) {
-                $query->where('works.title', 'ilike', '%' . $request['search'] . '%');
+                $query->where('works.title', 'ilike', '%'.$request['search'].'%');
             })
             ->when(isset($request['subject_id']), function (QueryBuilder $query) use ($request) {
                 $query->where('works.subject_id', $request['subject_id']);

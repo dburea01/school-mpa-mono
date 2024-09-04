@@ -24,7 +24,7 @@ class StoreResultRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
@@ -32,7 +32,6 @@ class StoreResultRequest extends FormRequest
         $work = $this->route('work');
 
         return [
-            'index' => 'required|int',
             'user_id' => [
                 'required',
                 'uuid',
@@ -42,25 +41,29 @@ class StoreResultRequest extends FormRequest
                             ->where('classroom_id', $work->classroom_id)
                     ),
             ],
-            'result.*.note' => [
-                'nullable',
+            'note' => [
                 Rule::requiredIf(
-                    /** @phpstan-ignore-next-line */
-                    fn () => $this->result[$this->index]['appreciation_id'] != null
-                        /** @phpstan-ignore-next-line */
-                        || $this->result[$this->index]['comment'] != null
+                    
+                    fn () => $this->appreciation_id != null
+                        
+                        || $this->comment != null
                 ),
                 'numeric',
                 //'between:$work->note_min,$work->note_max',
             ],
-            'result.*.appreciation_id' => [
+            'appreciation_id' => [
                 'nullable',
                 Rule::exists('appreciations', 'id'),
             ],
-            'result.*.comment' => 'max:200',
+            'comment' => 'max:200',
         ];
     }
 
+     /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array<string, string>
+     */
     public function messages(): array
     {
         /** @var \App\Models\Work $work */
@@ -68,11 +71,13 @@ class StoreResultRequest extends FormRequest
 
         return [
             'user_id.exists' => 'Utilisateur inconnu. What are you doing ? ....',
-            'result.*.note.required' => 'La note est obligatoire avec une appréciation ou un commentaire',
-            'result.*.note.between' => "La note doit etre comprise entre $work->note_min et $work->note_max",
 
-            'result.*.appreciation_id.exists' => "L'appréciation est incorrecte",
-            'result.*.comment.max' => 'Commentaire trop long (200 caractères max)',
+            'note.required' => 'La note est obligatoire avec une appréciation ou un commentaire',
+            'note.numeric' => 'La note doit être une valeur numérique',
+            'note.between' => "La note doit etre comprise entre $work->note_min et $work->note_max",
+
+            'appreciation_id.exists' => "L'appréciation est incorrecte",
+            'comment.max' => 'Commentaire trop long (200 caractères max)',
         ];
     }
 }

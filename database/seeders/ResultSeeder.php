@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\Appreciation;
 use App\Models\Assignment;
 use App\Models\Result;
-use App\Models\School;
 use App\Models\Work;
 use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Database\Seeder;

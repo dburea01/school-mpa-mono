@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Appreciation extends Model
 {
-    use HasFactory, HasCreatedUpdatedBy;
+    use HasCreatedUpdatedBy, HasFactory;
 
     protected $fillable = [
         'position',

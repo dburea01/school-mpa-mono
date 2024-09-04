@@ -15,16 +15,19 @@ class SelectAppreciation extends Component
 
     public string $name;
 
+    public string $id;
+
     public ?string $onchange;
 
     /**
      * Create a new component instance.
      */
-    public function __construct(Collection $appreciations, ?string $value, string $name, string $onchange = null)
+    public function __construct(Collection $appreciations, ?string $value, string $name, string $id, ?string $onchange = null)
     {
         $this->appreciations = $appreciations;
         $this->value = $value;
         $this->name = $name;
+        $this->id = $id;
         $this->onchange = $onchange;
     }
 

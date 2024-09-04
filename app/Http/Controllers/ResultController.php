@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreResultRequest;
-use App\Models\Appreciation;
 use App\Models\Result;
 use App\Models\User;
 use App\Models\Work;
@@ -11,7 +10,7 @@ use App\Repositories\AppreciationRepository;
 use App\Repositories\ResultRepository;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -47,7 +46,7 @@ class ResultController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Work $work, StoreResultRequest $request): RedirectResponse
+    public function store(Work $work, StoreResultRequest $request): JsonResponse
     {
 
         /** @var \App\Models\User $user */
@@ -57,25 +56,26 @@ class ResultController extends Controller
             DB::beginTransaction();
             // delete the result of this user, work, and then recreate it
             $this->resultRepository->deleteResultOneUserOneWork($work, $user);
-            $this->resultRepository->insert($work, $request->all());
+            $result = $this->resultRepository->insert($work, $request->all());
 
             DB::commit();
 
-            return redirect("works/$work->id/results")->with('success', "Résultat sauvegardé pour $user->full_name");
+            // return redirect("works/$work->id/results")->with('success', "Résultat sauvegardé pour $user->full_name");
+            return response()->json($result);
         } catch (\Throwable $th) {
             DB::rollback();
 
-            return back()->with('error', $th->getMessage());
+            // return back()->with('error', $th->getMessage());
+            return response()->json($th->getMessage(), 422);
         }
     }
 
-    public function resultByUser(School $school, User $user, Request $request): View
+    public function resultByUser(User $user, Request $request): View
     {
-        $this->authorize('viewAnyStudentResult', [Result::class, $school, $user]);
+        // $this->authorize('viewAnyStudentResult', [Result::class, $user]);
 
         return view('results.results_by_user', [
-            'school' => $school,
-            'period' => $this->periodRepository->getCurrentPeriod($school),
+            // 'period' => $this->periodRepository->getCurrentPeriod($school),
             'user' => $user,
             'results' => $this->resultRepository->getResultsByUser($school, $user, $request->all()),
             'search' => $request->query('search', ''),

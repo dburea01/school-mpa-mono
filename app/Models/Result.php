@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Result extends Model
 {
-    use HasFactory, HasCreatedUpdatedBy;
+    use HasCreatedUpdatedBy, HasFactory;
 
     protected $fillable = [
         'user_id',

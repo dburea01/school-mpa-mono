@@ -13,7 +13,6 @@
         <div class="card shadow">
             <div class="card-header text-center">
                 Liste des résultats <strong>{{ $work->title }}</strong>
-                <input type="hidden" id="work-id" value="{{ $work->id }}">
             </div>
             <div class="card-body">
 
@@ -28,28 +27,33 @@
                 $backGroundColor = 'bg-success';
                 }
                 @endphp
-                <form>
-
+                <form action="{{ route('results.store', ['work' => $work->id ]) }}" method="POST"
+                    id="form_{{ $loop->index }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <div class="row mb-1 border {{ $backGroundColor }}" style="--bs-bg-opacity: .2;">
                         <div class="col-md-4">
                             <strong>{{ $userWithResult->last_name }} {{ $userWithResult->first_name }}</strong>
-
-                            {{-- is absent --}}
                             <div class="form-check">
+
+                                {{-- is absent --}}
                                 <input
                                     class="form-check-input"
                                     type="checkbox"
                                     @checked($booIsAbsent)
-                                    id="is_absent_{{ $loop->index}}">
+                                    id="result[{{ $loop->index }}][is_absent]"
+                                    name="result[{{ $loop->index }}][is_absent]"
+                                    onchange='document.getElementById("form_{{$loop->index}}").submit()'>
+
                                 <label
                                     class="form-check-label"
-                                    for="is_absent_{{ $loop->index}}">Absence
+                                    for="result[{{ $loop->index }}][is_absent]">Absence
                                 </label>
+
                             </div>
                         </div>
 
                         <div class="col-md-8">
-                            <input type="hidden" name="user_id" id="user_{{$loop->index}}" value="{{ $userWithResult->user_id }}">
+                            <input type="hidden" name="user_id" value="{{ $userWithResult->user_id }}">
                             <input type="hidden" name="index" value="{{ $loop->index }}">
                             <div class="row mt-2">
                                 <div class="col-md-4">
@@ -57,9 +61,9 @@
                                     {{-- note --}}
                                     {{-- blade-formatter-disable --}}
                                     <input type="number"
-                                        class="form-control form-control-sm mr-sm-2"
-                                        id="note_{{$loop->index}}"
-                                        value="{{ $userWithResult->note }}"
+                                        class='form-control form-control-sm mr-sm-2  @error("result.$loop->index.note") is-invalid @enderror'
+                                        name="result[{{ $loop->index }}][note]"
+                                        value="{{ old('result.' . $loop->index . '.note', $userWithResult->note) }}"
                                         placeholder="note"
                                         @readonly($booIsAbsent)
                                         min="0"
@@ -72,27 +76,33 @@
                                     {{-- blade-formatter-disable --}}
                                     <x-select-appreciation
                                         :appreciations="$appreciations"
-                                        :id="'appreciation_'.$loop->index"
-                                        :name="'appreciation_'.$loop->index"
-                                        :value="$userWithResult->appreciation_id" />
+                                        :name="'result[' . $loop->index . '][appreciation_id]'"
+                                        :value="old('result.' . $loop->index . '.appreciation_id', $userWithResult->appreciation_id)"
+                                        {{-- 
+                                        onchange='document.getElementById("form_{{$userWithResult->id}}").submit()'
+                                        --}} />
                                     {{-- blade-formatter-enable --}}
                                 </div>
 
                                 {{-- button OK --}}
                                 @can('create', App\Models\Result::class)
                                 <div class="col-md-2 d-grid gap-2">
-                                    <button type="button" aria-label="Valider" class="btn btn-primary btn-sm validate-result" data-index="{{ $loop->index }}" title="Valider résultat">
-                                        <i class="bi bi-check" aria-hidden="true"></i>
-                                    </button>
+                                    <button type="submit" aria-label="Valider" class="btn btn-primary btn-sm" title="Valider résultat"><i
+                                            class="bi bi-check" aria-hidden="true"></i></button>
                                 </div>
-
-                                {{-- button delete result --}}
                                 <div class="col-md-2 d-grid gap-2">
                                     <button type="button" aria-label="Supprimer" class="btn btn-danger btn-sm delete-result" data-index="{{ $loop->index }}" title="Supprimer résultat (todo)">
-                                        <i class="bi bi-trash" aria-hidden="true"></i>
-                                    </button>
+                                        <i
+                                            class="bi bi-trash" aria-hidden="true"></i></button>
                                 </div>
                                 @endcan
+
+                                @error("result.$loop->index.note")
+                                <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                                @error("result.$loop->index.appreciation_id")
+                                <span class="text-danger">{{ $message }}</span>
+                                @enderror
 
                             </div>
                             <div class="row mt-1 mb-2">
@@ -103,20 +113,21 @@
                                     <textarea
                                         rows="1"
                                         maxlength="200"
-                                        class='form-control form-control-sm mr-sm-2'
-                                        id="comment_{{$loop->index}}"
+                                        class='form-control form-control-sm mr-sm-2 @error("result.$loop->index.comment") is-invalid @enderror'
+                                        name="result[{{ $loop->index }}][comment]"
                                         @readonly($booIsAbsent)
-                                        placeholder="commentaire">{{ $userWithResult->comment }}</textarea>
+                                        placeholder="commentaire"
+                                        onchange='document.getElementById("form_{{$loop->index}}").submit()'>{{ old('result.' . $loop->index . '.comment', $userWithResult->comment) }}</textarea>
                                     {{-- blade-formatter-enable --}}
                                 </div>
+                                @error("result.$loop->index.comment")
+                                <span class="text-danger">{{ $message }}</span>
+                                @enderror
                             </div>
 
 
                         </div>
-                        <span class="text-danger" id="error_{{$loop->index}}"></span>
                     </div>
-
-
                 </form>
                 @endforeach
             </div>
@@ -134,69 +145,13 @@
 <script>
     $(document).ready(function() {
 
-        $('.validate-result').click(function() {
+        if (localStorage.getItem("scroll-position") != null) {
+            $(window).scrollTop(localStorage.getItem("scroll-position"));
+        }
 
-            let index = $(this).attr('data-index')
-            console.log('index ' + index)
-
-            let userId = $('#user_' + index).val()
-            console.log('user id ' + userId)
-
-            let workId = $('#work-id').val()
-            console.log('work id ' + workId)
-
-            let note = $('#note_' + index).val()
-            console.log('note ' + note)
-
-            let appreciationId = $('#appreciation_' + index).val()
-            console.log('appreciation id ' + appreciationId)
-
-            let comment = $('#comment_' + index).val()
-            console.log('comment ' + comment)
-
-            let isAbsent = $('#is_absent_' + index).prop('checked')
-            console.log('is absent ' + isAbsent)
-
-            const data = {
-                'note': note,
-                'comment': comment,
-                'user_id': userId,
-                'appreciation_id': appreciationId,
-                'is_absent': isAbsent
-            }
-
-            $.ajax({
-                url: '/works/' + workId + '/results',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                type: 'POST',
-                data: data,
-                dataType: 'json',
-                success: function(data) {
-
-                    console.log('tout est ok')
-                    console.log(data)
-
-                    $('#error_' + index).html('')
-
-                },
-                error: function(data) {
-                    console.log('error')
-                    console.log(data.status)
-
-                    if (data.status == 422) {
-                        const errors = $.parseJSON(data.responseText);
-                        console.log(errors)
-
-                        $('#error_' + index).html(errors.message)
-                    }
-
-
-                },
-            })
-
-        })
+        $(window).on("scroll", function() {
+            localStorage.setItem("scroll-position", $(window).scrollTop());
+        });
 
         $('.delete-result').click(function() {
             alert('todo')
