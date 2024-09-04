@@ -30,13 +30,12 @@
                 <form action="{{ route('results.store', ['work' => $work->id ]) }}" method="POST"
                     id="form_{{ $loop->index }}">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                    <div class="row border {{ $backGroundColor }}" style="--bs-bg-opacity: .2;">
+                    <div class="row mb-1 border {{ $backGroundColor }}" style="--bs-bg-opacity: .2;">
                         <div class="col-md-4">
                             <strong>{{ $userWithResult->last_name }} {{ $userWithResult->first_name }}</strong>
                             <div class="form-check">
 
                                 {{-- is absent --}}
-                                {{-- blade-formatter-disable --}}
                                 <input
                                     class="form-check-input"
                                     type="checkbox"
@@ -49,7 +48,7 @@
                                     class="form-check-label"
                                     for="result[{{ $loop->index }}][is_absent]">Absence
                                 </label>
-                                {{-- blade-formatter-enable --}}
+
                             </div>
                         </div>
 
@@ -87,9 +86,14 @@
 
                                 {{-- button OK --}}
                                 @can('create', App\Models\Result::class)
-                                <div class="col-md-4 d-grid gap-2">
-                                    <button type="submit" aria-label="Valider" class="btn btn-primary btn-sm"><i
+                                <div class="col-md-2 d-grid gap-2">
+                                    <button type="submit" aria-label="Valider" class="btn btn-primary btn-sm" title="Valider résultat"><i
                                             class="bi bi-check" aria-hidden="true"></i></button>
+                                </div>
+                                <div class="col-md-2 d-grid gap-2">
+                                    <button type="button" aria-label="Supprimer" class="btn btn-danger btn-sm delete-result" data-index="{{ $loop->index }}" title="Supprimer résultat (todo)">
+                                        <i
+                                            class="bi bi-trash" aria-hidden="true"></i></button>
                                 </div>
                                 @endcan
 
@@ -138,17 +142,24 @@
 @endsection
 
 @section('extra_js')
-    <script>
-        $(document).ready(function() {
+<script>
+    $(document).ready(function() {
 
-            if (localStorage.getItem("scroll-position") != null) {
-                $(window).scrollTop(localStorage.getItem("scroll-position"));
-            }
+        if (localStorage.getItem("scroll-position") != null) {
+            $(window).scrollTop(localStorage.getItem("scroll-position"));
+        }
 
-            $(window).on("scroll", function() {
-                localStorage.setItem("scroll-position", $(window).scrollTop());
-            });
-
+        $(window).on("scroll", function() {
+            localStorage.setItem("scroll-position", $(window).scrollTop());
         });
-    </script>
+
+        $('.delete-result').click(function() {
+            alert('todo')
+            console.log(this)
+            let index = $(this).attr('data-index')
+            console.log(index)
+        })
+
+    });
+</script>
 @endsection
