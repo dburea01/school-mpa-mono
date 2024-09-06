@@ -38,7 +38,7 @@ class ResultSeeder extends Seeder
             $allResults = Result::where('work_id', $work->id)->get();
 
             $resultRandom = $allResults->random();
-            $resultRandom->is_absent = true;
+            $resultRandom->is_absent = 1;
             $resultRandom->note = null;
             $resultRandom->appreciation_id = null;
             $resultRandom->comment = null;

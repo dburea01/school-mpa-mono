@@ -18,7 +18,7 @@ return new class extends Migration
             $table->decimal('note')->nullable();
             $table->tinyInteger('appreciation_id')->nullable();
             $table->string('comment')->nullable();
-            $table->boolean('is_absent')->default(false);
+            $table->tinyInteger('is_absent')->default(0)->comment('1 => is absent / 0 => is NOT absent');
             $table->timestamps();
             $table->string('created_by');
             $table->string('updated_by')->nullable();

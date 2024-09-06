@@ -53,6 +53,7 @@ Route::middleware(['auth'])->group(function () {
     // Route::resource('works', WorkController::class)->whereUuid('work');
     Route::resource('periods/{period}/works', WorkController::class)->whereUuid(['period', 'work']);
     Route::resource('works/{work}/results', ResultController::class)->only(['index', 'store'])->whereUuid('work')->scoped();
+    Route::post('works/{work}/results/destroy', [ResultController::class, 'destroy'])->whereUuid('work');
 });
 
 Route::fallback(function () {

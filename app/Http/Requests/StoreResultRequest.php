@@ -5,10 +5,31 @@ namespace App\Http\Requests;
 use App\Models\Result;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 
 class StoreResultRequest extends FormRequest
 {
+    /**
+     * Prepare inputs for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'is_absent' => $this->toBoolean($this->is_absent),
+        ]);
+    }
+
+    /**
+     * Convert to boolean
+     */
+    private function toBoolean(mixed $booleable): bool|null
+    {
+        return filter_var($booleable, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+    }
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -37,18 +58,19 @@ class StoreResultRequest extends FormRequest
                 'uuid',
                 Rule::exists('assignments', 'user_id')
                     ->where(
-                        fn (Builder $query) => $query
+                        fn(Builder $query) => $query
                             ->where('classroom_id', $work->classroom_id)
                     ),
             ],
+            'is_absent' => 'required|boolean',
             'note' => [
-                Rule::requiredIf(
-                    
-                    fn () => $this->appreciation_id != null
-                        
-                        || $this->comment != null
-                ),
+                'bail',
+                // Rule::requiredIf($request->is_absent === false),
+                'nullable',
+                'required_if:is_absent,false',
+                'prohibited_if:is_absent,true',
                 'numeric',
+                'gte:0',
                 //'between:$work->note_min,$work->note_max',
             ],
             'appreciation_id' => [
@@ -59,7 +81,7 @@ class StoreResultRequest extends FormRequest
         ];
     }
 
-     /**
+    /**
      * Get the error messages for the defined validation rules.
      *
      * @return array<string, string>
@@ -72,8 +94,13 @@ class StoreResultRequest extends FormRequest
         return [
             'user_id.exists' => 'Utilisateur inconnu. What are you doing ? ....',
 
-            'note.required' => 'La note est obligatoire avec une appréciation ou un commentaire',
+            'is_absent.required' => 'Absence non précisée',
+            'is_absent.boolean' => 'Absence incorrecte (true / false exigé)',
+
+            'note.required_if' => "La note est obligatoire si l'élève est déclaré non absent",
+            'note.prohibited_if' => "La note est interdite si l'élève est déclaré absent",
             'note.numeric' => 'La note doit être une valeur numérique',
+            'note.gte' => 'La note doit être positive ou nulle',
             'note.between' => "La note doit etre comprise entre $work->note_min et $work->note_max",
 
             'appreciation_id.exists' => "L'appréciation est incorrecte",

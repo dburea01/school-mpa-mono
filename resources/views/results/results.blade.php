@@ -19,18 +19,18 @@
 
                 @foreach ($usersWithResult as $userWithResult)
                 @php
-                $booIsAbsent = $userWithResult->is_absent == '1' ? true : false;
-                $backGroundColor = 'bg-light';
+                $booIsAbsent = $userWithResult->is_absent == 1 ? true : false;
+                $backGroundColor = 'white';
 
                 if ($booIsAbsent) {
-                $backGroundColor = 'bg-warning';
+                $backGroundColor = 'orange';
                 } elseif ($userWithResult->note != null) {
-                $backGroundColor = 'bg-success';
+                $backGroundColor = 'LightGreen';
                 }
                 @endphp
                 <form>
 
-                    <div class="row mb-1 border {{ $backGroundColor }}" style="--bs-bg-opacity: .2;">
+                    <div class="row mb-1 border" id="row_{{ $loop->index }}" style="--bs-bg-opacity: .2; background-color: {{$backGroundColor}}">
                         <div class="col-md-4">
                             <strong>{{ $userWithResult->last_name }} {{ $userWithResult->first_name }}</strong>
 
@@ -43,7 +43,7 @@
                                     id="is_absent_{{ $loop->index}}">
                                 <label
                                     class="form-check-label"
-                                    for="is_absent_{{ $loop->index}}">Absence
+                                    for="is_absent_{{ $loop->index}}">Absent
                                 </label>
                             </div>
                         </div>
@@ -61,7 +61,6 @@
                                         id="note_{{$loop->index}}"
                                         value="{{ $userWithResult->note }}"
                                         placeholder="note"
-                                        @readonly($booIsAbsent)
                                         min="0"
                                         max="20"
                                         step="0.01">
@@ -99,15 +98,12 @@
                                 <div class="col">
 
                                     {{-- comment --}}
-                                    {{-- blade-formatter-disable --}}
                                     <textarea
                                         rows="1"
                                         maxlength="200"
                                         class='form-control form-control-sm mr-sm-2'
                                         id="comment_{{$loop->index}}"
-                                        @readonly($booIsAbsent)
                                         placeholder="commentaire">{{ $userWithResult->comment }}</textarea>
-                                    {{-- blade-formatter-enable --}}
                                 </div>
                             </div>
 
@@ -124,7 +120,9 @@
     </div>
 
     <div class="col-md-4 sticky-top align-self-start">
-        resumé to do
+        {{--
+        <x-table-work-summary :$work :$usersWithResult />
+        --}}
     </div>
 </div>
 
@@ -154,7 +152,7 @@
             let comment = $('#comment_' + index).val()
             console.log('comment ' + comment)
 
-            let isAbsent = $('#is_absent_' + index).prop('checked')
+            let isAbsent = $('#is_absent_' + index).prop('checked') == true ? 1 : 0
             console.log('is absent ' + isAbsent)
 
             const data = {
@@ -179,6 +177,18 @@
                     console.log(data)
 
                     $('#error_' + index).html('')
+                    $('#note_' + index).val(data.data.note)
+                    $('#comment_' + index).val(data.data.comment)
+                    $('#appreciation_' + index).val(data.data.appreciation_id)
+
+                    if (data.data.is_absent) {
+                        console.log('orange')
+                        backGroundColor = 'orange'
+                    } else {
+                        console.log('green')
+                        backGroundColor = 'LightGreen'
+                    }
+                    setBackGroundColor(index, backGroundColor);
 
                 },
                 error: function(data) {
@@ -199,11 +209,57 @@
         })
 
         $('.delete-result').click(function() {
-            alert('todo')
-            console.log(this)
             let index = $(this).attr('data-index')
-            console.log(index)
+            console.log('index ' + index)
+
+            let userId = $('#user_' + index).val()
+            console.log('user id ' + userId)
+
+            let workId = $('#work-id').val()
+            console.log('work id ' + workId)
+
+            const data = {
+                'user_id': userId
+            }
+
+            $.ajax({
+                url: '/works/' + workId + '/results/destroy',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: 'POST',
+                data: data,
+                dataType: 'json',
+                success: function(data) {
+
+                    console.log('tout est ok')
+                    $('#error_' + index).html('')
+                    $('#note_' + index).val('')
+                    $('#comment_' + index).val('')
+                    $('#appreciation_' + index).val('')
+                    $('#is_absent_' + index).prop('checked', false)
+                    setBackGroundColor(index, "white");
+
+
+                },
+                error: function(data) {
+                    console.log('error')
+                    console.log(data.status)
+
+                    if (data.status == 422) {
+                        const errors = $.parseJSON(data.responseText);
+                        console.log(errors)
+
+                        $('#error_' + index).html(errors.message)
+                    }
+                },
+            })
         })
+
+        function setBackGroundColor(index, color) {
+            console.log(index, color)
+            $('#row_' + index).css("background-color", color);
+        }
 
     });
 </script>

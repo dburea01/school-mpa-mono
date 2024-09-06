@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property int $is_absent
+ */
 class Result extends Model
 {
     use HasCreatedUpdatedBy, HasFactory;
@@ -16,6 +19,7 @@ class Result extends Model
         'note',
         'appreciation_id',
         'comment',
+        'is_absent'
     ];
 
     public function user(): BelongsTo

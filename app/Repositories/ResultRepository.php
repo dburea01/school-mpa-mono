@@ -2,16 +2,15 @@
 
 namespace App\Repositories;
 
-use App\Models\Classroom;
 use App\Models\Result;
 use App\Models\User;
 use App\Models\Work;
-use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ResultRepository
 {
@@ -50,13 +49,22 @@ class ResultRepository
     public function insert(Work $work, array $data): Result
     {
         $result = new Result();
+
         $result->work_id = $work->id;
         $result->user_id = $data['user_id'];
-
         $result->is_absent = $data['is_absent'];
-        $result->note = $data['note'];
-        $result->appreciation_id = $data['appreciation_id'];
-        $result->comment = $data['comment'];
+
+        if ($data['is_absent'] == 0) {
+            Log::info($data);
+            Log::info('is absent');
+            $result->note = $data['note'];
+            $result->appreciation_id = $data['appreciation_id'];
+            $result->comment = $data['comment'];
+        } else {
+            $result->note = null;
+            $result->appreciation_id = null;
+            $result->comment = null;
+        }
 
         $result->save();
 
@@ -82,7 +90,7 @@ class ResultRepository
             ->leftJoin('subjects', function (JoinClause $join) {
                 $join->on('works.subject_id', 'subjects.id');
             })
-            ->leftJoin('classrooms', function (JoinClause $join)  {
+            ->leftJoin('classrooms', function (JoinClause $join) {
                 $join->on('works.classroom_id', 'classrooms.id');
             })
             ->leftJoin('work_types', function (JoinClause $join) {
