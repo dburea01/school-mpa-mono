@@ -52,6 +52,10 @@ class ResultRepository
             $query->orderBy('note', $direction);
         }
 
+        if ($sort == 'appreciation') {
+            $query->orderBy('appreciation_id', $direction);
+        }
+
         return $query->get();
     }
 
@@ -65,8 +69,6 @@ class ResultRepository
         $result->is_absent = $data['is_absent'];
 
         if ($data['is_absent'] == 0) {
-            Log::info($data);
-            Log::info('is absent');
             $result->note = $data['note'];
             $result->appreciation_id = $data['appreciation_id'];
             $result->comment = $data['comment'];
@@ -79,6 +81,29 @@ class ResultRepository
         $result->save();
 
         return $result;
+    }
+
+    /** @param array<string,string> $data */
+    public function update(Result $result, array $data): Result
+    {
+        $result->is_absent = $data['is_absent'];
+
+        if ($data['is_absent'] == 0) {
+            $result->note = $data['note'];
+            $result->appreciation_id = $data['appreciation_id'];
+            $result->comment = $data['comment'];
+        } else {
+            $result->note = null;
+            $result->appreciation_id = null;
+            $result->comment = null;
+        }
+        $result->save();
+        return $result;
+    }
+
+    public function delete(Result $result): void
+    {
+        $result->delete();
     }
 
     public function deleteResultOneUserOneWork(Work $work, User $user): void
@@ -108,7 +133,7 @@ class ResultRepository
             })
             ->where('results.user_id', $user->id)
             ->when(isset($request['search']), function (QueryBuilder $query) use ($request) {
-                $query->where('works.title', 'ilike', '%' . $request['search'] . '%');
+                $query->where('works.title', 'ilike', '%'.$request['search'].'%');
             })
             ->when(isset($request['subject_id']), function (QueryBuilder $query) use ($request) {
                 $query->where('works.subject_id', $request['subject_id']);

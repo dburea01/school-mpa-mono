@@ -21,7 +21,7 @@ class TableWorkSummary extends Component
 
     public int $quantityStudentsIsAbsent;
 
-    public Collection $resultsNotNotedYet;
+    public Collection $resultsNotNoted;
 
     public Collection $resultsNoted;
 
@@ -32,14 +32,14 @@ class TableWorkSummary extends Component
         public Work $work,
         public Collection $usersWithResult,
     ) {
-        $this->resultsNotNotedYet = $usersWithResult->filter(function ($user) {
+        $this->resultsNotNoted = $usersWithResult->filter(function ($user) {
             /** @phpstan-ignore-next-line */
-            return $user->note == null;
+            return $user->result_id == null;
         });
 
         $this->resultsNoted = $usersWithResult->filter(function ($user) {
             /** @phpstan-ignore-next-line */
-            return $user->note != null  || $user->is_absent == true;
+            return $user->result_id != null && ! $user->is_absent;
         });
 
         $this->quantityStudents = $usersWithResult->count();

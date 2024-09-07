@@ -88,7 +88,11 @@
                                 <td>{{ $work->work_status_name }}</td>
 
                                 <td>
-                                    @can('deleteWork', $work->id)
+                                    @php
+                                    $workPolicy = App\Models\Work::find($work->id)
+                                    @endphp
+                                    @can('delete', $workPolicy)
+
                                     <i class="bi bi-trash btn-delete-work text-danger"
                                         title="supprimer"
                                         style="cursor: pointer;"
@@ -98,11 +102,11 @@
                                         data-worktitle="{{$work->title}}">
                                     </i>
 
-                                    @endif
+                                    @endcan
 
-                                    @can('viewAnyResult', \App\Models\Result::class)
+                                    @can('viewAny', \App\Models\Result::class)
                                     <a href="{{ route('results.index', ['work'=>$work->id]) }}" title="notes"><i class="bi bi-123"></i></a>
-                                    @endif
+                                    @endcan
                                 </td>
                             </tr>
                             @endforeach

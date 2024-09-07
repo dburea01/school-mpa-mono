@@ -3,15 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\DestroyResultRequest;
+use App\Http\Requests\IndexResultRequest;
 use App\Http\Requests\StoreResultRequest;
 use App\Http\Resources\ResultResource;
 use App\Models\Result;
 use App\Models\User;
 use App\Models\Work;
+use App\Repositories\AppreciationRepository;
 use App\Repositories\ResultRepository;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -21,41 +24,61 @@ class ResultController extends Controller
     use AuthorizesRequests;
 
     public ResultRepository $resultRepository;
+    public AppreciationRepository $appreciationRepository;
 
-    public function __construct(ResultRepository $resultRepository)
+    public function __construct(ResultRepository $resultRepository, AppreciationRepository $appreciationRepository)
     {
         $this->resultRepository = $resultRepository;
+        $this->appreciationRepository = $appreciationRepository;
     }
 
-    public function index(Work $work, Request $request): View
+    public function index(Work $work, IndexResultRequest $request): View
     {
         $this->authorize('viewAny', Result::class);
 
-        $request->validate([
-            'sort' => 'in:name,note',
-            'direction' => 'in:asc,desc'
-        ]);
-
-            $sort = $request->has('sort') ? $request->sort : 'name';
-            $direction = $request->has('direction') ? $request->direction : 'asc';
+        /** @var string $sort */
+        $sort = $request->input('sort', 'name');
+        /** @var string $direction */
+        $direction = $request->input('direction', 'asc');
 
         $usersWithResult = $this->resultRepository->getUsersWithResults($work, $sort, $direction);
+
         // dd($usersWithResult);
         return view('results.results', [
             'work' => $work,
-            'usersWithResult' => $usersWithResult
+            'usersWithResult' => $usersWithResult,
+            'direction' => $direction == 'asc' ? 'desc' : 'asc',
+        ]);
+    }
+
+    public function create(Work $work, Request $request): View
+    {
+        $this->authorize('create', Result::class);
+        $request->validate([
+            'user_id' => 'required|uuid'
+        ]);
+
+        $result = new Result();
+        $user = User::findOrFail($request->user_id);
+
+        return view('results.result_form', [
+            'work' => $work,
+            'result' => $result,
+            'user' => $user,
+            'appreciations' => $this->appreciationRepository->all()
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Work $work, StoreResultRequest $request): JsonResponse|ResultResource
+    public function store(Work $work, StoreResultRequest $request): RedirectResponse
     {
+        // see the authorizations in the form request
 
         /** @var \App\Models\User $user */
         $user = User::find($request->user_id);
-        // see the authorizations in the form request
+
         try {
             DB::beginTransaction();
             // delete the result of this user, work, and then recreate it
@@ -64,9 +87,7 @@ class ResultController extends Controller
 
             DB::commit();
 
-            // return redirect("works/$work->id/results")->with('success', "Résultat sauvegardé pour $user->full_name");
-            // return response()->json($result);
-            return new ResultResource($result);
+            return redirect("works/$work->id/results")->with('success', "Résultat sauvegardé pour $user->full_name");
         } catch (\Throwable $th) {
             DB::rollback();
 
@@ -75,17 +96,59 @@ class ResultController extends Controller
         }
     }
 
-    public function destroy(Work $work, DestroyResultRequest $request): JsonResponse|Response
+    /**
+     * Display the specified resource.
+     */
+    public function show(Work $work, Result $result): void
     {
+        $this->authorize('view', $result);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Work $work, Result $result, StoreResultRequest $request): RedirectResponse
+    {
+        // see the authorizations in the form request
 
         /** @var \App\Models\User $user */
         $user = User::find($request->user_id);
 
         try {
-            // delete the result of this user, work,
-            $this->resultRepository->deleteResultOneUserOneWork($work, $user);
+            $resultUpdated = $this->resultRepository->update($result, $request->all());
 
-            return response()->noContent();
+            return redirect("works/$work->id/results")->with('success', "Résultat sauvegardé pour $user->full_name");
+        } catch (\Throwable $th) {
+            return back()->with('error', $th->getMessage());
+        }
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Work $work, Result $result): View
+    {
+        $this->authorize('update', $result);
+
+        $user = User::findOrFail($result->user_id);
+        return view('results.result_form', [
+            'work' => $work,
+            'result' => $result,
+            'user' => $user,
+            'appreciations' => $this->appreciationRepository->all()
+        ]);
+    }
+
+    public function destroy(Work $work, Result $result): RedirectResponse
+    {
+        /** @var \App\Models\User $user */
+        $user = User::findOrFail($result->user_id);
+
+        try {
+            // delete the result of this user, work,
+            $this->resultRepository->delete($result);
+
+            return redirect("works/$work->id/results")->with('success', "Résultat supprimé pour $user->full_name");
         } catch (\Throwable $th) {
             return response()->json($th->getMessage(), 422);
         }

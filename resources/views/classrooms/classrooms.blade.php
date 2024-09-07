@@ -65,12 +65,12 @@
                                 @endcan
                             </td>
                             <td class="text-center">
-                                @can('viewAny', [App\Models\Works::class])
+                                @can('viewAny', [App\Models\Work::class])
                                 <a href=" {{ route('works.index', ['period' => $period, 'classroom_id' => $classroom->id]) }}">
                                     {{ $classroom->works_count }}
                                 </a>
                                 @else
-                                {{ $classroom->works_counts }}
+                                {{ $classroom->works_count }}
                                 @endcan
                             </td>
 

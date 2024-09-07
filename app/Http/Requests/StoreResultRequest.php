@@ -5,7 +5,6 @@ namespace App\Http\Requests;
 use App\Models\Result;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 
 class StoreResultRequest extends FormRequest
@@ -25,7 +24,7 @@ class StoreResultRequest extends FormRequest
     /**
      * Convert to boolean
      */
-    private function toBoolean(mixed $booleable): bool|null
+    private function toBoolean(mixed $booleable): ?bool
     {
         return filter_var($booleable, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
     }
@@ -36,7 +35,11 @@ class StoreResultRequest extends FormRequest
     public function authorize(): bool
     {
         if ($this->user() && $this->method() == 'POST') {
-            return $this->user()->can('create', [Result::class, $this->route('work')]);
+            return $this->user()->can('create', Result::class);
+        }
+
+        if ($this->user() && $this->method() == 'PUT') {
+            return $this->user()->can('update', $this->route('result'));
         }
 
         return false;
@@ -62,7 +65,7 @@ class StoreResultRequest extends FormRequest
                             ->where('classroom_id', $work->classroom_id)
                     ),
             ],
-            'is_absent' => 'required|boolean',
+            'is_absent' => 'boolean',
             'note' => [
                 'bail',
                 // Rule::requiredIf($request->is_absent === false),

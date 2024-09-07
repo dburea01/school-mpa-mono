@@ -78,6 +78,12 @@ return new class extends Migration
             ['id' => 'createWork',   'name' => 'Créer un travail'],
             ['id' => 'updateWork',   'name' => 'Modifier un travail'],
             ['id' => 'deleteWork',   'name' => 'Supprimer un travail'],
+
+            ['id' => 'viewAnyResult',  'name' => 'Voir tous les résultats'],
+            ['id' => 'viewResult',     'name' => 'Voir un résultat'],
+            ['id' => 'createResult',   'name' => 'Créer un résultat'],
+            ['id' => 'updateResult',   'name' => 'Modifier un résultat'],
+            ['id' => 'deleteResult',   'name' => 'Supprimer un résultat'],
         ];
 
         foreach ($tasks as $task) {

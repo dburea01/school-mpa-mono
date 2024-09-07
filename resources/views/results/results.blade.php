@@ -16,25 +16,28 @@
             </div>
             <div class="card-body">
 
-                <table class="table table-sm table-striped table-hover table-bordered">
+                <table class="table table-sm table-hover table-bordered">
                     <thead>
                         <tr>
                             <th>Elève
-                                <a href="{{ route('results.index', ['work' => $work, 'sort' => 'name', 'direction' => 'asc']) }}"><i class="bi bi-arrow-down-up"></i></a>
-                                <a href="{{ route('results.index', ['work' => $work, 'sort' => 'name', 'direction' => 'desc']) }}"><i class="bi bi-sort-alpha-down-alt"></i></a>
+                                <a href="{{ route('results.index', ['work' => $work, 'sort' => 'name', 'direction' => $direction]) }}"><i class="bi bi-arrow-down-up"></i></a>
                             </th>
                             <th>Note
-                                <a href="{{ route('results.index', ['work' => $work, 'sort' => 'note', 'direction' => 'asc']) }}"><i class="bi bi-sort-numeric-down"></i></a>
-                                <a href="{{ route('results.index', ['work' => $work, 'sort' => 'note', 'direction' => 'desc']) }}"><i class="bi bi-sort-numeric-down-alt"></i></a>
+                                <a href="{{ route('results.index', ['work' => $work, 'sort' => 'note', 'direction' => $direction]) }}"><i class="bi bi-arrow-down-up"></i></a>
                             </th>
-                            <th>Appréciation</th>
+                            <th>Appréciation
+                                <a href="{{ route('results.index', ['work' => $work, 'sort' => 'appreciation', 'direction' => $direction]) }}"><i class="bi bi-arrow-down-up"></i></a>
+                            </th>
                             <th>&nbsp;</th>
                         </tr>
                     </thead>
 
                     <tbody>
                         @foreach ($usersWithResult as $userWithResult)
-                        <tr @if ($userWithResult->is_absent) class="table-danger" @endif>
+                        <tr
+                            @if ($userWithResult->is_absent) class="table-danger" @endif
+                            @if ($userWithResult->note) class="table-success" @endif
+                            >
                             <td>{{ $userWithResult->last_name }} {{ $userWithResult->first_name }}
 
                                 @if ($userWithResult->is_absent)
@@ -53,7 +56,7 @@
                                 @if ($userWithResult->result_id)
                                 {{ route('results.edit', ['work' => $work, 'result' => $userWithResult->result_id ]) }}
                                 @else
-                                {{ route('results.create', ['work' => $work]) }}
+                                {{ route('results.create', ['work' => $work, 'user_id' => $userWithResult->user_id ]) }}
                                 @endif 
                                 "><i class="bi bi-pencil"></i></a>
                             </td>

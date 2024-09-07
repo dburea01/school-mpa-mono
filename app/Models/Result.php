@@ -19,7 +19,7 @@ class Result extends Model
         'note',
         'appreciation_id',
         'comment',
-        'is_absent'
+        'is_absent',
     ];
 
     public function user(): BelongsTo

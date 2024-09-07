@@ -18,7 +18,9 @@ class ClassroomRepository
             'users as teachers_count' => function (Builder $query) {
                 $query->where('role_id', 'TEACHER');
             },
-        ])->withCount('works')
+        ])->withCount(['works' => function (Builder $query) use ($period) {
+            $query->where('period_id', $period->id);
+        }])
             ->where('period_id', $period->id)->orderBy('short_name')->get();
     }
 

@@ -7,7 +7,9 @@ use App\Models\Assignment;
 use App\Models\Result;
 use App\Models\Work;
 use Illuminate\Contracts\Database\Query\Builder;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class ResultSeeder extends Seeder
 {
@@ -20,12 +22,15 @@ class ResultSeeder extends Seeder
         $appreciations = Appreciation::all();
 
         foreach ($works as $work) {
-            $assignments = Assignment::where('classroom_id', $work->classroom_id)
-                ->with(['user' => function (Builder $query) {
-                    $query->where('role_id', 'STUDENT');
-                }])
-                ->get();
-            // dd($assignments);
+
+
+            $assignments = DB::table('users')
+                ->join('assignments', function (JoinClause $join) use ($work) {
+                    $join->on('assignments.user_id', 'users.id')
+                        ->where('users.role_id', 'STUDENT')
+                        ->where('assignments.classroom_id', $work->classroom_id);
+                })->select('users.id as user_id')->get();
+
             foreach ($assignments as $assignment) {
                 Result::factory()->create([
                     'user_id' => $assignment->user_id,

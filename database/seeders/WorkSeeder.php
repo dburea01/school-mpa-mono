@@ -27,7 +27,7 @@ class WorkSeeder extends Seeder
             $classrooms = Classroom::where('period_id', $period->id)->get();
 
             foreach ($classrooms as $classroom) {
-                for ($i = 0; $i < 20; $i++) {
+                for ($i = 0; $i < rand(5, 10); $i++) {
                     Work::factory()->create([
                         'work_type_id' => $workTypes->random()->id,
                         'subject_id' => $subjects->random()->id,

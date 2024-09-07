@@ -40,6 +40,12 @@ return new class extends Migration
             ['role_id' => 'TEACHER', 'task_id' => 'createWork'],
             ['role_id' => 'TEACHER', 'task_id' => 'updateWork'],
             ['role_id' => 'TEACHER', 'task_id' => 'deleteWork'],
+
+            ['role_id' => 'TEACHER', 'task_id' => 'viewAnyResult'],
+            ['role_id' => 'TEACHER', 'task_id' => 'viewResult'],
+            ['role_id' => 'TEACHER', 'task_id' => 'createResult'],
+            ['role_id' => 'TEACHER', 'task_id' => 'updateResult'],
+            ['role_id' => 'TEACHER', 'task_id' => 'deleteResult'],
         ];
 
         foreach ($roleTasks as $roleTask) {

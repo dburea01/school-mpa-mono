@@ -6,10 +6,10 @@
     <div class="card-body">
 
         <strong>Titre : </strong>{{ $work->title }}<br>
-
         <strong>Classe : </strong>{{ $work->classroom->short_name }}<br>
         <strong>Matière : </strong>{{ $work->subject->name }}<br>
         <strong>Type : </strong>{{ $work->workType->name }}<br>
+        <strong>Status : </strong>{{ $work->workStatus->name }}<br>
 
         <hr />
         <strong>Moyenne : </strong>{{ $average }}<br>
@@ -17,7 +17,7 @@
         <strong>Note maxi : </strong>{{ $maximum }}<br>
 
         <hr />
-        <strong>Nombre élèves à corriger : </strong>{{ $quantityStudents }}<br>
+        <strong>Nombre élèves : </strong>{{ $quantityStudents }}<br>
         <strong>Nombre absences : </strong>{{ $quantityStudentsIsAbsent }}<br>
         <strong>Notes attribuées : </strong>{{ $quantityResultsNoted }}<br>
 
