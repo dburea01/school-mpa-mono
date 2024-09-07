@@ -8,7 +8,6 @@ use App\Http\Resources\ResultResource;
 use App\Models\Result;
 use App\Models\User;
 use App\Models\Work;
-use App\Repositories\AppreciationRepository;
 use App\Repositories\ResultRepository;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -23,26 +22,28 @@ class ResultController extends Controller
 
     public ResultRepository $resultRepository;
 
-    public AppreciationRepository $appreciationRepository;
-
-    public function __construct(ResultRepository $resultRepository, AppreciationRepository $appreciationRepository)
+    public function __construct(ResultRepository $resultRepository)
     {
         $this->resultRepository = $resultRepository;
-        $this->appreciationRepository = $appreciationRepository;
     }
 
-    public function index(Work $work): View
+    public function index(Work $work, Request $request): View
     {
         $this->authorize('viewAny', Result::class);
 
-        $usersWithResult = $this->resultRepository->getUsersWithResults($work);
-        // dd($usersWithResult);
-        $appreciations = $this->appreciationRepository->all();
+        $request->validate([
+            'sort' => 'in:name,note',
+            'direction' => 'in:asc,desc'
+        ]);
 
+            $sort = $request->has('sort') ? $request->sort : 'name';
+            $direction = $request->has('direction') ? $request->direction : 'asc';
+
+        $usersWithResult = $this->resultRepository->getUsersWithResults($work, $sort, $direction);
+        // dd($usersWithResult);
         return view('results.results', [
             'work' => $work,
-            'usersWithResult' => $usersWithResult,
-            'appreciations' => $appreciations,
+            'usersWithResult' => $usersWithResult
         ]);
     }
 

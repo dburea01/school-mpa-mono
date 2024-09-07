@@ -74,7 +74,7 @@
                                     <hr class="dropdown-divider">
                                 </li>
                                 <li>
-                                    <a href="#" class="dropdown-item disabled" aria-disabled="true">{{ $currentPeriod->name }}</a>
+                                    <a  class="dropdown-item disabled" aria-disabled="true">{{ $currentPeriod->name }}</a>
                                 </li>
                                 @can('viewAny', App\models\Classroom::class)
                                 <li>

@@ -50,10 +50,9 @@ Route::middleware(['auth'])->group(function () {
     // Route::resource('assignments', AssignmentController::class)->whereUuid('assignment');
     Route::resource('classrooms/{classroom}/assignments', AssignmentController::class)->whereUuid(['classroom', 'assignment'])->scoped();
     Route::resource('work-types', WorkTypeController::class)->whereNumber('work_type');
-    // Route::resource('works', WorkController::class)->whereUuid('work');
+    
     Route::resource('periods/{period}/works', WorkController::class)->whereUuid(['period', 'work']);
-    Route::resource('works/{work}/results', ResultController::class)->only(['index', 'store'])->whereUuid('work')->scoped();
-    Route::post('works/{work}/results/destroy', [ResultController::class, 'destroy'])->whereUuid('work');
+    Route::resource('works/{work}/results', ResultController::class)->whereUuid(['work', 'result']);
 });
 
 Route::fallback(function () {

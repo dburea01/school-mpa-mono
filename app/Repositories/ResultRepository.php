@@ -14,11 +14,11 @@ use Illuminate\Support\Facades\Log;
 
 class ResultRepository
 {
-    public function getUsersWithResults(Work $work): Collection
+    public function getUsersWithResults(Work $work, string $sort, string $direction): Collection
     {
 
         // get the assigned users + their results
-        $usersWithResults = DB::table('users')
+        $query = DB::table('users')
             ->join('assignments', function (JoinClause $join) use ($work) {
                 $join->on('assignments.user_id', 'users.id')
                     ->where('users.role_id', 'STUDENT')
@@ -28,7 +28,8 @@ class ResultRepository
                 $join->on('results.user_id', 'users.id')
                     ->where('results.work_id', $work->id);
             })
-            ->orderBy('last_name')->orderBy('first_name')
+            ->leftjoin('appreciations', 'appreciations.id', 'results.appreciation_id')
+
             ->select(
                 'users.id as user_id',
                 'users.last_name',
@@ -36,13 +37,22 @@ class ResultRepository
                 'users.birth_date',
                 'users.gender_id',
                 'results.appreciation_id',
+                'appreciations.name as appreciation_name',
+                'results.id as result_id',
                 'results.note',
                 'results.comment',
                 'results.is_absent'
-            )
-            ->get();
+            );
 
-        return $usersWithResults;
+        if ($sort == 'name') {
+            $query->orderBy('last_name', $direction)->orderBy('first_name', $direction);
+        }
+
+        if ($sort == 'note') {
+            $query->orderBy('note', $direction);
+        }
+
+        return $query->get();
     }
 
     /** @param array<string,string> $data */
@@ -98,7 +108,7 @@ class ResultRepository
             })
             ->where('results.user_id', $user->id)
             ->when(isset($request['search']), function (QueryBuilder $query) use ($request) {
-                $query->where('works.title', 'ilike', '%'.$request['search'].'%');
+                $query->where('works.title', 'ilike', '%' . $request['search'] . '%');
             })
             ->when(isset($request['subject_id']), function (QueryBuilder $query) use ($request) {
                 $query->where('works.subject_id', $request['subject_id']);

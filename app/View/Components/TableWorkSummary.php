@@ -3,10 +3,9 @@
 namespace App\View\Components;
 
 use App\Models\Work;
-use Closure;
-use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Illuminate\View\Component;
+use Illuminate\View\View;
 
 class TableWorkSummary extends Component
 {
@@ -35,34 +34,34 @@ class TableWorkSummary extends Component
     ) {
         $this->resultsNotNotedYet = $usersWithResult->filter(function ($user) {
             /** @phpstan-ignore-next-line */
-            return $user->result == null;
+            return $user->note == null;
         });
 
         $this->resultsNoted = $usersWithResult->filter(function ($user) {
             /** @phpstan-ignore-next-line */
-            return $user->result != null && $user->result->note != null && $user->result->is_absent == false;
+            return $user->note != null  || $user->is_absent == true;
         });
 
         $this->quantityStudents = $usersWithResult->count();
         $this->quantityStudentsIsAbsent = $usersWithResult->filter(function ($user) {
             /** @phpstan-ignore-next-line */
-            return $user->result != null && $user->result->is_absent;
+            return $user->is_absent;
         })->count();
 
         $this->quantityResultsNoted = $this->resultsNoted->count();
 
         /** @phpstan-ignore-next-line */
-        $this->average = $this->resultsNoted->count() != 0 ? number_format(round($this->resultsNoted->pluck('result')->average('note'), 2), 2) : '';
+        $this->average = $this->resultsNoted->count() != 0 ? number_format(round($this->resultsNoted->average('note'), 2), 2) : '';
         /** @phpstan-ignore-next-line */
-        $this->minimum = $this->resultsNoted->count() != 0 ? $this->resultsNoted->pluck('result')->min('note') : '';
+        $this->minimum = $this->resultsNoted->count() != 0 ? $this->resultsNoted->min('note') : '';
         /** @phpstan-ignore-next-line */
-        $this->maximum = $this->resultsNoted->count() != 0 ? $this->resultsNoted->pluck('result')->max('note') : '';
+        $this->maximum = $this->resultsNoted->count() != 0 ? $this->resultsNoted->max('note') : '';
     }
 
     /**
      * Get the view / contents that represent the component.
      */
-    public function render(): View|Closure|string
+    public function render(): View
     {
         return view('components.table-work-summary');
     }
