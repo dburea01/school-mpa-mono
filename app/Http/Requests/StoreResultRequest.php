@@ -61,7 +61,7 @@ class StoreResultRequest extends FormRequest
                 'uuid',
                 Rule::exists('assignments', 'user_id')
                     ->where(
-                        fn(Builder $query) => $query
+                        fn (Builder $query) => $query
                             ->where('classroom_id', $work->classroom_id)
                     ),
             ],

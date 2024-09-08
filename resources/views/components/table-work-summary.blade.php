@@ -21,8 +21,13 @@
         <strong>Nombre absences : </strong>{{ $quantityStudentsIsAbsent }}<br>
         <strong>Notes attribuées : </strong>{{ $quantityResultsNoted }}<br>
 
-        @php $progressionNotation = 100 * $quantityResultsNoted / ($quantityStudents - $quantityStudentsIsAbsent) @endphp
-
+        @php
+        if (($quantityStudents - $quantityStudentsIsAbsent) != 0) {
+        $progressionNotation = 100 * $quantityResultsNoted / ($quantityStudents - $quantityStudentsIsAbsent);
+        } else {
+        $progressionNotation = 0;
+        }
+        @endphp
         <div class="progress mt-3" role="progressbar" aria-label="Success striped" aria-valuenow="{{ $progressionNotation }}"
             aria-valuemin="0" aria-valuemax="100">
             <div class="progress-bar bg-success" style="width: {{ $progressionNotation }}%">

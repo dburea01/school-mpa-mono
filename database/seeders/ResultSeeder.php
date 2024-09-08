@@ -6,9 +6,9 @@ use App\Models\Appreciation;
 use App\Models\Assignment;
 use App\Models\Result;
 use App\Models\Work;
-use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class ResultSeeder extends Seeder
@@ -23,7 +23,7 @@ class ResultSeeder extends Seeder
 
         foreach ($works as $work) {
 
-
+            
             $assignments = DB::table('users')
                 ->join('assignments', function (JoinClause $join) use ($work) {
                     $join->on('assignments.user_id', 'users.id')
@@ -31,6 +31,7 @@ class ResultSeeder extends Seeder
                         ->where('assignments.classroom_id', $work->classroom_id);
                 })->select('users.id as user_id')->get();
 
+            /** @var Assignment $assignment */
             foreach ($assignments as $assignment) {
                 Result::factory()->create([
                     'user_id' => $assignment->user_id,

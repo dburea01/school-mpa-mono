@@ -10,7 +10,6 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class ResultRepository
 {
@@ -66,12 +65,10 @@ class ResultRepository
 
         $result->work_id = $work->id;
         $result->user_id = $data['user_id'];
-        $result->is_absent = $data['is_absent'];
+        $result->is_absent = (int) $data['is_absent'];
 
         if ($data['is_absent'] == 0) {
-            $result->note = $data['note'];
-            $result->appreciation_id = $data['appreciation_id'];
-            $result->comment = $data['comment'];
+            $result->fill($data);
         } else {
             $result->note = null;
             $result->appreciation_id = null;
@@ -86,18 +83,17 @@ class ResultRepository
     /** @param array<string,string> $data */
     public function update(Result $result, array $data): Result
     {
-        $result->is_absent = $data['is_absent'];
+        $result->is_absent = (int) $data['is_absent'];
 
         if ($data['is_absent'] == 0) {
-            $result->note = $data['note'];
-            $result->appreciation_id = $data['appreciation_id'];
-            $result->comment = $data['comment'];
+            $result->fill($data);
         } else {
             $result->note = null;
             $result->appreciation_id = null;
             $result->comment = null;
         }
         $result->save();
+
         return $result;
     }
 
@@ -113,7 +109,7 @@ class ResultRepository
             ->delete();
     }
 
-    /** @param array<string,string> $data */
+    /** @param array<string,string> $request */
     public function getResultsByUser(User $user, array $request): LengthAwarePaginator
     {
 

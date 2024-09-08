@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\DestroyResultRequest;
 use App\Http\Requests\IndexResultRequest;
 use App\Http\Requests\StoreResultRequest;
-use App\Http\Resources\ResultResource;
 use App\Models\Result;
 use App\Models\User;
 use App\Models\Work;
@@ -13,10 +11,8 @@ use App\Repositories\AppreciationRepository;
 use App\Repositories\ResultRepository;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 
 class ResultController extends Controller
@@ -24,6 +20,7 @@ class ResultController extends Controller
     use AuthorizesRequests;
 
     public ResultRepository $resultRepository;
+
     public AppreciationRepository $appreciationRepository;
 
     public function __construct(ResultRepository $resultRepository, AppreciationRepository $appreciationRepository)
@@ -55,7 +52,7 @@ class ResultController extends Controller
     {
         $this->authorize('create', Result::class);
         $request->validate([
-            'user_id' => 'required|uuid'
+            'user_id' => 'required|uuid',
         ]);
 
         $result = new Result();
@@ -65,7 +62,7 @@ class ResultController extends Controller
             'work' => $work,
             'result' => $result,
             'user' => $user,
-            'appreciations' => $this->appreciationRepository->all()
+            'appreciations' => $this->appreciationRepository->all(),
         ]);
     }
 
@@ -90,9 +87,7 @@ class ResultController extends Controller
             return redirect("works/$work->id/results")->with('success', "Résultat sauvegardé pour $user->full_name");
         } catch (\Throwable $th) {
             DB::rollback();
-
-            // return back()->with('error', $th->getMessage());
-            return response()->json($th->getMessage(), 422);
+            return back()->with('error', $th->getMessage());
         }
     }
 
@@ -131,16 +126,19 @@ class ResultController extends Controller
         $this->authorize('update', $result);
 
         $user = User::findOrFail($result->user_id);
+
         return view('results.result_form', [
             'work' => $work,
             'result' => $result,
             'user' => $user,
-            'appreciations' => $this->appreciationRepository->all()
+            'appreciations' => $this->appreciationRepository->all(),
         ]);
     }
 
     public function destroy(Work $work, Result $result): RedirectResponse
     {
+        $this->authorize('delete', $result);
+
         /** @var \App\Models\User $user */
         $user = User::findOrFail($result->user_id);
 
@@ -150,7 +148,7 @@ class ResultController extends Controller
 
             return redirect("works/$work->id/results")->with('success', "Résultat supprimé pour $user->full_name");
         } catch (\Throwable $th) {
-            return response()->json($th->getMessage(), 422);
+            return back()->with('error', $th->getMessage());
         }
     }
 
