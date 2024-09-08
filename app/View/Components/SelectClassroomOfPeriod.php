@@ -21,15 +21,20 @@ class SelectClassroomOfPeriod extends Component
 
     public string $id;
 
+    public string $required;
+    public string $placeholder;
+
     /**
      * Create a new component instance.
      */
-    public function __construct(Period $period, string $value, string $name, string $id)
+    public function __construct(Period $period, string $value, string $name, string $id, string $required, string $placeholder)
     {
         $this->period = $period;
         $this->value = $value;
         $this->name = $name;
         $this->id = $id;
+        $this->required = $required;
+        $this->placeholder = $placeholder;
 
         $classroomRepository = new ClassroomRepository();
         $this->classrooms = $classroomRepository->index($period);

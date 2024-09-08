@@ -129,7 +129,7 @@ class ResultRepository
             })
             ->where('results.user_id', $user->id)
             ->when(isset($request['search']), function (QueryBuilder $query) use ($request) {
-                $query->where('works.title', 'ilike', '%'.$request['search'].'%');
+                $query->where('works.title', 'like', '%' . $request['search'] . '%');
             })
             ->when(isset($request['subject_id']), function (QueryBuilder $query) use ($request) {
                 $query->where('works.subject_id', $request['subject_id']);
@@ -140,12 +140,16 @@ class ResultRepository
             ->when(isset($request['work_type_id']), function (QueryBuilder $query) use ($request) {
                 $query->where('works.work_type_id', $request['work_type_id']);
             })
+            ->when(isset($request['period_id']), function (QueryBuilder $query) use ($request) {
+                $query->where('classrooms.period_id', $request['period_id']);
+            })
             ->select([
                 'results.id as result_id',
                 'results.note as result_note',
                 'results.comment as result_comment',
                 'results.appreciation_id as result_appreciation_id',
                 'results.created_at as result_created_at',
+                'results.is_absent as result_is_absent',
                 'appreciations.short_name as appreciation_short_name',
                 'appreciations.name as appreciation_name',
                 'subjects.short_name as subject_short_name',
@@ -154,7 +158,7 @@ class ResultRepository
                 'work_types.short_name as work_type_short_name',
                 'work_types.name as work_type_name',
                 'works.title as work_title',
-                'works.description as work_description',
+                'works.comment as work_comment',
                 'works.instruction as work_instruction',
                 'works.expected_at as work_expected_at',
             ]);

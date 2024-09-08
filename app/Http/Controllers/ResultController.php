@@ -8,6 +8,7 @@ use App\Models\Result;
 use App\Models\User;
 use App\Models\Work;
 use App\Repositories\AppreciationRepository;
+use App\Repositories\PeriodRepository;
 use App\Repositories\ResultRepository;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -22,11 +23,13 @@ class ResultController extends Controller
     public ResultRepository $resultRepository;
 
     public AppreciationRepository $appreciationRepository;
+    public PeriodRepository $periodRepository;
 
-    public function __construct(ResultRepository $resultRepository, AppreciationRepository $appreciationRepository)
+    public function __construct(ResultRepository $resultRepository, AppreciationRepository $appreciationRepository, PeriodRepository $periodRepository)
     {
         $this->resultRepository = $resultRepository;
         $this->appreciationRepository = $appreciationRepository;
+        $this->periodRepository = $periodRepository;
     }
 
     public function index(Work $work, IndexResultRequest $request): View
@@ -152,18 +155,21 @@ class ResultController extends Controller
         }
     }
 
-    public function resultByUser(User $user, Request $request): View
+    public function resultsByUser(User $user, Request $request): View
     {
         // $this->authorize('viewAnyStudentResult', [Result::class, $user]);
+        $currentPeriod = $this->periodRepository->getCurrentPeriod();
+        abort_if(! $currentPeriod, 404, 'no current period');
 
         return view('results.results_by_user', [
-            // 'period' => $this->periodRepository->getCurrentPeriod($school),
             'user' => $user,
             'results' => $this->resultRepository->getResultsByUser($user, $request->all()),
             'search' => $request->query('search', ''),
             'subject_id' => $request->query('subject_id', ''),
-            'classroom_id' => $request->query('classroom_id', ''),
+            // 'classroom_id' => $request->query('classroom_id', ''),
             'work_type_id' => $request->query('work_type_id', ''),
+            'period' => $currentPeriod,
+            'period_id' => $request->query('period_id', $currentPeriod->id),
         ]);
     }
 }
