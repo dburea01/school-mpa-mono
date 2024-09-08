@@ -172,7 +172,7 @@
 --}}
 
 {{-- expected_at --}}
-{{--
+
                         <div class="row mb-3">
                             <label for="expected_at" class="col-sm-4 col-form-label col-form-label-sm text-truncate text-sm-end">
                                 Date rendu travail :
@@ -186,7 +186,7 @@
 </div>
 <div class="col-sm-4">(jj/mm/aaaa)</div>
 </div>
---}}
+
 
 {{-- instruction --}}
 <div class="row mb-3">

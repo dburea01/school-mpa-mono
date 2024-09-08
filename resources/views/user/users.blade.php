@@ -81,9 +81,13 @@
                                 </td>
 
                                 <td>
-                                    @if($user->role_id != 'ADMIN' && auth()->user()->can('deleteUser'))
+                                    @can('deleteUser', $user)
                                     <i class="bi bi-trash btn-delete-user text-danger" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#exampleModal" data-userid="{{$user->id}}" data-username="{{$user->full_name}}"></i>
-                                    @endif
+                                    @endcan
+
+                                    @can('viewAny', [App\Models\Result::class])
+                                    <a href="{{ route('resultsByUser', ['user' => $user]) }}" title="Voir résultats"><i class="bi bi-123"></i></a>
+                                    @endcan
                                 </td>
                             </tr>
                             @endforeach

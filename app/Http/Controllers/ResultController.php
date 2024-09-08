@@ -157,9 +157,12 @@ class ResultController extends Controller
 
     public function resultsByUser(User $user, Request $request): View
     {
-        // $this->authorize('viewAnyStudentResult', [Result::class, $user]);
+        $this->authorize('viewAnyStudentResult', [Result::class, $user]);
+        
         $currentPeriod = $this->periodRepository->getCurrentPeriod();
         abort_if(! $currentPeriod, 404, 'no current period');
+
+        $request->merge(['period_id' => $currentPeriod->id]);
 
         return view('results.results_by_user', [
             'user' => $user,
