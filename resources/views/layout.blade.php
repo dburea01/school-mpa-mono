@@ -68,6 +68,9 @@
                                 @php
                                 $periodRepository = new App\Repositories\PeriodRepository();
                                 $currentPeriod = $periodRepository->getCurrentPeriod();
+
+                                $userGroupRepository = new App\Repositories\UserGroupRepository();
+                                $studentsOfTheConnectedUser = $userGroupRepository->getStudentsOfParent(Auth::user());
                                 @endphp
                                 @if($currentPeriod)
                                 <li>
@@ -88,12 +91,30 @@
                                 </li>
                                 @endcan
 
+                                {{-- only if the connected user is a PARENT : find the students linked to the connected user --}}
+                                @if(Auth::user()->role_id == 'PARENT')
+                                @php
+                                $userGroupRepository = new App\Repositories\UserGroupRepository();
+                                $studentsOfTheParent = $userGroupRepository->getStudentsOfParent(Auth::user());
+                                @endphp
+                                @foreach($studentsOfTheParent as $student)
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('resultsByUser', ['user' => $student->id]) }}">Résultats de {{ $student->last_name }} {{ $student->first_name }}</a>
+                                </li>
+                                @endforeach
                                 @endif
+                                {{-- end of the PARENT menu section --}}
 
+                                {{-- only if the connected user is a STUDENT --}}
+                                @if(Auth::user()->role_id == 'STUDENT')
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('resultsByUser', ['user' => Auth::user()->id]) }}">Résultats de {{ Auth::user()->full_name }}</a>
+                                </li>
+                                @endif
+                                {{-- end of the STUDENT menu section --}}
 
-
-
-
+                                @endif
+                                {{-- end of the section depending on a current period --}}
                             </ul>
                         </li>
 

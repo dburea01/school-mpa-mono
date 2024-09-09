@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Group;
+use App\Models\User;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class GroupRepository

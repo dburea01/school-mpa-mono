@@ -18,7 +18,7 @@ class GroupFactory extends Factory
     {
         return [
             'name' => fake()->lastName(),
-            'comment' => fake()->sentence(6),
+            'comment' => fake()->boolean(5) ? fake()->sentence(6) : null,
         ];
     }
 }

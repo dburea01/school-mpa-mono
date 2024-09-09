@@ -4,20 +4,17 @@ namespace Database\Factories;
 
 use App\Models\Civility;
 use App\Models\LoginStatus;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use Spatie\Permission\Models\Role;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
  */
 class UserFactory extends Factory
 {
-    /**
-     * The current password being used by the factory.
-     */
-    protected static ?string $password;
+
 
     /**
      * Define the model's default state.
@@ -44,14 +41,14 @@ class UserFactory extends Factory
             'civility_id' => $civilityIds->random(),
             // 'birth_date' => fake()->date(),
 
-            'other_comment' => fake()->sentence(),
-            'health_comment' => fake()->sentence(),
+            'other_comment' => fake()->boolean(10) ? fake()->sentence() : null,
+            'health_comment' => fake()->boolean(10) ? fake()->sentence() : null,
             'address' => fake()->streetAddress(),
             'postal_code' => fake()->postcode(),
             'city' => fake()->city(),
             'country_id' => 'FR',
             'phone_number' => fake()->phoneNumber(),
-            'email' => strtolower($firstName).'.'.strtolower($lastName).'@'.fake()->domainName(),
+            'email' => strtolower($firstName) . '.' . strtolower($lastName) . '@' . fake()->domainName(),
             'email_verified_at' => now(),
             'password' => Hash::make('password'),
             'remember_token' => Str::random(10),

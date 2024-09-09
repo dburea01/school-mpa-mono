@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="row">
-    <div class="col-md-6 offset-md-3">
+    <div class="col-md-6">
         <div class="card shadow">
             <div class="card-header text-center">Se connecter</div>
 
@@ -65,40 +65,66 @@
     </div>
 
 
-</div>
 
-<div class="row mt-3">
-    <div class="col-md-6 offset-md-3">
+
+
+    <div class="col-md-6">
         <div class="card">
             <div class="card-header text-center">Examples</div>
 
             <div class="card-body">
                 @php
                 $admin = App\Models\User::where('role_id', 'ADMIN')->where('login_status_id', 'VALIDATED')->first();
-                $teacher = App\Models\User::where('role_id', 'TEACHER')->where('login_status_id', 'VALIDATED')->first();
-                $parent = App\Models\User::where('role_id', 'PARENT')->where('login_status_id', 'VALIDATED')->first();
-                $student = App\Models\User::where('role_id', 'STUDENT')->where('login_status_id', 'VALIDATED')->first();
+                $teachers = App\Models\User::where('role_id', 'TEACHER')->where('login_status_id', 'VALIDATED')->limit(3)->get();
+
+                $userGroup = App\Models\UserGroup::selectRaw('count(*) as quantity , group_id')->groupBy('group_id')->having('quantity', '>', 3)->first();
+                $groupId = $userGroup->group_id;
+                $parents = DB::table('users')->join('user_groups', 'user_groups.user_id', 'users.id')->where('users.role_id', 'PARENT')->where('user_groups.group_id', $groupId)->get();
+                $students = DB::table('users')->join('user_groups', 'user_groups.user_id', 'users.id')->where('users.role_id', 'STUDENT')->where('user_groups.group_id', $groupId)->get();
+
                 @endphp
 
 
                 <table class="table table-bordered table-sm text-center">
                     <tr>
                         <th class="text-end">administrateur</th>
+                        <td>{{ $admin->last_name }} {{ $admin->first_name }}</td>
                         <td>{{ $admin->email ?? 'unknown' }}</td>
                     </tr>
                     <tr>
-                        <th class="text-end">enseignant</th>
+                        <td colspan="3">Enseignants : </td>
+                    </tr>
+
+                    @foreach($teachers as $teacher)
+                    <tr>
+                        <th class="text-end">enseignant {{$loop->index + 1}}</th>
+                        <td>{{ $teacher->last_name }} {{ $teacher->first_name }}</td>
                         <td>{{ $teacher->email ?? 'unknown' }}</td>
                     </tr>
+                    @endforeach
+
                     <tr>
-                        <th class="text-end">parent</th>
+                        <td colspan="3">Famille : </td>
+                    </tr>
+                    @foreach($parents as $parent)
+                    <tr>
+                        <th class="text-end">parent {{$loop->index + 1}}</th>
+                        <td>{{ $parent->last_name }} {{ $parent->first_name }}</td>
                         <td>{{ $parent->email ?? 'unknown' }}</td>
                     </tr>
+                    @endforeach
+
+                    @foreach($students as $student)
                     <tr>
-                        <th class="text-end">élève</th>
+                        <th class="text-end">élève {{$loop->index + 1}}</th>
+                        <td>{{ $student->last_name }} {{ $student->first_name }}</td>
                         <td>{{ $student->email ?? 'unknown' }}</td>
                     </tr>
+                    @endforeach
                 </table>
+
+
+
 
 
             </div>
