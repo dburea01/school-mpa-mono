@@ -79,9 +79,16 @@
 
                 $userGroup = App\Models\UserGroup::selectRaw('count(*) as quantity , group_id')->groupBy('group_id')->having('quantity', '>', 3)->first();
                 $groupId = $userGroup->group_id;
-                $parents = DB::table('users')->join('user_groups', 'user_groups.user_id', 'users.id')->where('users.role_id', 'PARENT')->where('user_groups.group_id', $groupId)->get();
-                $students = DB::table('users')->join('user_groups', 'user_groups.user_id', 'users.id')->where('users.role_id', 'STUDENT')->where('user_groups.group_id', $groupId)->get();
 
+                $parents = DB::table('users')->join('user_groups', 'user_groups.user_id', 'users.id')->where('users.role_id', 'PARENT')->where('user_groups.group_id', $groupId)->select('users.*')->get();
+                foreach($parents as $parent){
+                App\Models\User::where('id', $parent->id)->update(['login_status_id' => 'VALIDATED']);
+                }
+
+                $students = DB::table('users')->join('user_groups', 'user_groups.user_id', 'users.id')->where('users.role_id', 'STUDENT')->where('user_groups.group_id', $groupId)->select('users.*')->get();
+                foreach($students as $student){
+                App\Models\User::where('id', $student->id)->update(['login_status_id' => 'VALIDATED']);
+                }
                 @endphp
 
 

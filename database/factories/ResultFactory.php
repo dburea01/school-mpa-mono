@@ -16,8 +16,9 @@ class ResultFactory extends Factory
      */
     public function definition(): array
     {
+        $note = random_int(0, 20);
         return [
-            'note' => random_int(0, 2000) / 100,
+            'note' => $note == 20 ? $note : $note + fake()->randomElement([0, 0.25, 0.5, 0.75]),
             'comment' => fake()->boolean(20) ? fake()->sentence() : null,
         ];
     }

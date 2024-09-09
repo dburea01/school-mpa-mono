@@ -78,7 +78,9 @@
                                 <td>{{ $result->subject_short_name }}</td>
                                 <td>{{ $result->classroom_short_name }}</td>
                                 <td>{{ $result->work_expected_at }}</td>
-                                <td>{{ $result->result_note }}</td>
+                                <td>{{-- $result->result_note --}}
+                                    {{ number_format(round($result->result_note, 2), 2)}}
+                                </td>
                                 <td>{{ $result->appreciation_name }}
                                     @if ($result->result_comment != '')
                                     <x-tooltip-comment :comment="$result->result_comment" />
