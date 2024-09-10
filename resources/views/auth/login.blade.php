@@ -69,7 +69,7 @@
 
 
     <div class="col-md-6">
-        <div class="card">
+        <div class="card mt-3 mt-md-0 shadow">
             <div class="card-header text-center">Examples</div>
 
             <div class="card-body">
@@ -91,47 +91,31 @@
                 }
                 @endphp
 
+                <div class="border p-3">
+                    <strong>Administrateur : {{ $admin->last_name }} {{ $admin->first_name }}</strong><br>
+                    {{ $admin->email ?? 'unknown' }}
+                    <button type="button" class="login" data-email="{{ $admin->email}}">Login</button>
+                </div><br><br>
 
-                <table class="table table-bordered table-sm text-center">
-                    <tr>
-                        <th class="text-end">administrateur</th>
-                        <td>{{ $admin->last_name }} {{ $admin->first_name }}</td>
-                        <td>{{ $admin->email ?? 'unknown' }}</td>
-                    </tr>
-                    <tr>
-                        <td colspan="3">Enseignants : </td>
-                    </tr>
-
+                <div class="border p-3">
                     @foreach($teachers as $teacher)
-                    <tr>
-                        <th class="text-end">enseignant {{$loop->index + 1}}</th>
-                        <td>{{ $teacher->last_name }} {{ $teacher->first_name }}</td>
-                        <td>{{ $teacher->email ?? 'unknown' }}</td>
-                    </tr>
+                    <strong>Enseignant {{ $loop->index + 1}} : {{ $teacher->last_name }} {{ $teacher->first_name }}</strong><br>
+                    {{ $teacher->email ?? 'unknown' }}
+                    <button type="button" class="login" data-email="{{ $teacher->email}}">Login</button><br><br>
                     @endforeach
+                </div>
 
-                    <tr>
-                        <td colspan="3">Famille : </td>
-                    </tr>
-                    @foreach($parents as $parent)
-                    <tr>
-                        <th class="text-end">parent {{$loop->index + 1}}</th>
-                        <td>{{ $parent->last_name }} {{ $parent->first_name }}</td>
-                        <td>{{ $parent->email ?? 'unknown' }}</td>
-                    </tr>
-                    @endforeach
+                @foreach($parents as $parent)
+                <strong>Parent {{ $loop->index + 1}} : {{ $parent->last_name }} {{ $parent->first_name }}</strong><br>
+                {{ $parent->email ?? 'unknown' }}
+                <button type="button" class="login" data-email="{{ $parent->email}}">Login</button><br><br>
+                @endforeach
 
-                    @foreach($students as $student)
-                    <tr>
-                        <th class="text-end">élève {{$loop->index + 1}}</th>
-                        <td>{{ $student->last_name }} {{ $student->first_name }}</td>
-                        <td>{{ $student->email ?? 'unknown' }}</td>
-                    </tr>
-                    @endforeach
-                </table>
-
-
-
+                @foreach($students as $student)
+                <strong>Elève {{ $loop->index + 1}} : {{ $student->last_name }} {{ $student->first_name }}</strong><br>
+                {{ $student->email ?? 'unknown' }}
+                <button type="button" class="login" data-email="{{ $student->email}}">Login</button><br><br>
+                @endforeach
 
 
             </div>
@@ -139,4 +123,24 @@
     </div>
 </div>
 
+@endsection
+
+@section('extra_js')
+<script>
+    $(document).ready(function() {
+
+        $('.login').click(function() {
+
+            let email = $(this).attr('data-email')
+            console.log('email ' + email)
+            $('#email').val(email)
+            $('#password').val('password')
+            $('#submit').click()
+
+
+        })
+
+
+    });
+</script>
 @endsection

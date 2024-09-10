@@ -21,7 +21,7 @@ class PolicyResultByUserTest extends TestCase
     use RefreshDatabase;
 
     private User $admin;
-    private User $userNotAdmin;
+    private User $teacher;
 
     private User $studentA, $studentB, $parentA, $parentB;
     private Group $groupA, $groupB;
@@ -39,7 +39,7 @@ class PolicyResultByUserTest extends TestCase
         parent::setUp();
 
         $this->admin = User::factory()->create(['role_id' => 'ADMIN']);
-        $this->userNotAdmin = User::factory()->create(['role_id' => 'TEACHER']);
+        $this->teacher = User::factory()->create(['role_id' => 'TEACHER']);
         
         $this->groupA = Group::factory()->create();
         $this->parentA = User::factory()->create(['role_id' => 'PARENT']);
@@ -49,36 +49,106 @@ class PolicyResultByUserTest extends TestCase
         $this->parentB = User::factory()->create(['role_id' => 'PARENT']);
         $this->studentB = User::factory()->create(['role_id' => 'STUDENT']);
 
-        UserGroup::insert([
+       
+        UserGroup::factory()->create([
             'group_id' => $this->groupA->id,
             'user_id' => $this->studentA->id
         ]);
-        UserGroup::insert([
+        UserGroup::factory()->create([
             'group_id' => $this->groupA->id,
             'user_id' => $this->parentA->id
         ]);
-        UserGroup::insert([
+        UserGroup::factory()->create([
             'group_id' => $this->groupB->id,
             'user_id' => $this->studentB->id
         ]);
-        UserGroup::insert([
+        UserGroup::factory()->create([
             'group_id' => $this->groupB->id,
             'user_id' => $this->parentB->id
         ]);
 
         
-        $this->period = Period::factory()->create();
+        $this->period = Period::factory()->current()->create();
+        /*
         $this->work = $this->buildWork($this->period);
         $this->result = Result::factory()->create([
             'work_id' => $this->work->id,
             'user_id' => $this->student->id
         ]);
         $this->url = '/works/' . $this->work->id . '/results';
+        */
     }
 
     public function test_the_admin_can_see_the_results_of_any_user(): void
     {
-        $this->get('users/'.$this->studentA->id.'/results')->assertOK();
+        $this->actingAs($this->admin);
+       
+        $this->get('/users/'.$this->studentA->id.'/results')->assertOK();
+        $this->get('/users/'.$this->studentB->id.'/results')->assertOK();
+    }
+
+    public function test_the_teacher_can_see_the_results_of_any_user(): void
+    {
+        $this->actingAs($this->teacher);
+       
+        $this->get('/users/'.$this->studentA->id.'/results')->assertOK();
+        $this->get('/users/'.$this->studentB->id.'/results')->assertOK();
+    }
+    
+    public function test_the_parentA_can_see_the_results_of_the_studentA(): void
+    {
+        $this->actingAs($this->parentA);
+       
+        $this->get('/users/'.$this->studentA->id.'/results')->assertOK();
+    }
+
+    public function test_the_parentB_can_see_the_results_of_the_studentB(): void
+    {
+        $this->actingAs($this->parentB);
+       
+        $this->get('/users/'.$this->studentB->id.'/results')->assertOK();
+    }
+
+    public function test_the_parentA_cannot_see_the_results_of_the_studentB(): void
+    {
+        $this->actingAs($this->parentA);
+       
+        $this->get('/users/'.$this->studentB->id.'/results')->assertForbidden();
+    }
+
+    public function test_the_parentB_cannot_see_the_results_of_the_studentA(): void
+    {
+        $this->actingAs($this->parentB);
+       
+        $this->get('/users/'.$this->studentA->id.'/results')->assertForbidden();
+    }
+
+    public function test_the_studentA_can_see_his_results(): void
+    {
+        $this->actingAs($this->studentA);
+       
+        $this->get('/users/'.$this->studentA->id.'/results')->assertOK();
+    }
+
+    public function test_the_studentB_can_see_his_results(): void
+    {
+        $this->actingAs($this->studentB);
+       
+        $this->get('/users/'.$this->studentB->id.'/results')->assertOK();
+    }
+
+    public function test_the_studentA_cannot_see_the_results_of_studentB(): void
+    {
+        $this->actingAs($this->studentA);
+       
+        $this->get('/users/'.$this->studentB->id.'/results')->assertForbidden();
+    }
+
+    public function test_the_studentB_cannot_see_the_results_of_studentA(): void
+    {
+        $this->actingAs($this->studentB);
+       
+        $this->get('/users/'.$this->studentA->id.'/results')->assertForbidden();
     }
 
    

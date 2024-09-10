@@ -43,7 +43,7 @@
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown1">
                                 <li><a class="dropdown-item" href="{{ route('logout') }}">Se déconnecter</a></li>
-                                <li><a class="dropdown-item" href="{{ route('users.edit', ['user'=>Auth::user()->id] ) }}">Mon profil</a></li>
+                                <li><a class="dropdown-item" href="#">Mon profil (@todo)</a></li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
