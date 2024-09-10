@@ -24,11 +24,11 @@ return new class extends Migration
         });
 
         $roles = [
+           
             [
-                'id' => 'DIRECTOR',
-                'name' => 'Directeur',
+                'id' => 'ADMIN',
+                'name' => 'Administrateur',
                 'is_active' => true,
-                'is_assignable' => true,
             ],
             [
                 'id' => 'TEACHER',
@@ -47,31 +47,7 @@ return new class extends Migration
                 'is_active' => true,
                 'is_assignable' => true,
             ],
-            [
-                'id' => 'SUPERVISOR',
-                'name' => 'Surveillant',
-                'is_active' => true,
-            ],
-            [
-                'id' => 'CPE',
-                'name' => 'Conseiller principal éducation',
-                'is_active' => true,
-            ],
-            [
-                'id' => 'ACCOUNTANT',
-                'name' => 'Comptable',
-                'is_active' => true,
-            ],
-            [
-                'id' => 'SECRETARY',
-                'name' => 'Secrétaire',
-                'is_active' => true,
-            ],
-            [
-                'id' => 'ADMIN',
-                'name' => 'Administrateur',
-                'is_active' => true,
-            ],
+            
 
         ];
 
