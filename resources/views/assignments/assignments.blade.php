@@ -52,7 +52,7 @@
 
 </div>
 
-<div class="col-md-9">
+<div class="col-md-9 mt-3 mt-md-0">
 
     <div class="card shadow">
         <div class="card-header text-center">

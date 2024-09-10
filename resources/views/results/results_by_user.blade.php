@@ -61,7 +61,7 @@
                                 <th>Type</th>
                                 <th>Matière</th>
                                 <th>Classe</th>
-                                <th>Date</th>
+                                <th class="d-none d-sm-block">Date</th>
                                 <th>Note</th>
                                 <th>Appréciation</th>
                             </tr>
@@ -77,7 +77,7 @@
                                 <td>{{ $result->work_type_short_name }}</td>
                                 <td>{{ $result->subject_short_name }}</td>
                                 <td>{{ $result->classroom_short_name }}</td>
-                                <td>{{ $result->work_expected_at }}</td>
+                                <td class="d-none d-sm-block">{{ $result->work_expected_at }}</td>
                                 <td>{{-- $result->result_note --}}
                                     {{ number_format(round($result->result_note, 2), 2)}}
                                 </td>

@@ -19,12 +19,12 @@
                 </a>
                 @endcan
             </div>
-            <div class="card-body">
+            <div class="card-body table-responsive">
                 <table class="table table-sm table-bordered table-hover" aria-label="classrooms list">
                     <thead>
                         <tr>
                             <th>Nom court</th>
-                            <th>Nom</th>
+                            <th class="d-none d-sm-block">Nom</th>
                             <th>Enseignants</th>
                             <th>Elèves</th>
                             <th>Travaux</th>
@@ -44,7 +44,7 @@
                                 @endcan
                             </td>
 
-                            <td>
+                            <td class="d-none d-sm-block">
                                 {{ $classroom->name }}
 
                                 @if ($classroom->comment != '')

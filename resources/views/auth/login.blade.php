@@ -70,7 +70,7 @@
 
     <div class="col-md-6">
         <div class="card mt-3 mt-md-0 shadow">
-            <div class="card-header text-center">Examples</div>
+            <div class="card-header text-center">Examples de profils pour tester</div>
 
             <div class="card-body">
                 @php
@@ -91,13 +91,13 @@
                 }
                 @endphp
 
-                <div class="border p-3">
+                <div class="border p-3 mb-3">
                     <strong>Administrateur : {{ $admin->last_name }} {{ $admin->first_name }}</strong><br>
                     {{ $admin->email ?? 'unknown' }}
                     <button type="button" class="login" data-email="{{ $admin->email}}">Login</button>
-                </div><br><br>
+                </div>
 
-                <div class="border p-3">
+                <div class="border p-3 mb-3">
                     @foreach($teachers as $teacher)
                     <strong>Enseignant {{ $loop->index + 1}} : {{ $teacher->last_name }} {{ $teacher->first_name }}</strong><br>
                     {{ $teacher->email ?? 'unknown' }}
@@ -105,17 +105,19 @@
                     @endforeach
                 </div>
 
-                @foreach($parents as $parent)
-                <strong>Parent {{ $loop->index + 1}} : {{ $parent->last_name }} {{ $parent->first_name }}</strong><br>
-                {{ $parent->email ?? 'unknown' }}
-                <button type="button" class="login" data-email="{{ $parent->email}}">Login</button><br><br>
-                @endforeach
+                <div class="border p-3 mb-3">
+                    @foreach($parents as $parent)
+                    <strong>Parent {{ $loop->index + 1}} : {{ $parent->last_name }} {{ $parent->first_name }}</strong><br>
+                    {{ $parent->email ?? 'unknown' }}
+                    <button type="button" class="login" data-email="{{ $parent->email}}">Login</button><br><br>
+                    @endforeach
 
-                @foreach($students as $student)
-                <strong>Elève {{ $loop->index + 1}} : {{ $student->last_name }} {{ $student->first_name }}</strong><br>
-                {{ $student->email ?? 'unknown' }}
-                <button type="button" class="login" data-email="{{ $student->email}}">Login</button><br><br>
-                @endforeach
+                    @foreach($students as $student)
+                    <strong>Elève {{ $loop->index + 1}} : {{ $student->last_name }} {{ $student->first_name }}</strong><br>
+                    {{ $student->email ?? 'unknown' }}
+                    <button type="button" class="login" data-email="{{ $student->email}}">Login</button><br><br>
+                    @endforeach
+                </div>
 
 
             </div>

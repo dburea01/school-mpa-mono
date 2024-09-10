@@ -21,7 +21,7 @@
                 </a>
                 @endcan
             </div>
-            <div class="card-body">
+            <div class="card-body table-responsive">
                 <table class="table table-sm table-bordered table-hover" aria-label="periods list">
                     <thead>
                         <tr>

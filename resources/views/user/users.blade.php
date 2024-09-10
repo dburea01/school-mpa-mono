@@ -58,7 +58,7 @@
                             <tr>
                                 <th>Nom</th>
                                 <th>Rôle</th>
-                                <th>Status</th>
+                                <th class="d-none d-sm-block">Status</th>
                                 <th>Groupe(s)</th>
                                 <th>&nbsp;</th>
                             </tr>
@@ -75,7 +75,7 @@
                                     @endcan
                                 </td>
                                 <td>{{ $user->role->name }}</td>
-                                <td>{{ $user->login_status_id }}</td>
+                                <td class="d-none d-sm-block">{{ $user->login_status_id }}</td>
                                 <td>
                                     <x-groups-of-an-user :groups="$user->groups" />
                                 </td>
