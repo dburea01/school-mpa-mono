@@ -133,6 +133,33 @@ L'attribution par défaut des tâches par rôles est défini dans le fichier mig
 
 **frecole** est fourni pas défaut en langue française. A VENIR : MULTILANGUES.
 
+## Envie de vous investir ?
+
+L'auteur du site est à la recherche de son product owner. Me contacter.
+
 ## Licence
 
 **frecole** is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## Quelques mots sur l'auteur du site
+
+- Identité : Dominique BUREAU (Dom)
+- Age : sexa (tout de suite ça force le respect hein ..;-)
+- Situation : marié, 2 grands et beaux enfants
+- CV : je bosse
+- Devise : Pour que ce jour compte - Jack Dawson
+- Loisir : J'adore le développement web (ah si seulement cela avait été inventé plus tôt).
+
+Malgré tous mes efforts, si vous rencontrez des problèmes (voire des bugs ...), ou si vous avez des suggestions fonctionnelles ou techniques à me faire sur **frecole** , vous pouvez me contacter. Des petits messages d'encouragements sont également les bienvenus.
+
+Enfin, si le site trouve son public et si l'engouement est là, alors sans doute qu'une version "full api" verra le jour. A suivre !
+
+## L'équipe
+
+- Chef de projet : Dominique BUREAU
+- Product owner : Dominique BUREAU
+- Conception : Dominique BUREAU
+- Développement : Dominique BUREAU
+- Scrum master : Dominique BUREAU
+- Testeur : Dominique BUREAU
+- Direction artistique : Dominique BUREAU
