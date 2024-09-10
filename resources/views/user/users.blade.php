@@ -84,10 +84,11 @@
                                     @can('deleteUser', $user)
                                     <i class="bi bi-trash btn-delete-user text-danger" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#exampleModal" data-userid="{{$user->id}}" data-username="{{$user->full_name}}"></i>
                                     @endcan
-
+                                    @if($user->role_id == 'STUDENT')
                                     @can('viewAny', [App\Models\Result::class])
                                     <a href="{{ route('resultsByUser', ['user' => $user]) }}" title="Voir résultats"><i class="bi bi-123"></i></a>
                                     @endcan
+                                    @endif
                                 </td>
                             </tr>
                             @endforeach
