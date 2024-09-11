@@ -1,165 +1,166 @@
-# A propos de **frecole** <font color="blue">About **frecole**</font>
+# About **frecole**
 
-**frecole** est un outil de gestion d'établissement scolaire, simple, offrant une alternative aux établissements ne pouvant pas acquérir une des nombreuses solutions du marché.
+**frecole** is a simple school management system, offering an alternative to establishments that cannot acquire one of the many solutions on the market.
 
-**frecole** permet ces fonctionnalités :
+**frecole** allows these features:
 
-- Gestion des utilisateurs (création/modification/suppression)
-- Rôles utilisateur : chaque rôle (enseignant, élève, parent...) donne des droits d'accés à l'application
-- Gestion des groupes d'utilisateurs (parent<==>élève)
-- Gestion des matières
-- Gestion des années scolaires
+- User management (creation/modification/deletion)
+- User roles: each role (teacher, student, parent, etc.) gives access rights to the application
+- Management of user groups (parent<==>student)
+- Materials management
+- Management of school years
 
-Pour chaque année scolaire :
+For each school year:
 
-- Gestion des classes
-- Gestion des affectations (élèves et enseignants)
-- Gestion des travaux
-- Gestion des corrections
-- Accés aux résultats scolaires (parents, élèves, enseignants)
+- Class management
+- Management of assignments (students and teachers)
+- Work management
+- Management of corrections
+- Access to school results (parents, students, teachers)
 
-Le modèle de données est consultable ici : [modèle de données](https://docs.google.com/drawings/d/1EbIsxDt3z9tIoRHQU_xx-jazaEomfl7eew0EOv8sZoE/edit "Modèle de données de frecole").
+The data model can be viewed here : [modèle de données](https://docs.google.com/drawings/d/1EbIsxDt3z9tIoRHQU_xx-jazaEomfl7eew0EOv8sZoE/edit "Data model").
 
-**frecole** a été développé en PHP avec le framework [laravel](https://laravel.com/).
+**frecole** has been developed in PHP with the [laravel](https://laravel.com/) framework.
 
-Une démonstration compléte est disponible ici : [https://school-mpa-mono-8f20b5d7a8b2.herokuapp.com/](https://school-mpa-mono-8f20b5d7a8b2.herokuapp.com/)
+A full demo is available here : [https://school-mpa-mono-8f20b5d7a8b2.herokuapp.com/](https://school-mpa-mono-8f20b5d7a8b2.herokuapp.com/)
 
-## Installation - pré requis
+## Installation - prerequisites
 
-**frecole** nécessite l'utilisation de :
+**frecole** requires the use of:
 
-- PHP 8.1
-- composer (pour installer les dépendances PHP)
-- node (pour installer les dépendances JS)
+- *PHP 8.1*
+- *composer* (to install PHP dependencies)
+- *node* (to install JS dependencies)
 
 ## Installation
 
-- Cloner le projet
+- Clone the project
 
 > git clone https://github.com/dburea01/school-mpa-mono.git my_folder
 
-- Entrer dans le répertoire d'installation
+- Enter the installation directory
 
 > cd my_folder
 
-- Installer les dépendances PHP
+- Install the PHP dependencies
 
 > composer install
 
-- Installer les dépendances JS
+- Install the JS dependencies
 
 > npm install
 
-- Initialiser vos environnements. Copier le fichier .env.example en .env
+- Initialize your environments. Copy the .env.example file to .env
 
 > COPY .env.example .env
 
-Si vous souhaitez utiliser les tests, initialisez également l'environnement de test
+If you want to use tests, you can also initialize the test environment (not required)
+
 > COPY .env.example .env.testing
 
-## Base de données
+## Databases
 
 ### sqlite
 
-Par défaut, **frecole** utilise la base de données SQLITE (fournie avec l'installation de PHP). Le fichier d'environnement *.env* pointe vers cette base de données.
+By default, **frecole** uses the SQLITE database (provided with the PHP installation). The *.env* environment file points to this database.
 
-Mais vous pouvez également choisir d'utiliser une autre base de données (voir ci-dessous).
+But you can also choose to use another database (see below).
 
-### postgre
+### postgresql
 
 @todo
 
-## Initialisation des tables
+## Initializing tables
 
-Exécuter la migration pour créer les tables. La migration alimente également quelques tables :
+Run the migration to create the tables. The migration also populates a few tables:
 
-- quelques matières
-- quelques types de travail
-- quelques appréciations
-- les civilités
-- les pays
-- les rôles
+- some subjects
+- some types of work
+- some comments
+- civilities
+- countries
+- the roles
 
-Libre à vous par la suite de compléter, modifier ces listes.
+You are then free to complete and modify these lists.
 
 > php artisan migrate:fresh
 
-Pour créer quelques données de test (des utilisateurs, des années scolaires, des affectations, des résultats...), vous pouvez également lancer la migration en précisant --seed :
+To create some test data (users, periods, assignments, results...), you can also launch the migration by specifying --seed:
 
 > php artisan migrate:fresh --seed
 
-## Lancement du projet
+## Project launch
 
-A partir du répertoire d'installation :
+From the installation directory:
 
 > php artisan serve
 
-Ceci lancera l'application sur le port 8000, **frecole** sera alors disponible sur [localhost:8000](http://localhost:8000)
+This will launch the application on port 8000, **frecole** will then be available on [localhost:8000](http://localhost:8000)
 
-## Lancement du projet en mode développement
+## Launch of the project in development mode
 
-Si vous souhaitez développer sur le projet, vous pouvez lancer *vite* en parallèle :
+If you want to develop on the project, you can launch *vite* in parallel:
 
 > npm run dev
 
-Ceci inspectera en temps réel toute modification dans le projet, rafraichira le site automatiquement, et buildera des ressources javascript et css optimisés pour la production. Voir également [https://laravel.com/docs/11.x/vite](https://laravel.com/docs/11.x/vite)
+This will inspect any changes in the project in real time, refresh the site automatically, and build javascript and css resources optimized for production. See also [https://laravel.com/docs/11.x/vite](https://laravel.com/docs/11.x/vite)
 
-## Les tests
+## The tests
 
-**frecole** est testé pour tous les aspects sécurité applicative (un coup de main est le bienvenu pour le reste....).
+**frecole** is tested for all application security aspects (a help is welcome for the othee tests....).
 
-Avant de lancer les tests:
+Before running the tests:
 
-- créez votre base de données de test (postgre OU sqlite)
-- créez votre environnement de test, voir le fichier *.env.testing*
+- create your test database (postgresql OR sqlite)
+- create your test environment, see the *.env.testing* file
   
-Pour lancer les tests :
+To run the tests:
 > php artisan test
 
-## Les autorisations
+## Permissions
 
-**frecole** est fourni avec ces rôles
+**frecole** comes with these roles
 
-- ADMIN (administrateur - a accés à tout)
-- TEACHER (enseignant - accés limité)
-- PARENT (parent - accés limité)
-- STUDENT (élève - accés limité)
+- ADMIN (administrator - has access to everything)
+- TEACHER (teacher - limited access)
+- PARENT (parent - limited access)
+- STUDENT (student - limited access)
 
-A chacun de ces rôles correspond une liste de tâches. Voir la matrice de ces tâches ici [https://docs.google.com/spreadsheets/d/1GB4SWRHhzk6gIeP6052KiuQ903_O8UaOWN6J4lz_eBE](https://docs.google.com/spreadsheets/d/1GB4SWRHhzk6gIeP6052KiuQ903_O8UaOWN6J4lz_eBE)
+Each of these roles corresponds to a list of tasks. See the matrix of these tasks here [https://docs.google.com/spreadsheets/d/1GB4SWRHhzk6gIeP6052KiuQ903_O8UaOWN6J4lz_eBE](https://docs.google.com/spreadsheets/d/1GB4SWRHhzk6gIeP6052KiuQ903_O8UaOWN6J4lz_eBE)
 
-L'attribution par défaut des tâches par rôles est défini dans le fichier migration *database/migrations/create_roles_tasks_table.php*. Libre à vous de modifier cette attribution. **ATTENTION:sujet sensible....**
+The default assignment of tasks by roles is defined in the migration file *database/migrations/create_roles_tasks_table.php*. You are free to modify this attribution. **WARNING: sensitive subject....**
 
-## Traduction de **frecole**
+## Translation of **frecole**
 
-**frecole** est fourni pas défaut en langue française. A VENIR : MULTILANGUES.
+**frecole** is provided by default in French. COMING SOON: MULTILANGUAGE.
 
-## Envie de vous investir ?
+## Want to invest?
 
-L'auteur du site est à la recherche de son product owner. Me contacter.
+The author of the site is looking for his product owner. Contact me.
 
 ## Licence
 
 **frecole** is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
-## Quelques mots sur l'auteur du site
+## A few words about the author of the site
 
-- Identité : Dominique BUREAU (Dom)
-- Age : sexa (tout de suite ça force le respect hein ..;-)
-- Situation : marié, 2 grands et beaux enfants
-- CV : je bosse
-- Devise : Pour que ce jour compte - Jack Dawson
-- Loisir : J'adore le développement web (ah si seulement cela avait été inventé plus tôt).
+- Identity: Dominique BUREAU (Dom)
+- Age: sixty-year-old (immediately that commands respect eh.. ;-)
+- Situation: married, 2 grown-up and beautiful children
+- CV: I work
+- Motto: Make this day count - Jack Dawson
+- Hobbies: I love web development (ah if only it had been invented earlier).
 
-Malgré tous mes efforts, si vous rencontrez des problèmes (voire des bugs ...), ou si vous avez des suggestions fonctionnelles ou techniques à me faire sur **frecole** , vous pouvez me contacter. Des petits messages d'encouragements sont également les bienvenus.
+Despite all my efforts, if you encounter problems (or even bugs...), or if you have functional or technical suggestions to make to me on **frecole**, you can contact me. Small messages of encouragement are also welcome.
 
-Enfin, si le site trouve son public et si l'engouement est là, alors sans doute qu'une version "full api" verra le jour. A suivre !
+Finally, if the site finds its audience and if the enthusiasm is there, then undoubtedly a “full API” version will see the light of day. To be continued!
 
 ## L'équipe
 
-- Chef de projet : Dominique BUREAU
+- Project Manager : Dominique BUREAU
 - Product owner : Dominique BUREAU
 - Conception : Dominique BUREAU
-- Développement : Dominique BUREAU
+- Development : Dominique BUREAU
 - Scrum master : Dominique BUREAU
-- Testeur : Dominique BUREAU
-- Direction artistique : Dominique BUREAU
+- Test : Dominique BUREAU
+- Designer : Dominique BUREAU
