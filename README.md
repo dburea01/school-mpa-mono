@@ -1,4 +1,4 @@
-# A propos de **frecole**
+# A propos de **frecole** <font color="blue">About **frecole**</font>
 
 **frecole** est un outil de gestion d'établissement scolaire, simple, offrant une alternative aux établissements ne pouvant pas acquérir une des nombreuses solutions du marché.
 
