@@ -89,7 +89,7 @@ To create some test data (users, periods, assignments, results...), you can also
 
 > php artisan migrate:fresh --seed
 
-## Project launch
+## Run the project
 
 From the installation directory:
 
@@ -97,7 +97,7 @@ From the installation directory:
 
 This will launch the application on port 8000, **frecole** will then be available on [localhost:8000](http://localhost:8000)
 
-## Launch of the project in development mode
+## Run the project in development mode
 
 If you want to develop on the project, you can launch *vite* in parallel:
 
@@ -107,7 +107,7 @@ This will inspect any changes in the project in real time, refresh the site auto
 
 ## The tests
 
-**frecole** is tested for all application security aspects (a help is welcome for the othee tests....).
+**frecole** is tested for all application security aspects (a help is welcome for the other tests....).
 
 Before running the tests:
 
@@ -128,13 +128,13 @@ To run the tests:
 
 Each of these roles corresponds to a list of tasks. See the matrix of these tasks here [https://docs.google.com/spreadsheets/d/1GB4SWRHhzk6gIeP6052KiuQ903_O8UaOWN6J4lz_eBE](https://docs.google.com/spreadsheets/d/1GB4SWRHhzk6gIeP6052KiuQ903_O8UaOWN6J4lz_eBE)
 
-The default assignment of tasks by roles is defined in the migration file *database/migrations/create_roles_tasks_table.php*. You are free to modify this attribution. **WARNING: sensitive subject....**
+The default assignment of tasks by roles is defined in the migration file *database/migrations/create_roles_tasks_table.php*. You are free to modify this attribution. **WARNING: sensitive topic ...**
 
 ## Translation of **frecole**
 
-**frecole** is provided by default in French. COMING SOON: MULTILANGUAGE.
+**frecole** is provided by default in french. COMING SOON: MULTILANGUAGE.
 
-## Want to invest?
+## Want to invest ?
 
 The author of the site is looking for his product owner. Contact me.
 
@@ -144,18 +144,18 @@ The author of the site is looking for his product owner. Contact me.
 
 ## A few words about the author of the site
 
-- Identity: Dominique BUREAU (Dom)
-- Age: sixty-year-old (immediately that commands respect eh.. ;-)
-- Situation: married, 2 grown-up and beautiful children
-- CV: I work
-- Motto: Make this day count - Jack Dawson
-- Hobbies: I love web development (ah if only it had been invented earlier).
+- Identity : Dominique BUREAU (Dom)
+- Age : sixty-year-old (immediately that commands respect eh.. ;-)
+- Situation : married, 2 grown-up and beautiful children
+- CV : I work
+- Motto : Make this day count - Jack Dawson
+- Hobbies : I love web development (ah if only it had been invented earlier).
 
 Despite all my efforts, if you encounter problems (or even bugs...), or if you have functional or technical suggestions to make to me on **frecole**, you can contact me. Small messages of encouragement are also welcome.
 
-Finally, if the site finds its audience and if the enthusiasm is there, then undoubtedly a “full API” version will see the light of day. To be continued!
+Finally, if the site finds its audience and if the enthusiasm is there, then undoubtedly a “full API” version may be developped. To be continued!
 
-## L'équipe
+## The team
 
 - Project Manager : Dominique BUREAU
 - Product owner : Dominique BUREAU
