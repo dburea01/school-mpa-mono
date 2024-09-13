@@ -29,9 +29,9 @@
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body">
-                    @auth
-                    <ul class="navbar-nav justify-content-start flex-grow-1 pe-3">
 
+                    <ul class="navbar-nav justify-content-start flex-grow-1 pe-3">
+                        @auth
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 @if (Auth::user()->photo_url)
@@ -118,18 +118,18 @@
                             </ul>
                         </li>
 
+
+                        <li class="navbar-text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <x-display-current-period />
+                        </li>
+                        @endauth
+
+                        @guest
+                        <li class="nav-item">
+                            <a href="{{ route('login') }}" class="nav-link">Se connecter</a>
+                        </li>
+                        @endguest
                     </ul>
-                    <span class="navbar-text">
-                        <x-display-current-period />
-                    </span>
-                    @endauth
-
-                    @guest
-                    <li class="nav-item">
-                        <a href="{{ route('login') }}" class="nav-link">Se connecter</a>
-                    </li>
-                    @endguest
-
                 </div>
             </div>
         </div>

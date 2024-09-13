@@ -61,7 +61,7 @@
                                 <span class="text-danger">{{ $message }}</span>
                                 @enderror
 
-                                <input type="text" readonly disabled id="user_id" name="user_id" value="{{ old('user_id', $user->id) }}">
+                                <input type="text" readonly id="user_id" name="user_id" value="{{ old('user_id', $user->id) }}">
                             </div>
                         </div>
 
